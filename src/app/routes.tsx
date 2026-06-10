@@ -2,11 +2,16 @@ import { createBrowserRouter, Link } from "react-router";
 import { Layout } from "./components/Layout";
 import { Home } from "./pages/Home";
 import { Services } from "./pages/Services";
-import { WebsiteDevelopment, MobileAppDevelopment, AIMLSolutions } from "./pages/ServiceDetail";
+import {
+  WebsiteDevelopment,
+  MobileAppDevelopment,
+  AIMLSolutions,
+} from "./pages/ServiceDetail";
 import { Portfolio } from "./pages/Portfolio";
 import { About } from "./pages/About";
 import { Contact } from "./pages/Contact";
 import { AdminPortfolio } from "./pages/AdminPortfolio";
+import { PortfolioDetail } from "./pages/PortfolioDetails";
 
 import { useT } from "./providers";
 function NotFound() {
@@ -17,7 +22,10 @@ function NotFound() {
         <div className="text-[#C99A3D] tracking-widest text-sm mb-3">404</div>
         <h1 className="text-3xl text-[#1F2A1F] mb-4">{t("nf_title")}</h1>
         <p className="text-[#5F6756] mb-8">{t("nf_sub")}</p>
-        <Link to="/" className="inline-flex items-center px-6 py-3 rounded-full bg-[#004B08] text-[#F3EFDF] hover:bg-[#8E9970] transition-colors">
+        <Link
+          to="/"
+          className="inline-flex items-center px-6 py-3 rounded-full bg-[#004B08] text-[#F3EFDF] hover:bg-[#8E9970] transition-colors"
+        >
           {t("cta_back_home")}
         </Link>
       </div>
@@ -33,7 +41,10 @@ export const router = createBrowserRouter([
       { index: true, Component: Home },
       { path: "services", Component: Services },
       { path: "services/website-development", Component: WebsiteDevelopment },
-      { path: "services/mobile-app-development", Component: MobileAppDevelopment },
+      {
+        path: "services/mobile-app-development",
+        Component: MobileAppDevelopment,
+      },
       { path: "services/ai-ml-solutions", Component: AIMLSolutions },
       { path: "portfolio", Component: Portfolio },
       { path: "about", Component: About },
@@ -43,4 +54,5 @@ export const router = createBrowserRouter([
   },
   { path: "/admin", Component: AdminPortfolio },
   { path: "/admin/portfolio", Component: AdminPortfolio },
+  { path: "/portfolio/:id", Component: PortfolioDetail },
 ]);
