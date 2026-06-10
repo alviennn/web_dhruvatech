@@ -1,10 +1,7 @@
 import { Link } from "react-router";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import {
-  listAdminPortfolioItems,
-  type AdminPortfolioItem,
-} from "../data/portfolioStore";
+import { listPortfolioItems, type PortfolioItem } from "../data/api/api";
 import {
   ArrowUpRight,
   Compass,
@@ -50,7 +47,6 @@ function Reveal({
     </motion.div>
   );
 }
-
 function HomeTexture() {
   return (
     <div className="home-texture absolute inset-0 pointer-events-none opacity-[0.18]" />
@@ -61,10 +57,12 @@ function HomeTexture() {
 
 export function FeaturedWorkPreview() {
   const { t } = useT();
-  const [projects, setProjects] = useState<AdminPortfolioItem[]>([]);
+  const [projects, setProjects] = useState<PortfolioItem[]>([]);
 
   useEffect(() => {
-    setProjects(listAdminPortfolioItems().slice(0, 3));
+    listPortfolioItems()
+      .then((items) => setProjects(items.slice(0, 3)))
+      .catch(() => {});
   }, []);
 
   return (
@@ -188,16 +186,18 @@ export function ProjectVisual({
           </div>
 
           <div className="space-y-1.5">
-            {["A. Continuous evolution", "B. Stable foundation", "C. Both above"].map(
-              (text) => (
-                <div
-                  key={text}
-                  className="text-[10px] px-2 py-1.5 rounded bg-[#8E9970]/30 text-[#F3EFDF]/80 border border-[#C99A3D]/15"
-                >
-                  {text}
-                </div>
-              )
-            )}
+            {[
+              "A. Continuous evolution",
+              "B. Stable foundation",
+              "C. Both above",
+            ].map((text) => (
+              <div
+                key={text}
+                className="text-[10px] px-2 py-1.5 rounded bg-[#8E9970]/30 text-[#F3EFDF]/80 border border-[#C99A3D]/15"
+              >
+                {text}
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -207,9 +207,7 @@ export function ProjectVisual({
   if (kind === "ai") {
     return (
       <div className="absolute inset-0 p-6 flex flex-col">
-        <div className="text-[#E0C16A] text-xs mb-3">
-          AI · OBJECT DETECTION
-        </div>
+        <div className="text-[#E0C16A] text-xs mb-3">AI · OBJECT DETECTION</div>
 
         <div className="flex-1 rounded-2xl bg-[#004B08]/60 border border-[#C99A3D]/20 p-4 relative">
           <div className="absolute inset-4 border border-dashed border-[#E0C16A]/60 rounded-lg" />
@@ -375,7 +373,10 @@ export function ProcessPreview() {
       <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
         <Reveal>
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-14">
-            <SectionHeader title={t("process_title")} subtitle={t("process_sub")} />
+            <SectionHeader
+              title={t("process_title")}
+              subtitle={t("process_sub")}
+            />
 
             <Link
               to="/about"
@@ -424,7 +425,11 @@ export function MindsetPreview() {
 
   const values = [
     { icon: Layers, titleKey: "val_stable", descKey: "val_stable_desc" },
-    { icon: Lightbulb, titleKey: "val_purposeful", descKey: "val_purposeful_desc" },
+    {
+      icon: Lightbulb,
+      titleKey: "val_purposeful",
+      descKey: "val_purposeful_desc",
+    },
     { icon: Cpu, titleKey: "val_evolving", descKey: "val_evolving_desc" },
   ] as const;
 
@@ -434,7 +439,10 @@ export function MindsetPreview() {
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
         <Reveal>
-          <SectionHeader title={t("mindset_title")} subtitle={t("mindset_sub")} />
+          <SectionHeader
+            title={t("mindset_title")}
+            subtitle={t("mindset_sub")}
+          />
         </Reveal>
 
         <div className="grid md:grid-cols-3 gap-6 mt-14">
@@ -445,13 +453,9 @@ export function MindsetPreview() {
                   <Icon size={22} strokeWidth={1.8} />
                 </div>
 
-                <h3 className="text-2xl text-[#1F2A1F] mb-3">
-                  {t(titleKey)}
-                </h3>
+                <h3 className="text-2xl text-[#1F2A1F] mb-3">{t(titleKey)}</h3>
 
-                <p className="text-[#5F6756] leading-relaxed">
-                  {t(descKey)}
-                </p>
+                <p className="text-[#5F6756] leading-relaxed">{t(descKey)}</p>
               </div>
             </Reveal>
           ))}
@@ -478,9 +482,7 @@ export function HomeIntro() {
         <Reveal>
           <p className="text-[clamp(1.35rem,2.5vw,2rem)] leading-snug text-[#1F2A1F]">
             {t("home_intro")}{" "}
-            <span className="text-[#004B08]">
-              {t("home_intro_accent")}
-            </span>{" "}
+            <span className="text-[#004B08]">{t("home_intro_accent")}</span>{" "}
             {t("home_intro_tail")}
           </p>
 
@@ -514,9 +516,7 @@ export function Footer() {
             />
           </div>
 
-          <p className="leading-relaxed max-w-sm">
-            {t("footer_desc")}
-          </p>
+          <p className="leading-relaxed max-w-sm">{t("footer_desc")}</p>
         </div>
 
         <div className="md:col-span-2">

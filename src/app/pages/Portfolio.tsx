@@ -1,10 +1,11 @@
+// Portfolio.tsx — Public page
+// Mengambil data dari backend API, menampilkan key features & tech stack
+
 import { useEffect, useState } from "react";
 import { PageHero, CTABlock } from "../components/shared";
 import { useT } from "../providers";
-import {
-  listAdminPortfolioItems,
-  type AdminPortfolioItem,
-} from "../data/portfolioStore";
+import { listPortfolioItems, type PortfolioItem } from "../data/api/api";
+import { Link } from "react-router";
 
 export function Portfolio() {
   const { t } = useT();
@@ -17,16 +18,21 @@ export function Portfolio() {
   ];
 
   const [filter, setFilter] = useState("all");
-  const [adminItems, setAdminItems] = useState<AdminPortfolioItem[]>([]);
+  const [items, setItems] = useState<PortfolioItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    setAdminItems(listAdminPortfolioItems());
+    listPortfolioItems()
+      .then(setItems)
+      .catch(() => setError("Gagal memuat portfolio. Silakan coba lagi."))
+      .finally(() => setLoading(false));
   }, []);
 
-  const adminToFilter = (type: AdminPortfolioItem["type"]) =>
+  const adminToFilter = (type: PortfolioItem["type"]) =>
     type === "Mobile Apps" ? "Mobile App" : type;
 
-  const visibleAdmin = adminItems.filter((item) => {
+  const visibleItems = items.filter((item) => {
     if (filter === "all") return true;
     return adminToFilter(item.type) === filter;
   });
@@ -37,9 +43,7 @@ export function Portfolio() {
         title={
           <>
             {t("portfolio_hero_t1")}{" "}
-            <span className="text-[#004B08]">
-              {t("portfolio_hero_t2")}
-            </span>
+            <span className="text-[#004B08]">{t("portfolio_hero_t2")}</span>
           </>
         }
         subtitle={t("portfolio_hero_sub")}
@@ -51,6 +55,7 @@ export function Portfolio() {
         <div className="pointer-events-none absolute -bottom-48 left-[-160px] h-[540px] w-[540px] rounded-full bg-[#C99A3D]/[0.06] blur-3xl" />
 
         <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
+          {/* Filter Buttons */}
           <div className="mb-10 flex flex-wrap gap-2">
             {filters.map((f) => (
               <button
@@ -67,40 +72,112 @@ export function Portfolio() {
             ))}
           </div>
 
-          {visibleAdmin.length > 0 ? (
+          {/* Loading */}
+          {loading && (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {visibleAdmin.map((p) => (
-                <article
-                  key={p.id}
-                  className="group overflow-hidden rounded-[26px] border border-[#1F2A1F]/10 bg-white/70 shadow-[0_16px_50px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_22px_70px_rgba(31,42,31,0.09)]"
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="rounded-[26px] border border-[#1F2A1F]/10 bg-white/70 overflow-hidden animate-pulse"
                 >
-                  <div className="aspect-[4/3] relative overflow-hidden bg-[#1F2A1F]">
-                    <img
-                      src={p.coverImage}
-                      alt={p.title}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
-                    />
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#1F2A1F]/35 via-transparent to-transparent opacity-70" />
+                  <div className="aspect-[4/3] bg-[#1F2A1F]/10" />
+                  <div className="p-6 space-y-3">
+                    <div className="h-3 w-20 rounded bg-[#1F2A1F]/10" />
+                    <div className="h-5 w-3/4 rounded bg-[#1F2A1F]/10" />
+                    <div className="h-4 w-full rounded bg-[#1F2A1F]/8" />
+                    <div className="h-4 w-5/6 rounded bg-[#1F2A1F]/8" />
                   </div>
-
-                  <div className="p-6">
-                    <div className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#004B08]">
-                      {p.type}
-                    </div>
-
-                    <h3 className="mb-3 text-xl leading-snug text-[#1F2A1F]">
-                      {p.title}
-                    </h3>
-
-                    <p className="text-sm leading-relaxed text-[#5F6756]">
-                      {p.description}
-                    </p>
-                  </div>
-                </article>
+                </div>
               ))}
             </div>
-          ) : (
+          )}
+
+          {/* Error */}
+          {!loading && error && (
+            <div className="rounded-[28px] border border-[#C99A3D]/30 bg-[#C99A3D]/10 px-6 py-10 text-center text-[#8A641E]">
+              {error}
+            </div>
+          )}
+
+          {/* Items Grid */}
+          {!loading && !error && visibleItems.length > 0 && (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {visibleItems.map((p) => (
+                <Link to={`/portfolio/${p.id}`} key={p.id} className="block">
+                  <article
+                    key={p.id}
+                    className="group overflow-hidden rounded-[26px] border border-[#1F2A1F]/10 bg-white/70 shadow-[0_16px_50px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_22px_70px_rgba(31,42,31,0.09)]"
+                  >
+                    {/* Cover Image */}
+                    <div className="aspect-[4/3] relative overflow-hidden bg-[#1F2A1F]">
+                      <img
+                        src={p.coverImage}
+                        alt={p.title}
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#1F2A1F]/35 via-transparent to-transparent opacity-70" />
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-6">
+                      <div className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#004B08]">
+                        {p.type}
+                      </div>
+
+                      <h3 className="mb-3 text-xl leading-snug text-[#1F2A1F]">
+                        {p.title}
+                      </h3>
+
+                      <p className="text-sm leading-relaxed text-[#5F6756]">
+                        {p.description}
+                      </p>
+
+                      {/* Key Features */}
+                      {p.keyFeatures && p.keyFeatures.length > 0 && (
+                        <div className="mt-4">
+                          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#004B08]/60">
+                            Fitur Kunci
+                          </p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {p.keyFeatures.map((feature, i) => (
+                              <span
+                                key={i}
+                                className="rounded-full bg-[#004B08]/8 px-3 py-1 text-xs text-[#004B08]"
+                              >
+                                {feature}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Tech Stack */}
+                      {p.techStack && p.techStack.length > 0 && (
+                        <div className="mt-3">
+                          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#5F6756]/60">
+                            Tech Stack
+                          </p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {p.techStack.map((tech, i) => (
+                              <span
+                                key={i}
+                                className="rounded-full border border-[#1F2A1F]/10 bg-white px-3 py-1 text-xs text-[#5F6756]"
+                              >
+                                {tech}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </article>
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {/* Empty State */}
+          {!loading && !error && visibleItems.length === 0 && (
             <div className="rounded-[28px] border border-[#1F2A1F]/10 bg-white/60 px-6 py-20 text-center text-[#5F6756] shadow-[0_16px_50px_rgba(31,42,31,0.045)] backdrop-blur">
               {t("portfolio_empty")}
             </div>
@@ -109,14 +186,9 @@ export function Portfolio() {
 
         <style>{`
           @keyframes portfolioTextureMove {
-            0% {
-              background-position: 0 0;
-            }
-            100% {
-              background-position: 72px 72px;
-            }
+            0% { background-position: 0 0; }
+            100% { background-position: 72px 72px; }
           }
-
           .portfolio-texture {
             background-image:
               linear-gradient(rgba(31, 42, 31, 0.055) 1px, transparent 1px),
@@ -124,11 +196,8 @@ export function Portfolio() {
             background-size: 72px 72px;
             animation: portfolioTextureMove 24s linear infinite;
           }
-
           @media (prefers-reduced-motion: reduce) {
-            .portfolio-texture {
-              animation: none;
-            }
+            .portfolio-texture { animation: none; }
           }
         `}</style>
       </section>
