@@ -74,7 +74,10 @@ const en = {
   val_evolving_desc: "Digital products should grow with user behavior, goals, and technology.",
 
   // final CTA
-  cta_home: "Have a Digital Product in Mind?",
+  home_cta_title: "Got a Digital Idea?",
+  home_cta_sub: "Let’s discuss your idea and turn it into a reliable website, mobile app, dashboard, or AI-powered digital product.",
+  home_cta_button: "Start Consultation",
+  home_cta_note: "Get a clear direction before starting design and development.",
 
   // services page
   services_hero_t1: "Digital Services Built for",
@@ -305,7 +308,11 @@ const id: Record<keyof typeof en, string> = {
   val_purposeful_desc: "Setiap halaman, fitur, dan interaksi harus memiliki alasan di baliknya.",
   val_evolving_desc: "Produk digital harus tumbuh seiring perilaku pengguna, tujuan, dan teknologi.",
 
-  cta_home: "Punya Ide Produk Digital?",
+  home_cta_title: "Punya Ide Digital?",
+  home_cta_sub:
+    "Diskusikan ide Anda dan ubah menjadi website, aplikasi mobile, dashboard, atau produk digital berbasis AI yang lebih terarah.",
+  home_cta_button: "Konsultasi Sekarang",
+  home_cta_note: "Dapatkan arah yang jelas sebelum memulai desain dan pengembangan.",
 
   services_hero_t1: "Layanan Digital untuk",
   services_hero_t2: "Pertumbuhan Bisnis",
