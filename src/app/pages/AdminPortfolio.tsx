@@ -1,7 +1,7 @@
-// Admin page — dilindungi login, connect ke backend Express
+// Admin page — dilindungi login, connect ke backend PHP
 // File ini menggantikan src/app/pages/AdminPortfolio.tsx
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowUpRight,
   Image as ImageIcon,
@@ -10,6 +10,7 @@ import {
   Lock,
   Eye,
   EyeOff,
+  X,
 } from "lucide-react";
 import { useT } from "../providers";
 import {
@@ -29,6 +30,7 @@ const ACCEPTED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const PROJECT_TYPES: PortfolioType[] = ["Website", "Mobile Apps", "AI/ML"];
 const TITLE_MAX_LENGTH = 45;
 const DESCRIPTION_MAX_LENGTH = 130;
+const MAX_IMAGES = 8;
 
 // ─── Login Screen ─────────────────────────────────────────────────────────────
 
@@ -213,22 +215,62 @@ function ChangePasswordModal({ onClose }: { onClose: () => void }) {
   );
 }
 
+// ─── Image Preview Item ────────────────────────────────────────────────────────
+
+function ImageThumb({
+  src,
+  index,
+  isFirst,
+  onRemove,
+}: {
+  src: string;
+  index: number;
+  isFirst: boolean;
+  onRemove: () => void;
+}) {
+  return (
+    <div className="relative group">
+      <img
+        src={src}
+        alt={`Preview ${index + 1}`}
+        className="h-24 w-24 rounded-2xl object-cover border border-[#1F2A1F]/10 bg-[#f5f5f5]"
+      />
+      {isFirst && (
+        <span className="absolute bottom-1 left-1 rounded-full bg-[#004B08] px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white">
+          Cover
+        </span>
+      )}
+      <button
+        type="button"
+        onClick={onRemove}
+        className="absolute -right-1.5 -top-1.5 hidden h-5 w-5 items-center justify-center rounded-full bg-[#C99A3D] text-white shadow group-hover:flex"
+        aria-label="Hapus gambar"
+      >
+        <X size={11} />
+      </button>
+    </div>
+  );
+}
+
 // ─── Main Admin Dashboard ──────────────────────────────────────────────────────
 
 export function AdminPortfolio() {
   const { t } = useT();
-  const [authed, setAuthed] = useState<boolean | null>(null); // null = loading
+  const [authed, setAuthed] = useState<boolean | null>(null);
 
   // Form state
   const [title, setTitle] = useState("");
   const [type, setType] = useState<PortfolioType | "">("");
   const [description, setDescription] = useState("");
-  const [keyFeatures, setKeyFeatures] = useState(""); // comma-separated input
-  const [techStack, setTechStack] = useState(""); // comma-separated input
-  const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
-  const [coverPreview, setCoverPreview] = useState("");
-  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [keyFeatures, setKeyFeatures] = useState("");
+  const [techStack, setTechStack] = useState("");
 
+  // ← ganti: dari satu coverImageFile → array imageFiles + previews
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [deletedNotice, setDeletedNotice] = useState(false);
@@ -237,18 +279,14 @@ export function AdminPortfolio() {
   const [fetchError, setFetchError] = useState("");
   const [showChangePw, setShowChangePw] = useState(false);
 
-  // Check auth on mount
   useEffect(() => {
     if (!isLoggedIn()) {
       setAuthed(false);
       return;
     }
-    verifyToken().then((user) => {
-      setAuthed(!!user);
-    });
+    verifyToken().then((user) => setAuthed(!!user));
   }, []);
 
-  // Fetch items when authed
   useEffect(() => {
     if (!authed) return;
     listPortfolioItems()
@@ -263,28 +301,58 @@ export function AdminPortfolio() {
     setAuthed(false);
   };
 
-  const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  // ── Image handling ──────────────────────────────────────────────────────────
+
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    if (!files.length) return;
     setError("");
     setSuccess(false);
-    if (!ACCEPTED_TYPES.includes(file.type)) {
-      setError("Format gambar tidak didukung. Gunakan JPG, PNG, atau WebP.");
+
+    const remaining = MAX_IMAGES - imageFiles.length;
+    if (remaining <= 0) {
+      setError(`Maksimal ${MAX_IMAGES} gambar.`);
       return;
     }
-    setCoverImageFile(file);
-    const reader = new FileReader();
-    reader.onload = () => setCoverPreview(String(reader.result ?? ""));
-    reader.readAsDataURL(file);
+
+    const valid: File[] = [];
+    const previews: string[] = [];
+
+    for (const file of files.slice(0, remaining)) {
+      if (!ACCEPTED_TYPES.includes(file.type)) {
+        setError("Format tidak didukung. Gunakan JPG, PNG, atau WebP.");
+        continue;
+      }
+      valid.push(file);
+      previews.push(URL.createObjectURL(file));
+    }
+
+    setImageFiles((prev) => [...prev, ...valid]);
+    setImagePreviews((prev) => [...prev, ...previews]);
+
+    // reset input supaya file yang sama bisa dipilih ulang
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
+
+  const removeImage = (index: number) => {
+    URL.revokeObjectURL(imagePreviews[index]);
+    setImageFiles((prev) => prev.filter((_, i) => i !== index));
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // ── Submit ──────────────────────────────────────────────────────────────────
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setSuccess(false);
 
-    if (!title.trim() || !type || !description.trim() || !coverImageFile) {
-      setError("Semua field wajib diisi, termasuk gambar cover.");
+    if (!title.trim() || !type || !description.trim()) {
+      setError("Title, kategori, dan deskripsi wajib diisi.");
+      return;
+    }
+    if (imageFiles.length === 0) {
+      setError("Minimal 1 gambar harus diupload.");
       return;
     }
     if (title.trim().length > TITLE_MAX_LENGTH) {
@@ -313,17 +381,20 @@ export function AdminPortfolio() {
         description: description.trim(),
         keyFeatures: features,
         techStack: techs,
-        coverImageFile,
+        imageFiles, // ← kirim array
       });
 
       setItems((prev) => [created, ...prev]);
+
+      // reset form
       setTitle("");
       setType("");
       setDescription("");
       setKeyFeatures("");
       setTechStack("");
-      setCoverImageFile(null);
-      setCoverPreview("");
+      imagePreviews.forEach((url) => URL.revokeObjectURL(url));
+      setImageFiles([]);
+      setImagePreviews([]);
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3500);
     } catch (err: unknown) {
@@ -347,7 +418,8 @@ export function AdminPortfolio() {
     }
   };
 
-  // ── Render States ──
+  // ── Render States ────────────────────────────────────────────────────────────
+
   if (authed === null) {
     return (
       <div className="min-h-screen bg-[#f5f5f5] flex items-center justify-center">
@@ -356,13 +428,12 @@ export function AdminPortfolio() {
     );
   }
 
-  if (!authed) {
-    return <LoginScreen onSuccess={() => setAuthed(true)} />;
-  }
+  if (!authed) return <LoginScreen onSuccess={() => setAuthed(true)} />;
 
   const titleTooLong = title.length > TITLE_MAX_LENGTH;
   const descriptionTooLong = description.length > DESCRIPTION_MAX_LENGTH;
-  const previewReady = title.trim() || description.trim() || coverPreview;
+  const previewReady =
+    title.trim() || description.trim() || imagePreviews.length > 0;
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-[#f5f5f5] px-6 pb-20 pt-16 lg:px-10">
@@ -389,24 +460,20 @@ export function AdminPortfolio() {
               publik.
             </p>
           </div>
-
-          {/* Admin actions */}
           <div className="flex items-center gap-2 shrink-0">
             <button
               type="button"
               onClick={() => setShowChangePw(true)}
               className="inline-flex items-center gap-2 rounded-full border border-[#1F2A1F]/15 px-4 py-2.5 text-sm text-[#1F2A1F] hover:bg-white transition-colors"
             >
-              <Lock size={14} />
-              Ganti Password
+              <Lock size={14} /> Ganti Password
             </button>
             <button
               type="button"
               onClick={handleLogout}
               className="inline-flex items-center gap-2 rounded-full border border-[#1F2A1F]/15 px-4 py-2.5 text-sm text-[#1F2A1F] hover:bg-white transition-colors"
             >
-              <LogOut size={14} />
-              Logout
+              <LogOut size={14} /> Logout
             </button>
           </div>
         </div>
@@ -511,8 +578,7 @@ export function AdminPortfolio() {
                 placeholder="Admin Dashboard, Laporan PDF, Multi-User"
               />
               <p className="mt-1 text-xs text-[#5F6756]">
-                Pisahkan dengan koma. Contoh: Login Admin, Export Excel,
-                Notifikasi
+                Pisahkan dengan koma.
               </p>
             </AdminField>
 
@@ -526,38 +592,52 @@ export function AdminPortfolio() {
                 placeholder="React, Node.js, PostgreSQL, Tailwind"
               />
               <p className="mt-1 text-xs text-[#5F6756]">
-                Pisahkan dengan koma. Contoh: React, Express, MySQL
+                Pisahkan dengan koma.
               </p>
             </AdminField>
 
-            {/* Cover Image */}
-            <AdminField label="Gambar Cover" required>
-              <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border border-dashed border-[#1F2A1F]/15 bg-[#f5f5f5]/80 px-4 py-6 text-[#5F6756] transition-colors hover:border-[#C99A3D]/70 hover:bg-white">
-                <ImageIcon size={18} />
-                <span className="text-sm">
-                  {coverImageFile
-                    ? coverImageFile.name
-                    : "Klik untuk upload gambar"}
-                </span>
-                <input
-                  type="file"
-                  accept="image/jpeg,image/jpg,image/png,image/webp"
-                  onChange={onFile}
-                  className="hidden"
-                />
-              </label>
-              <p className="mt-2 text-xs leading-relaxed text-[#5F6756]">
-                Rekomendasi: 1200×900px, rasio 4:3, format WebP/JPG, maks 5MB.
-              </p>
-              {coverPreview && (
-                <div className="mt-4 overflow-hidden rounded-2xl border border-[#1F2A1F]/10 bg-[#f5f5f5]">
-                  <img
-                    src={coverPreview}
-                    alt="Cover preview"
-                    className="aspect-[4/3] w-full object-cover"
-                  />
+            {/* ── Gambar (Multiple) ── */}
+            <AdminField label="Gambar Project" required>
+              {/* Thumbnail strip */}
+              {imagePreviews.length > 0 && (
+                <div className="mb-3 flex flex-wrap gap-2">
+                  {imagePreviews.map((src, i) => (
+                    <ImageThumb
+                      key={src}
+                      src={src}
+                      index={i}
+                      isFirst={i === 0}
+                      onRemove={() => removeImage(i)}
+                    />
+                  ))}
                 </div>
               )}
+
+              {/* Upload button — sembunyikan kalau sudah max */}
+              {imageFiles.length < MAX_IMAGES && (
+                <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border border-dashed border-[#1F2A1F]/15 bg-[#f5f5f5]/80 px-4 py-5 text-[#5F6756] transition-colors hover:border-[#C99A3D]/70 hover:bg-white">
+                  <ImageIcon size={18} />
+                  <span className="text-sm">
+                    {imageFiles.length === 0
+                      ? "Klik untuk upload gambar"
+                      : `Tambah gambar (${imageFiles.length}/${MAX_IMAGES})`}
+                  </span>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/jpg,image/png,image/webp"
+                    multiple
+                    onChange={onFileChange}
+                    className="hidden"
+                  />
+                </label>
+              )}
+
+              <p className="mt-2 text-xs leading-relaxed text-[#5F6756]">
+                Gambar pertama otomatis jadi cover. Rekomendasi: 1200×900px,
+                rasio 4:3, WebP/JPG, maks 5MB per file. Bisa upload hingga{" "}
+                {MAX_IMAGES} gambar.
+              </p>
             </AdminField>
 
             {error && (
@@ -595,9 +675,9 @@ export function AdminPortfolio() {
               {previewReady ? (
                 <article className="overflow-hidden rounded-[26px] border border-[#1F2A1F]/10 bg-white/70">
                   <div className="aspect-[4/3] bg-[#f5f5f5]">
-                    {coverPreview ? (
+                    {imagePreviews[0] ? (
                       <img
-                        src={coverPreview}
+                        src={imagePreviews[0]}
                         alt=""
                         className="h-full w-full object-cover"
                       />
@@ -607,6 +687,19 @@ export function AdminPortfolio() {
                       </div>
                     )}
                   </div>
+
+                  {/* Dot indicator kalau ada lebih dari 1 gambar */}
+                  {imagePreviews.length > 1 && (
+                    <div className="flex justify-center gap-1 border-t border-[#1F2A1F]/6 py-2">
+                      {imagePreviews.map((_, i) => (
+                        <span
+                          key={i}
+                          className={`h-1.5 w-1.5 rounded-full transition-colors ${i === 0 ? "bg-[#004B08]" : "bg-[#1F2A1F]/20"}`}
+                        />
+                      ))}
+                    </div>
+                  )}
+
                   <div className="p-6">
                     {type && (
                       <div className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#004B08]">
@@ -620,7 +713,6 @@ export function AdminPortfolio() {
                       {description || "Deskripsi project..."}
                     </p>
 
-                    {/* Key Features Preview */}
                     {keyFeatures && (
                       <div className="mt-4">
                         <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#004B08]/60">
@@ -643,7 +735,6 @@ export function AdminPortfolio() {
                       </div>
                     )}
 
-                    {/* Tech Stack Preview */}
                     {techStack && (
                       <div className="mt-3">
                         <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#5F6756]/60">
@@ -700,11 +791,20 @@ export function AdminPortfolio() {
                   key={it.id}
                   className="flex gap-4 rounded-[24px] border border-[#1F2A1F]/10 bg-white/70 p-4 shadow-[0_12px_40px_rgba(31,42,31,0.045)] backdrop-blur"
                 >
-                  <img
-                    src={it.coverImage}
-                    alt={it.title}
-                    className="h-24 w-24 flex-shrink-0 rounded-2xl border border-[#1F2A1F]/10 object-cover bg-[#f5f5f5]"
-                  />
+                  <div className="relative flex-shrink-0">
+                    <img
+                      src={it.coverImage}
+                      alt={it.title}
+                      className="h-24 w-24 rounded-2xl border border-[#1F2A1F]/10 object-cover bg-[#f5f5f5]"
+                    />
+                    {/* Badge jumlah gambar */}
+                    {it.images?.length > 1 && (
+                      <span className="absolute bottom-1 right-1 rounded-full bg-black/50 px-1.5 py-0.5 text-[9px] text-white">
+                        +{it.images.length - 1}
+                      </span>
+                    )}
+                  </div>
+
                   <div className="flex min-w-0 flex-1 flex-col">
                     <div className="mb-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#004B08]">
                       {it.type}
@@ -716,7 +816,6 @@ export function AdminPortfolio() {
                       {it.description}
                     </p>
 
-                    {/* Features & Techs mini badges */}
                     {(it.keyFeatures.length > 0 || it.techStack.length > 0) && (
                       <div className="mt-2 flex flex-wrap gap-1">
                         {it.keyFeatures.slice(0, 2).map((f, i) => (
@@ -744,8 +843,7 @@ export function AdminPortfolio() {
                         onClick={() => setDeleteId(it.id)}
                         className="inline-flex items-center gap-1.5 rounded-full border border-[#1F2A1F]/10 px-3 py-1.5 text-sm text-[#1F2A1F] transition-colors hover:border-[#C99A3D] hover:text-[#C99A3D]"
                       >
-                        <Trash2 size={14} />
-                        Hapus
+                        <Trash2 size={14} /> Hapus
                       </button>
                     </div>
                   </div>
@@ -756,6 +854,7 @@ export function AdminPortfolio() {
         </div>
       </div>
 
+      {/* Delete confirm modal */}
       {deleteId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6">
           <div className="w-full max-w-sm rounded-[28px] border border-[#1F2A1F]/10 bg-white p-8 shadow-2xl">
@@ -764,7 +863,8 @@ export function AdminPortfolio() {
             </div>
             <h2 className="mt-4 text-lg text-[#1F2A1F]">Hapus Project?</h2>
             <p className="mt-2 text-sm text-[#5F6756]">
-              Project yang dihapus tidak bisa dikembalikan.
+              Project yang dihapus tidak bisa dikembalikan. Semua gambar yang
+              terkait juga akan dihapus.
             </p>
             <div className="mt-6 flex gap-3">
               <button

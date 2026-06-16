@@ -49,10 +49,10 @@ export const router = createBrowserRouter([
       { path: "portfolio", Component: Portfolio },
       { path: "about", Component: About },
       { path: "contact", Component: Contact },
+      { path: "/portfolio/:id", Component: PortfolioDetail },
       { path: "*", Component: NotFound },
     ],
   },
   { path: "/admin", Component: AdminPortfolio },
   { path: "/admin/portfolio", Component: AdminPortfolio },
-  { path: "/portfolio/:id", Component: PortfolioDetail },
 ]);
