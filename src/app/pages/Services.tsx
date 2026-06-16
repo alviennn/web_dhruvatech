@@ -121,11 +121,6 @@ export function Services() {
         <ServicesMotionStyle />
       </section>
 
-      <CTABlock
-        title={t("services_final_cta")}
-        primaryTo="/contact"
-        primaryLabel={t("cta_tell_idea")}
-      />
     </>
   );
 }

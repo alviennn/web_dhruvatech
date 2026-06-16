@@ -24,6 +24,7 @@ import { SectionHeader } from "./shared";
 import { useT } from "../providers";
 import logo from "../../imports/8.png";
 import ctaImage from "../../imports/cta.png";
+import ctaLogoMark from "../../imports/dhruva-mark.png";
 
 /* ---------------- ANIMATION WRAPPER ---------------- */
 
@@ -499,54 +500,75 @@ export function HomeIntro() {
   );
 }
 
-export function DigitalProductCTA() {
-  const { t } = useT();
-
+export function DigitalProductCTA({
+  title,
+  subtitle,
+  buttonLabel,
+  note,
+}: {
+  title: string;
+  subtitle: string;
+  buttonLabel: string;
+  note?: string;
+}) {
   return (
     <section className="relative z-20 overflow-visible bg-[#f5f5f5] pt-10 pb-0 lg:pt-14">
-      <div className="absolute inset-x-0 bottom-0 h-[42%] bg-[#24452A]" />
+      <div className="absolute inset-x-0 bottom-[-2px] h-[42%] bg-[#24452A]" />
 
       <div className="relative z-20 mx-auto max-w-7xl px-6 lg:px-10">
         <Reveal>
-          <div className="relative overflow-hidden rounded-[42px] bg-[#46585B] px-6 pt-10 pb-10 shadow-[0_28px_90px_rgba(31,42,31,0.16)] md:px-10 lg:min-h-[180px] lg:px-16 lg:py-0">
-            <div className="pointer-events-none absolute -right-28 top-1/2 h-[560px] w-[560px] -translate-y-1/2 rounded-full border-[76px] border-white/[0.065]" />
-            <div className="pointer-events-none absolute right-[10%] top-[16%] h-48 w-48 rounded-full bg-white/[0.045] blur-2xl" />
-            <div className="pointer-events-none absolute bottom-[-140px] right-[-90px] h-[360px] w-[360px] rounded-full bg-[#C99A3D]/14 blur-3xl" />
-            <div className="pointer-events-none absolute left-[18%] bottom-[-130px] h-[280px] w-[280px] rounded-full bg-[#8E9970]/14 blur-3xl" />
+          <div className="relative overflow-hidden rounded-[42px] bg-[#46585B] px-6 pt-9 pb-9 shadow-[0_28px_90px_rgba(31,42,31,0.16)] md:px-10 lg:min-h-[360px] lg:px-16 lg:py-0">
+            {/* Logo watermark */}
+            <img
+              src={ctaLogoMark}
+              alt=""
+              aria-hidden="true"
+              className="pointer-events-none absolute right-[-120px] top-1/2 h-[640px] w-auto -translate-y-1/2 opacity-[0.045] mix-blend-screen"
+            />
 
-            <div className="relative z-10 grid items-center gap-10 lg:grid-cols-12">
+            <div className="pointer-events-none absolute right-[10%] top-[16%] h-48 w-48 rounded-full bg-white/[0.04] blur-2xl" />
+            <div className="pointer-events-none absolute bottom-[-140px] right-[-90px] h-[360px] w-[360px] rounded-full bg-[#C99A3D]/12 blur-3xl" />
+            <div className="pointer-events-none absolute left-[18%] bottom-[-130px] h-[280px] w-[280px] rounded-full bg-[#8E9970]/12 blur-3xl" />
+
+            <div className="relative z-10 grid items-center gap-8 lg:grid-cols-12">
               {/* Image side */}
-              <div className="relative hidden min-h-[420px] lg:col-span-6 lg:block">
+              <div className="relative hidden min-h-[360px] lg:col-span-6 lg:block">
                 <img
                   src={ctaImage}
                   alt="Dhruva Tech consultation"
-                  className="absolute left-[39%] bottom-[-24px] h-[430px] w-auto max-w-none -translate-x-1/2 object-contain object-bottom"
+                  className="absolute left-[39%] bottom-[-58px] h-[420px] w-auto max-w-none -translate-x-1/2 object-contain object-bottom"
                 />
               </div>
 
               {/* Text side */}
-              <div className="lg:col-span-6 lg:py-16">
-                <h2 className="max-w-xl text-[clamp(2.35rem,4.7vw,4.1rem)] font-semibold leading-[1.08] tracking-tight text-[#F3EFDF]">
-                  {t("home_cta_title")}
+              <div className="lg:col-span-6 lg:py-10">
+                <h2 className="max-w-lg text-[clamp(1.9rem,3.4vw,3rem)] font-semibold leading-[1.08] tracking-tight text-[#F3EFDF]">
+                  {title}
                 </h2>
 
-                <p className="mt-6 max-w-xl text-lg leading-relaxed text-[#F3EFDF]/82">
-                  {t("home_cta_sub")}
+                <p className="mt-5 max-w-xl text-base lg:text-[1.05rem] leading-relaxed text-[#F3EFDF]/82">
+                  {subtitle}
                 </p>
 
-                <div className="mt-8 flex flex-wrap items-center gap-4">
+                <div className="mt-7 flex flex-wrap items-center gap-4">
                   <Link
                     to="/contact"
-                    className="group inline-flex items-center gap-2 rounded-full bg-[#F3EFDF] px-7 py-3.5 text-sm font-semibold text-[#004B08] shadow-[0_16px_40px_rgba(0,0,0,0.14)] transition-colors hover:bg-white"
+                    className="group inline-flex items-center gap-2 rounded-full bg-[#F3EFDF] px-6 py-3 text-sm font-semibold text-[#004B08] shadow-[0_16px_40px_rgba(0,0,0,0.14)] transition-colors hover:bg-white"
                   >
                     <MessageCircle size={18} strokeWidth={2} />
-                    {t("home_cta_button")}
+                    {buttonLabel}
                     <ArrowUpRight
                       size={17}
                       className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                     />
                   </Link>
                 </div>
+
+                {note && (
+                  <p className="mt-5 max-w-xl text-sm leading-relaxed text-[#F3EFDF]/65">
+                    {note}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -742,4 +764,4 @@ function HomeMotionStyle() {
       }
     `}</style>
   );
-}}
+}

@@ -5,7 +5,6 @@ import {
   FeaturedWorkPreview,
   ProcessPreview,
   MindsetPreview,
-  DigitalProductCTA,
 } from "../components/Sections";
 
 export function Home() {
@@ -17,7 +16,6 @@ export function Home() {
       <FeaturedWorkPreview />
       <ProcessPreview />
       <MindsetPreview />
-      <DigitalProductCTA />
     </>
   );
 }
