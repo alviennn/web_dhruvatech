@@ -43,12 +43,29 @@ export function Contact() {
     (
       e: React.ChangeEvent<
         HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-      >
+      >,
     ) =>
       setForm({ ...form, [k]: e.target.value });
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const message = `
+Hallo DhurvaTech! Saya ingin mengajukan project inquiry 🙏
+
+*Nama:* ${form.fullName}
+*Bisnis/Perusahaan:* ${form.business || "-"}
+*Email:* ${form.email}
+*WhatsApp:* ${form.whatsapp || "-"}
+*Tipe Project:* ${form.projectType}
+*Referral:* ${form.referral || "-"}
+
+*Deskripsi Project:*
+${form.description}
+  `.trim();
+
+    const url = `https://wa.me/6289514693178?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
     setSubmitted(true);
   };
 
@@ -58,9 +75,7 @@ export function Contact() {
         title={
           <>
             {t("contact_hero_t1")}{" "}
-            <span className="text-[#004B08]">
-              {t("contact_hero_t2")}
-            </span>
+            <span className="text-[#004B08]">{t("contact_hero_t2")}</span>
           </>
         }
         subtitle={t("contact_hero_sub")}
@@ -221,17 +236,20 @@ export function Contact() {
                   <ContactRow
                     icon={MessageCircle}
                     label="WhatsApp"
-                    value="+62 895-1469-3178"
+                    value="+62 895-1469-3178 (DhurvaTech)"
+                    link={`https://wa.me/6289514693178?text=${encodeURIComponent("Hallo DhurvaTech! Saya ingin konsultasi mengenai project saya.")}`}
                   />
                   <ContactRow
                     icon={Mail}
                     label="Email"
                     value="dhurvatech@gmail.com"
+                    link="mailto:dhurvatech@gmail.com"
                   />
                   <ContactRow
                     icon={Instagram}
                     label="Instagram"
                     value="@dhruvatech_"
+                    link="https://www.instagram.com/dhruvatech_"
                   />
                 </ul>
               </div>
@@ -294,21 +312,38 @@ function ContactRow({
   icon: Icon,
   label,
   value,
+  link,
 }: {
   icon: any;
   label: string;
   value: string;
+  link?: string;
 }) {
-  return (
-    <li className="flex items-center gap-4 rounded-2xl border border-[#1F2A1F]/10 bg-[#f5f5f5]/70 p-4">
+  const inner = (
+    <li className="flex items-center gap-4 rounded-2xl border border-[#1F2A1F]/10 bg-[#f5f5f5]/70 p-4 transition-colors hover:border-[#C99A3D]/50 hover:bg-white">
       <div className="w-11 h-11 rounded-[14px] border border-[#D7D2B8] bg-[#F7F6F0]/80 text-[#004B08] grid place-items-center shrink-0">
         <Icon size={18} strokeWidth={1.8} />
       </div>
-
-      <div>
+      <div className="flex-1 min-w-0">
         <div className="text-xs text-[#5F6756]">{label}</div>
-        <div className="text-[#1F2A1F]">{value}</div>
+        <div className="text-[#1F2A1F] truncate">{value}</div>
       </div>
+      {link && <ArrowUpRight size={16} className="text-[#5F6756] shrink-0" />}
     </li>
   );
+
+  if (link) {
+    return (
+      <a
+        href={link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block"
+      >
+        {inner}
+      </a>
+    );
+  }
+
+  return inner;
 }
