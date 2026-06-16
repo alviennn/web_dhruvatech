@@ -316,10 +316,9 @@ export function WebsiteDevelopment() {
           "Fast loading experience",
         ]}
       />
-      S
+
       <ProcessSection />
       <WebsitePricingSection />
-      <CTABlock title={t("web_cta")} primaryTo="/contact?service=website" />
     </>
   );
 }
