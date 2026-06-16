@@ -56,26 +56,9 @@ export function PageHero({
 }) {
   return (
     <section className="relative overflow-hidden bg-[#f5f5f5] text-[#1F2A1F] min-h-screen flex items-center">
-      {/* Static lightweight background texture */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.10]"
-        aria-hidden="true"
-      >
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(31,42,31,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(31,42,31,0.04)_1px,transparent_1px)] bg-[size:72px_72px]" />
-      </div>
+      <HeroSystemTexture />
 
-      {/* Static soft glow */}
-      <div
-        className="absolute right-[-180px] top-[-120px] h-[360px] w-[520px] rounded-full bg-[#8E9970]/20 blur-3xl pointer-events-none"
-        aria-hidden="true"
-      />
-
-      <div
-        className="absolute left-[-160px] bottom-[-140px] h-[320px] w-[420px] rounded-full bg-[#C99A3D]/10 blur-3xl pointer-events-none"
-        aria-hidden="true"
-      />
-
-      <div className="relative mx-auto grid w-full max-w-7xl items-center gap-12 px-6 pt-28 pb-20 lg:grid-cols-12 lg:px-10 lg:pt-32 lg:pb-24">
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-12 px-6 pt-28 pb-20 lg:grid-cols-12 lg:px-10 lg:pt-32 lg:pb-24">
         <div className={accent ? "lg:col-span-7" : "lg:col-span-9"}>
           <h1 className="max-w-5xl text-[clamp(3rem,6vw,5.6rem)] leading-[0.98] tracking-tight text-[#1F2A1F]">
             {title}
@@ -89,6 +72,117 @@ export function PageHero({
         {accent && <div className="lg:col-span-5">{accent}</div>}
       </div>
     </section>
+  );
+}
+
+function HeroSystemTexture() {
+  return (
+    <div
+      className="absolute inset-0 pointer-events-none overflow-hidden"
+      aria-hidden="true"
+    >
+      {/* Soft colorful glow */}
+      <div className="absolute -top-52 right-[-180px] h-[640px] w-[640px] rounded-full bg-[#8E9970]/22 blur-3xl" />
+      <div className="absolute bottom-[-220px] left-[-160px] h-[540px] w-[540px] rounded-full bg-[#C99A3D]/14 blur-3xl" />
+      <div className="absolute top-[22%] left-[38%] h-[360px] w-[360px] rounded-full bg-[#6EA7A1]/10 blur-3xl" />
+      <div className="absolute bottom-[16%] right-[22%] h-[300px] w-[300px] rounded-full bg-[#D98C67]/10 blur-3xl" />
+
+      {/* Fine dotted grid */}
+      <div className="absolute inset-0 opacity-[0.20] bg-[radial-gradient(circle_at_1px_1px,#1F2A1F_0.9px,transparent_0)] bg-[size:28px_28px]" />
+
+      {/* Colored dotted overlay */}
+      <div className="absolute inset-0 opacity-[0.16] bg-[radial-gradient(circle_at_1px_1px,#C99A3D_1px,transparent_0)] bg-[size:112px_112px]" />
+
+      {/* Large subtle layout grid */}
+      <div className="absolute inset-0 opacity-[0.07] bg-[linear-gradient(to_right,#004B08_1px,transparent_1px),linear-gradient(to_bottom,#004B08_1px,transparent_1px)] bg-[size:240px_240px]" />
+
+      {/* Professional technical lines */}
+      <svg
+        className="absolute inset-0 h-full w-full"
+        viewBox="0 0 1600 900"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {/* Main guide lines */}
+        <line
+          x1="0"
+          y1="265"
+          x2="1600"
+          y2="265"
+          stroke="#C99A3D"
+          strokeOpacity="0.18"
+        />
+        <line
+          x1="0"
+          y1="610"
+          x2="1600"
+          y2="610"
+          stroke="#6EA7A1"
+          strokeOpacity="0.16"
+        />
+
+        <line
+          x1="420"
+          y1="0"
+          x2="420"
+          y2="900"
+          stroke="#D98C67"
+          strokeOpacity="0.14"
+        />
+        <line
+          x1="1180"
+          y1="0"
+          x2="1180"
+          y2="900"
+          stroke="#004B08"
+          strokeOpacity="0.13"
+        />
+
+        {/* Connector motifs */}
+        <path
+          d="M420 265H560C590 265 610 285 610 315V360"
+          stroke="#C99A3D"
+          strokeOpacity="0.24"
+        />
+        <path
+          d="M1180 610H1040C1010 610 990 590 990 560V520"
+          stroke="#004B08"
+          strokeOpacity="0.18"
+        />
+        <path
+          d="M760 265V390C760 420 780 440 810 440H930"
+          stroke="#6EA7A1"
+          strokeOpacity="0.20"
+        />
+        <path
+          d="M250 610H360C390 610 410 590 410 560V510"
+          stroke="#D98C67"
+          strokeOpacity="0.18"
+        />
+
+        {/* Colorful nodes */}
+        <circle cx="420" cy="265" r="4.5" fill="#C99A3D" fillOpacity="0.46" />
+        <circle cx="610" cy="360" r="4.5" fill="#C99A3D" fillOpacity="0.40" />
+
+        <circle cx="1180" cy="610" r="4.5" fill="#004B08" fillOpacity="0.38" />
+        <circle cx="990" cy="520" r="4.5" fill="#004B08" fillOpacity="0.34" />
+
+        <circle cx="760" cy="265" r="4.5" fill="#6EA7A1" fillOpacity="0.42" />
+        <circle cx="930" cy="440" r="4.5" fill="#6EA7A1" fillOpacity="0.36" />
+
+        <circle cx="250" cy="610" r="4.5" fill="#D98C67" fillOpacity="0.38" />
+        <circle cx="410" cy="510" r="4.5" fill="#D98C67" fillOpacity="0.34" />
+
+        {/* Node rings */}
+        <circle cx="420" cy="265" r="10" stroke="#C99A3D" strokeOpacity="0.16" />
+        <circle cx="1180" cy="610" r="10" stroke="#004B08" strokeOpacity="0.13" />
+        <circle cx="760" cy="265" r="10" stroke="#6EA7A1" strokeOpacity="0.14" />
+        <circle cx="250" cy="610" r="10" stroke="#D98C67" strokeOpacity="0.13" />
+      </svg>
+
+      {/* Clean overlay */}
+      <div className="absolute inset-0 bg-[#f5f5f5]/48" />
+    </div>
   );
 }
 

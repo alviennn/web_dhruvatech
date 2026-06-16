@@ -9,7 +9,7 @@ import {
   Compass,
   Workflow,
 } from "lucide-react";
-import { SectionHeader, ProcessStrip } from "../components/shared";
+import { PageHero ,SectionHeader, ProcessStrip } from "../components/shared";
 import { useT } from "../providers";
 
 export function About() {
@@ -30,51 +30,32 @@ export function About() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-[#f5f5f5] pt-32 pb-24 lg:pt-44 lg:pb-32 text-[#1F2A1F]">
-        <AboutTexture />
+      <PageHero
+  title={
+    <>
+      {t("about_hero_t1")}{" "}
+      <span className="text-[#004B08]">
+        {t("about_hero_t2")}
+      </span>{" "}
+      {t("about_hero_t3")}
+    </>
+  }
+  subtitle={t("about_hero_sub")}
+  accent={
+    <div className="relative overflow-hidden rounded-[32px] border border-[#1F2A1F]/10 bg-white/65 p-8 shadow-[0_24px_80px_rgba(31,42,31,0.08)] backdrop-blur">
+      <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-[#C99A3D]/10 blur-3xl" />
+      <div className="absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-[#004B08]/[0.06] blur-3xl" />
 
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-48 -left-48 h-[620px] w-[620px] rounded-full bg-[#004B08]/[0.07] blur-3xl" />
-          <div className="absolute -bottom-56 right-[-180px] h-[720px] w-[720px] rounded-full bg-[#8E9970]/[0.12] blur-3xl" />
-        </div>
+      <div className="relative">
+        <p className="whitespace-pre-line text-[clamp(1.35rem,2.4vw,2rem)] leading-snug text-[#1F2A1F]">
+          {t("about_quote")}
+        </p>
 
-        <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-6 lg:grid-cols-12 lg:px-10">
-          <Reveal className="lg:col-span-7">
-            
-
-            <h1 className="max-w-4xl text-[clamp(2.6rem,5.4vw,4.8rem)] leading-[1.02] tracking-tight text-[#1F2A1F]">
-              {t("about_hero_t1")}{" "}
-              <span className="relative inline-block text-[#004B08]">
-                {t("about_hero_t2")}
-                <span className="absolute -bottom-2 left-0 h-[8px] w-full rounded-full bg-[#C99A3D]/20" />
-              </span>{" "}
-              {t("about_hero_t3")}
-            </h1>
-
-            <p className="mt-7 max-w-2xl text-lg leading-relaxed text-[#5F6756]">
-              {t("about_hero_sub")}
-            </p>
-          </Reveal>
-
-          <Reveal delay={0.12} className="lg:col-span-5">
-            <div className="relative rounded-[32px] border border-[#1F2A1F]/10 bg-white/65 p-8 shadow-[0_24px_80px_rgba(31,42,31,0.08)] backdrop-blur">
-              <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-[#C99A3D]/10 blur-3xl" />
-              <div className="absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-[#004B08]/[0.06] blur-3xl" />
-
-              <div className="relative">
-        
-                <p className="mt-5 whitespace-pre-line text-[clamp(1.35rem,2.4vw,2rem)] leading-snug text-[#1F2A1F]">
-                  {t("about_quote")}
-                </p>
-
-                <div className="mt-10 h-px w-full bg-gradient-to-r from-[#C99A3D]/45 via-[#D7D2B8]/60 to-transparent" />
-              </div>
-            </div>
-          </Reveal>
-        </div>
-
-        <AboutMotionStyle />
-      </section>
+        <div className="mt-10 h-px w-full bg-gradient-to-r from-[#C99A3D]/45 via-[#D7D2B8]/60 to-transparent" />
+      </div>
+    </div>
+  }
+/>
 
       {/* INTRO */}
       <section className="relative overflow-hidden bg-[#f5f5f5] py-24 lg:py-28 border-y border-[#1F2A1F]/10">
@@ -173,32 +154,7 @@ export function About() {
       </section>
 
       {/* CTA */}
-      <section className="relative overflow-hidden bg-[#f5f5f5] py-24 lg:py-28 border-t border-[#1F2A1F]/10">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute left-1/2 top-1/2 h-[620px] w-[620px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#004B08]/[0.06] blur-3xl" />
-        </div>
-
-        <div className="relative mx-auto max-w-4xl px-6 lg:px-10 text-center">
-          <Reveal>
-            <h2 className="text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.05] tracking-tight text-[#1F2A1F]">
-              {t("about_cta")}
-            </h2>
-
-            <div className="mt-10 flex justify-center">
-              <Link
-                to="/contact"
-                className="group inline-flex items-center gap-2 rounded-full bg-[#004B08] px-7 py-3.5 text-[#F3EFDF] shadow-[0_16px_40px_rgba(0,75,8,0.16)] transition-colors hover:bg-[#24452A]"
-              >
-                {t("cta_start")}
-                <ArrowUpRight
-                  size={18}
-                  className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                />
-              </Link>
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      
     </>
   );
 }

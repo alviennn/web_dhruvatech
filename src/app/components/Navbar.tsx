@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
-import { Link, NavLink, useLocation } from "react-router";
+import { useLocation } from "react-router";
 import { useT } from "../providers";
 import logo from "../../imports/7.png";
 
@@ -14,6 +14,7 @@ export function Navbar() {
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
     onScroll();
+
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -39,6 +40,11 @@ export function Navbar() {
     { label: t("nav_contact"), to: "/contact" },
   ];
 
+  const isActivePath = (to: string) => {
+    if (to === "/") return location.pathname === "/";
+    return location.pathname === to || location.pathname.startsWith(`${to}/`);
+  };
+
   return (
     <header className="fixed left-0 right-0 top-0 z-50 px-4 pt-4">
       <div
@@ -48,8 +54,9 @@ export function Navbar() {
             : "border-[#1F2A1F]/10 bg-white/55 shadow-[0_12px_40px_rgba(31,42,31,0.04)] backdrop-blur-xl"
         }`}
       >
-        <Link
-          to="/"
+        {/* Logo */}
+        <a
+          href="/"
           className="flex items-center gap-3 shrink-0"
           aria-label="Dhruva Tech home"
         >
@@ -58,8 +65,9 @@ export function Navbar() {
             alt="Dhruva Tech"
             className="h-16 w-auto md:h-[112px] lg:h-[116px]"
           />
-        </Link>
+        </a>
 
+        {/* Desktop Navigation */}
         <nav className="hidden items-center gap-2 lg:flex">
           {links.map((l) =>
             "children" in l && l.children ? (
@@ -69,15 +77,13 @@ export function Navbar() {
                 onMouseEnter={() => setServicesOpen(true)}
                 onMouseLeave={() => setServicesOpen(false)}
               >
-                <NavLink
-                  to={l.to}
-                  className={({ isActive }) =>
-                    `inline-flex items-center gap-1.5 rounded-full px-4 py-2.5 text-[15px] font-semibold transition-all ${
-                      isActive
-                        ? "bg-[#004B08]/10 text-[#004B08]"
-                        : "text-[#1F2A1F]/75 hover:bg-[#004B08]/[0.06] hover:text-[#004B08]"
-                    }`
-                  }
+                <a
+                  href={l.to}
+                  className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2.5 text-[15px] font-semibold transition-all ${
+                    isActivePath(l.to)
+                      ? "bg-[#004B08]/10 text-[#004B08]"
+                      : "text-[#1F2A1F]/75 hover:bg-[#004B08]/[0.06] hover:text-[#004B08]"
+                  }`}
                 >
                   {l.label}
                   <ChevronDown
@@ -87,54 +93,53 @@ export function Navbar() {
                       servicesOpen ? "rotate-180" : ""
                     }`}
                   />
-                </NavLink>
+                </a>
 
                 {servicesOpen && (
                   <div className="absolute left-0 top-full pt-4">
                     <div className="w-72 rounded-[24px] border border-[#1F2A1F]/10 bg-white/90 p-2 shadow-[0_24px_80px_rgba(31,42,31,0.12)] backdrop-blur-xl">
                       {l.children.map((c) => (
-                        <Link
+                        <a
                           key={c.to}
-                          to={c.to}
+                          href={c.to}
                           className="block rounded-[18px] px-4 py-3 text-sm font-semibold text-[#1F2A1F]/75 transition-colors hover:bg-[#f5f5f5] hover:text-[#004B08]"
                         >
                           {c.label}
-                        </Link>
+                        </a>
                       ))}
                     </div>
                   </div>
                 )}
               </div>
             ) : (
-              <NavLink
+              <a
                 key={l.to}
-                to={l.to}
-                end={l.to === "/"}
-                className={({ isActive }) =>
-                  `rounded-full px-4 py-2.5 text-[15px] font-semibold transition-all ${
-                    isActive
-                      ? "bg-[#004B08]/10 text-[#004B08]"
-                      : "text-[#1F2A1F]/75 hover:bg-[#004B08]/[0.06] hover:text-[#004B08]"
-                  }`
-                }
+                href={l.to}
+                className={`rounded-full px-4 py-2.5 text-[15px] font-semibold transition-all ${
+                  isActivePath(l.to)
+                    ? "bg-[#004B08]/10 text-[#004B08]"
+                    : "text-[#1F2A1F]/75 hover:bg-[#004B08]/[0.06] hover:text-[#004B08]"
+                }`}
               >
                 {l.label}
-              </NavLink>
+              </a>
             )
           )}
         </nav>
 
+        {/* Desktop Right */}
         <div className="hidden items-center gap-3 lg:flex">
           <LangSwitcher lang={lang} onChange={setLang} />
 
-          <Link
-            to="/contact"
+          <a
+            href="/contact"
             className="inline-flex items-center justify-center rounded-full bg-[#004B08] px-6 py-3 text-sm font-semibold text-[#F3EFDF] shadow-[0_14px_35px_rgba(0,75,8,0.18)] transition-colors hover:bg-[#24452A]"
           >
             {t("cta_start")}
-          </Link>
+          </a>
         </div>
 
+        {/* Mobile Toggle */}
         <button
           aria-label="Toggle menu"
           className="grid h-11 w-11 place-items-center rounded-full border border-[#1F2A1F]/10 bg-white/70 text-[#1F2A1F] lg:hidden"
@@ -144,28 +149,37 @@ export function Navbar() {
         </button>
       </div>
 
+      {/* Mobile Menu */}
       {open && (
         <div className="mx-auto mt-3 max-w-7xl rounded-[28px] border border-[#1F2A1F]/10 bg-[#f5f5f5]/95 px-6 py-6 shadow-[0_24px_80px_rgba(31,42,31,0.12)] backdrop-blur-xl lg:hidden">
           <div className="flex flex-col gap-2">
             {links.map((l) => (
               <div key={l.to}>
-                <Link
-                  to={l.to}
-                  className="block rounded-2xl px-4 py-3 text-base font-semibold text-[#1F2A1F]/85 transition-colors hover:bg-white hover:text-[#004B08]"
+                <a
+                  href={l.to}
+                  className={`block rounded-2xl px-4 py-3 text-base font-semibold transition-colors hover:bg-white hover:text-[#004B08] ${
+                    isActivePath(l.to)
+                      ? "bg-white text-[#004B08]"
+                      : "text-[#1F2A1F]/85"
+                  }`}
                 >
                   {l.label}
-                </Link>
+                </a>
 
                 {"children" in l && l.children && (
                   <div className="ml-4 mt-1 space-y-1 border-l border-[#1F2A1F]/10 pl-3">
                     {l.children.map((c) => (
-                      <Link
+                      <a
                         key={c.to}
-                        to={c.to}
-                        className="block rounded-xl px-3 py-2 text-sm font-medium text-[#1F2A1F]/65 transition-colors hover:bg-white hover:text-[#004B08]"
+                        href={c.to}
+                        className={`block rounded-xl px-3 py-2 text-sm font-medium transition-colors hover:bg-white hover:text-[#004B08] ${
+                          isActivePath(c.to)
+                            ? "bg-white text-[#004B08]"
+                            : "text-[#1F2A1F]/65"
+                        }`}
                       >
                         {c.label}
-                      </Link>
+                      </a>
                     ))}
                   </div>
                 )}
@@ -177,12 +191,12 @@ export function Navbar() {
             <LangSwitcher lang={lang} onChange={setLang} />
           </div>
 
-          <Link
-            to="/contact"
+          <a
+            href="/contact"
             className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-[#004B08] px-5 py-3 font-semibold text-[#F3EFDF]"
           >
             {t("cta_start")}
-          </Link>
+          </a>
         </div>
       )}
     </header>
@@ -201,6 +215,7 @@ function LangSwitcher({
       {(["en", "id"] as const).map((l) => (
         <button
           key={l}
+          type="button"
           onClick={() => onChange(l)}
           className={`rounded-full px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition-all ${
             lang === l
