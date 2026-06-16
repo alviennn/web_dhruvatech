@@ -1,7 +1,6 @@
 // API service — connect ke PHP backend
 // Ganti file lama: src/app/data/api.ts
 
-// Akses langsung ke file PHP (bypass .htaccess router)
 const BASE          = import.meta.env.VITE_API_URL || "http://localhost:8080/dhruvatech-api/php-backend";
 const AUTH_URL      = `${BASE}/api/auth/index.php`;
 const PORTFOLIO_URL = `${BASE}/api/portfolio/index.php`;
@@ -24,6 +23,7 @@ function authHeaders(): Record<string, string> {
 }
 
 export type PortfolioType = "Website" | "Mobile Apps" | "AI/ML";
+
 export type PortfolioItem = {
   id: string;
   title: string;
@@ -32,6 +32,7 @@ export type PortfolioItem = {
   keyFeatures: string[];
   techStack: string[];
   coverImage: string;
+  images: string[];       // ← tambah: array semua gambar
   createdAt: string;
 };
 
@@ -79,7 +80,7 @@ export async function addPortfolioItem(input: {
   description: string;
   keyFeatures: string[];
   techStack: string[];
-  coverImageFile: File;
+  imageFiles: File[];     // ← ganti: dari coverImageFile → imageFiles (array)
 }): Promise<PortfolioItem> {
   const formData = new FormData();
   formData.append("title", input.title);
@@ -87,7 +88,12 @@ export async function addPortfolioItem(input: {
   formData.append("description", input.description);
   formData.append("keyFeatures", JSON.stringify(input.keyFeatures));
   formData.append("techStack", JSON.stringify(input.techStack));
-  formData.append("coverImage", input.coverImageFile);
+
+  // ← ganti: kirim sebagai images[] agar cocok dengan $_FILES['images'] di PHP
+  input.imageFiles.forEach((file) => {
+    formData.append("images[]", file);
+  });
+
   const res = await fetch(PORTFOLIO_URL, {
     method: "POST",
     headers: authHeaders(),
