@@ -63,7 +63,13 @@ export const router = createBrowserRouter([
       { path: "*", Component: NotFound },
     ],
   },
-  { path: "/admin", Component: AdminPortfolio },
-  { path: "/admin/portfolio", Component: AdminPortfolio },
-  { path: "/portfolio/:id", Component: PortfolioDetail },
+
+  {
+    path: "/admin",
+    Component: AdminPortfolio,
+  },
+  {
+    path: "/admin/portfolio",
+    Component: AdminPortfolio,
+  },
 ]);
