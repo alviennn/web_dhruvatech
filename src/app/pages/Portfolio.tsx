@@ -7,6 +7,62 @@ import { useT } from "../providers";
 import { listPortfolioItems, type PortfolioItem } from "../data/api/api";
 import { Link } from "react-router";
 
+type PricingPackage = {
+  name: string;
+  price: string;
+  priceNote?: string;
+  suitableFor?: string;
+  features: string[];
+  highlight?: boolean;
+  badge?: string;
+};
+
+const pricingPackages: PricingPackage[] = [
+  {
+    name: "Web Basic",
+    price: "900rb-an",
+    priceNote: "Landing page / non-CRUD",
+    features: [
+      "Free hosting & domain (.com) 1 tahun",
+      "Free konsultasi",
+      "Integrasi sosial media",
+      "Website sederhana & responsif",
+      "User guide (panduan pakai)",
+      "4 Halaman: Beranda, Produk, Tentang Kami, Kontak",
+    ],
+  },
+  {
+    name: "Web Premium",
+    price: "1,5 JT - 2,5 JT",
+    priceNote: "Cocok untuk UMKM, blog, company profile",
+    features: [
+      "Free hosting & domain (.com) 1 tahun",
+      "User guide (panduan untuk client)",
+      "Dashboard Admin",
+      "Payment gateway & katalog produk (opsional)",
+      "Statistik kunjungan website",
+    ],
+    highlight: true,
+    badge: "Paling Direkomendasikan",
+  },
+  {
+    name: "Web by Request",
+    price: "Custom",
+    priceNote: "Menyesuaikan fitur & desain kebutuhan kamu",
+    features: [
+      "Diskusi kebutuhan & fitur bareng tim kami",
+      "Desain & arsitektur sesuai kompleksitas project",
+      "Estimasi harga & timeline transparan",
+      "Cocok untuk sistem khusus / fitur kompleks",
+    ],
+  },
+];
+
+function buildWaLink(packageName: string) {
+  const text = `Hallo DhurvaTech! Saya tertarik dengan paket ${packageName}, saya ingin konsultasi mengenai project saya.`;
+  return `https://wa.me/6289514693178?text=${encodeURIComponent(text)}`;
+}
+
 export function Portfolio() {
   const { t } = useT();
 
