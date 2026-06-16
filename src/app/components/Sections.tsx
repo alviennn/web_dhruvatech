@@ -1,7 +1,10 @@
 import { Link } from "react-router";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { listPortfolioItems, type PortfolioItem } from "../data/api/api";
+import {
+  listAdminPortfolioItems,
+  type AdminPortfolioItem,
+} from "../data/portfolioStore";
 import {
   ArrowUpRight,
   Compass,
@@ -15,10 +18,13 @@ import {
   Cpu,
   Lightbulb,
   Layers,
+  MessageCircle,
 } from "lucide-react";
 import { SectionHeader } from "./shared";
 import { useT } from "../providers";
 import logo from "../../imports/8.png";
+import ctaImage from "../../imports/cta.png";
+import ctaLogoMark from "../../imports/dhruva-mark.png";
 
 /* ---------------- ANIMATION WRAPPER ---------------- */
 
@@ -47,6 +53,7 @@ function Reveal({
     </motion.div>
   );
 }
+
 function HomeTexture() {
   return (
     <div className="home-texture absolute inset-0 pointer-events-none opacity-[0.18]" />
@@ -57,12 +64,10 @@ function HomeTexture() {
 
 export function FeaturedWorkPreview() {
   const { t } = useT();
-  const [projects, setProjects] = useState<PortfolioItem[]>([]);
+  const [projects, setProjects] = useState<AdminPortfolioItem[]>([]);
 
   useEffect(() => {
-    listPortfolioItems()
-      .then((items) => setProjects(items.slice(0, 3)))
-      .catch(() => {});
+    setProjects(listAdminPortfolioItems().slice(0, 3));
   }, []);
 
   return (
@@ -186,18 +191,16 @@ export function ProjectVisual({
           </div>
 
           <div className="space-y-1.5">
-            {[
-              "A. Continuous evolution",
-              "B. Stable foundation",
-              "C. Both above",
-            ].map((text) => (
-              <div
-                key={text}
-                className="text-[10px] px-2 py-1.5 rounded bg-[#8E9970]/30 text-[#F3EFDF]/80 border border-[#C99A3D]/15"
-              >
-                {text}
-              </div>
-            ))}
+            {["A. Continuous evolution", "B. Stable foundation", "C. Both above"].map(
+              (text) => (
+                <div
+                  key={text}
+                  className="text-[10px] px-2 py-1.5 rounded bg-[#8E9970]/30 text-[#F3EFDF]/80 border border-[#C99A3D]/15"
+                >
+                  {text}
+                </div>
+              )
+            )}
           </div>
         </div>
       </div>
@@ -207,7 +210,9 @@ export function ProjectVisual({
   if (kind === "ai") {
     return (
       <div className="absolute inset-0 p-6 flex flex-col">
-        <div className="text-[#E0C16A] text-xs mb-3">AI · OBJECT DETECTION</div>
+        <div className="text-[#E0C16A] text-xs mb-3">
+          AI · OBJECT DETECTION
+        </div>
 
         <div className="flex-1 rounded-2xl bg-[#004B08]/60 border border-[#C99A3D]/20 p-4 relative">
           <div className="absolute inset-4 border border-dashed border-[#E0C16A]/60 rounded-lg" />
@@ -373,10 +378,7 @@ export function ProcessPreview() {
       <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
         <Reveal>
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-14">
-            <SectionHeader
-              title={t("process_title")}
-              subtitle={t("process_sub")}
-            />
+            <SectionHeader title={t("process_title")} subtitle={t("process_sub")} />
 
             <Link
               to="/about"
@@ -425,11 +427,7 @@ export function MindsetPreview() {
 
   const values = [
     { icon: Layers, titleKey: "val_stable", descKey: "val_stable_desc" },
-    {
-      icon: Lightbulb,
-      titleKey: "val_purposeful",
-      descKey: "val_purposeful_desc",
-    },
+    { icon: Lightbulb, titleKey: "val_purposeful", descKey: "val_purposeful_desc" },
     { icon: Cpu, titleKey: "val_evolving", descKey: "val_evolving_desc" },
   ] as const;
 
@@ -439,10 +437,7 @@ export function MindsetPreview() {
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
         <Reveal>
-          <SectionHeader
-            title={t("mindset_title")}
-            subtitle={t("mindset_sub")}
-          />
+          <SectionHeader title={t("mindset_title")} subtitle={t("mindset_sub")} />
         </Reveal>
 
         <div className="grid md:grid-cols-3 gap-6 mt-14">
@@ -453,9 +448,13 @@ export function MindsetPreview() {
                   <Icon size={22} strokeWidth={1.8} />
                 </div>
 
-                <h3 className="text-2xl text-[#1F2A1F] mb-3">{t(titleKey)}</h3>
+                <h3 className="text-2xl text-[#1F2A1F] mb-3">
+                  {t(titleKey)}
+                </h3>
 
-                <p className="text-[#5F6756] leading-relaxed">{t(descKey)}</p>
+                <p className="text-[#5F6756] leading-relaxed">
+                  {t(descKey)}
+                </p>
               </div>
             </Reveal>
           ))}
@@ -482,7 +481,9 @@ export function HomeIntro() {
         <Reveal>
           <p className="text-[clamp(1.35rem,2.5vw,2rem)] leading-snug text-[#1F2A1F]">
             {t("home_intro")}{" "}
-            <span className="text-[#004B08]">{t("home_intro_accent")}</span>{" "}
+            <span className="text-[#004B08]">
+              {t("home_intro_accent")}
+            </span>{" "}
             {t("home_intro_tail")}
           </p>
 
@@ -499,46 +500,160 @@ export function HomeIntro() {
   );
 }
 
+export function DigitalProductCTA({
+  title,
+  subtitle,
+  buttonLabel,
+  note,
+}: {
+  title: string;
+  subtitle: string;
+  buttonLabel: string;
+  note?: string;
+}) {
+  return (
+    <section className="relative z-20 overflow-visible bg-[#f5f5f5] pt-10 pb-0 lg:pt-14">
+      <div className="absolute inset-x-0 bottom-[-2px] h-[42%] bg-[#24452A]" />
+
+      <div className="relative z-20 mx-auto max-w-7xl px-6 lg:px-10">
+        <Reveal>
+          <div className="relative overflow-hidden rounded-[42px] bg-[#46585B] px-6 pt-9 pb-9 shadow-[0_28px_90px_rgba(31,42,31,0.16)] md:px-10 lg:min-h-[360px] lg:px-16 lg:py-0">
+            {/* Logo watermark */}
+            <img
+              src={ctaLogoMark}
+              alt=""
+              aria-hidden="true"
+              className="pointer-events-none absolute right-[-120px] top-1/2 h-[640px] w-auto -translate-y-1/2 opacity-[0.045] mix-blend-screen"
+            />
+
+            <div className="pointer-events-none absolute right-[10%] top-[16%] h-48 w-48 rounded-full bg-white/[0.04] blur-2xl" />
+            <div className="pointer-events-none absolute bottom-[-140px] right-[-90px] h-[360px] w-[360px] rounded-full bg-[#C99A3D]/12 blur-3xl" />
+            <div className="pointer-events-none absolute left-[18%] bottom-[-130px] h-[280px] w-[280px] rounded-full bg-[#8E9970]/12 blur-3xl" />
+
+            <div className="relative z-10 grid items-center gap-8 lg:grid-cols-12">
+              {/* Image side */}
+              <div className="relative hidden min-h-[360px] lg:col-span-6 lg:block">
+                <img
+                  src={ctaImage}
+                  alt="Dhruva Tech consultation"
+                  className="absolute left-[39%] bottom-[-58px] h-[420px] w-auto max-w-none -translate-x-1/2 object-contain object-bottom"
+                />
+              </div>
+
+              {/* Text side */}
+              <div className="lg:col-span-6 lg:py-10">
+                <h2 className="max-w-lg text-[clamp(1.9rem,3.4vw,3rem)] font-semibold leading-[1.08] tracking-tight text-[#F3EFDF]">
+                  {title}
+                </h2>
+
+                <p className="mt-5 max-w-xl text-base lg:text-[1.05rem] leading-relaxed text-[#F3EFDF]/82">
+                  {subtitle}
+                </p>
+
+                <div className="mt-7 flex flex-wrap items-center gap-4">
+                  <Link
+                    to="/contact"
+                    className="group inline-flex items-center gap-2 rounded-full bg-[#F3EFDF] px-6 py-3 text-sm font-semibold text-[#004B08] shadow-[0_16px_40px_rgba(0,0,0,0.14)] transition-colors hover:bg-white"
+                  >
+                    <MessageCircle size={18} strokeWidth={2} />
+                    {buttonLabel}
+                    <ArrowUpRight
+                      size={17}
+                      className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    />
+                  </Link>
+                </div>
+
+                {note && (
+                  <p className="mt-5 max-w-xl text-sm leading-relaxed text-[#F3EFDF]/65">
+                    {note}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 /* ---------------- FOOTER ---------------- */
 
 export function Footer() {
   const { t } = useT();
 
   return (
-    <footer className="bg-[#24452A] text-[#F3EFDF]/80 border-t border-[#C99A3D]/15">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-16 grid md:grid-cols-12 gap-10">
+    <footer className="relative z-10 overflow-visible bg-[#24452A] text-[#F3EFDF]/80">
+      {/* Simple wave motif */}
+    <div
+      className="pointer-events-none absolute inset-x-0 top-[-40px] h-[260px] overflow-visible z-0"
+      aria-hidden="true"
+    >
+      <svg
+        className="h-full w-full"
+        viewBox="0 0 1440 260"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        preserveAspectRatio="none"
+      >
+        <path
+          d="M-80 170C160 60 320 60 520 140C720 220 900 220 1120 120C1280 48 1400 56 1520 110"
+          stroke="#C99A3D"
+          strokeWidth="56"
+          strokeLinecap="round"
+          strokeOpacity="0.10"
+        />
+      </svg>
+    </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-16 grid md:grid-cols-12 gap-10">
         <div className="md:col-span-4">
-          <div className="flex items-center gap-3 mb-5">
+          <div className="flex items-center">
             <img
               src={logo}
               alt="Dhruva Tech"
-              className="h-16 md:h-20 lg:h-24 w-auto"
+              className="h-20 md:h-24 lg:h-28 w-auto"
             />
           </div>
 
-          <p className="leading-relaxed max-w-sm">{t("footer_desc")}</p>
+          <p className="leading-relaxed max-w-sm text-[#F3EFDF]/75">
+            {t("footer_desc")}
+          </p>
         </div>
 
         <div className="md:col-span-2">
           <FooterTitle>{t("footer_menu")}</FooterTitle>
           <ul className="space-y-3">
             <li>
-              <Link to="/services" className="hover:text-[#E0C16A]">
+              <Link
+                to="/services"
+                className="hover:text-[#E0C16A] transition-colors"
+              >
                 {t("nav_services")}
               </Link>
             </li>
             <li>
-              <Link to="/portfolio" className="hover:text-[#E0C16A]">
+              <Link
+                to="/portfolio"
+                className="hover:text-[#E0C16A] transition-colors"
+              >
                 {t("nav_portfolio")}
               </Link>
             </li>
             <li>
-              <Link to="/about" className="hover:text-[#E0C16A]">
+              <Link
+                to="/about"
+                className="hover:text-[#E0C16A] transition-colors"
+              >
                 {t("nav_about")}
               </Link>
             </li>
             <li>
-              <Link to="/contact" className="hover:text-[#E0C16A]">
+              <Link
+                to="/contact"
+                className="hover:text-[#E0C16A] transition-colors"
+              >
                 {t("nav_contact")}
               </Link>
             </li>
@@ -551,7 +666,7 @@ export function Footer() {
             <li>
               <Link
                 to="/services/website-development"
-                className="hover:text-[#E0C16A]"
+                className="hover:text-[#E0C16A] transition-colors"
               >
                 {t("nav_website")}
               </Link>
@@ -559,7 +674,7 @@ export function Footer() {
             <li>
               <Link
                 to="/services/mobile-app-development"
-                className="hover:text-[#E0C16A]"
+                className="hover:text-[#E0C16A] transition-colors"
               >
                 {t("nav_mobile")}
               </Link>
@@ -567,7 +682,7 @@ export function Footer() {
             <li>
               <Link
                 to="/services/ai-ml-solutions"
-                className="hover:text-[#E0C16A]"
+                className="hover:text-[#E0C16A] transition-colors"
               >
                 {t("nav_ai")}
               </Link>
@@ -579,22 +694,22 @@ export function Footer() {
           <FooterTitle>{t("footer_contact")}</FooterTitle>
           <ul className="space-y-3">
             <li>
-              <a href="#" className="hover:text-[#E0C16A]">
+              <a href="#" className="hover:text-[#E0C16A] transition-colors">
                 WhatsApp
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-[#E0C16A]">
+              <a href="#" className="hover:text-[#E0C16A] transition-colors">
                 Email
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-[#E0C16A]">
+              <a href="#" className="hover:text-[#E0C16A] transition-colors">
                 Instagram
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-[#E0C16A]">
+              <a href="#" className="hover:text-[#E0C16A] transition-colors">
                 LinkedIn
               </a>
             </li>
@@ -602,7 +717,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-[#C99A3D]/10">
+      <div className="relative z-10 border-t border-[#C99A3D]/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 py-6 flex flex-col sm:flex-row gap-3 justify-between text-sm text-[#F3EFDF]/60">
           <span>{t("footer_rights")}</span>
           <span>{t("footer_tag")}</span>

@@ -1,10 +1,5 @@
 import { Check, AlertCircle, Sparkles, MessageCircle } from "lucide-react";
-import {
-  PageHero,
-  CTABlock,
-  SectionHeader,
-  ProcessStrip,
-} from "../components/shared";
+import { PageHero, SectionHeader, ProcessStrip } from "../components/shared";
 
 import { useT } from "../providers";
 import type { Key } from "../i18n";
@@ -378,7 +373,6 @@ export function MobileAppDevelopment() {
         ]}
       />
       <ProcessSection />
-      <CTABlock title={t("mob_cta")} primaryTo="/contact?service=mobile-app" />
     </>
   );
 }
@@ -457,8 +451,6 @@ export function AIMLSolutions() {
 
         <ServiceMotionStyle />
       </section>
-
-      <CTABlock title={t("ai_cta")} primaryTo="/contact?service=ai-ml" />
     </>
   );
 }

@@ -258,7 +258,6 @@ export function Portfolio() {
         `}</style>
       </section>
 
-      <CTABlock title={t("portfolio_cta")} primaryTo="/contact" />
     </>
   );
 }
