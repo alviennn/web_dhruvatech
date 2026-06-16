@@ -141,7 +141,7 @@ const en = {
   portfolio_filter_ai: "AI/ML",
   portfolio_filter_uiux: "UI/UX",
   portfolio_filter_concept: "Concept Work",
-  portfolio_empty: "No items match this filter yet.",
+  portfolio_empty: "Project Coming Soon - Stay Tuned!",
   portfolio_cta: "Have a Similar Project in Mind?",
 
   // about page
