@@ -85,12 +85,11 @@ function getCTAContent(
   };
 }
 
-export function Layout() {
+export function AppShell() {
   const location = useLocation();
   const { t } = useT();
 
   const cta = getCTAContent(location.pathname, t);
-  const hideCTA = location.pathname.startsWith("/contact");
 
   return (
     <div className="min-h-screen bg-[#f5f5f5] text-[#1F2A1F]">
@@ -100,13 +99,11 @@ export function Layout() {
         <Outlet />
       </main>
 
-      {!hideCTA && (
-        <DigitalProductCTA
-          title={cta.title}
-          subtitle={cta.subtitle}
-          buttonLabel={cta.buttonLabel}
-        />
-      )}
+      <DigitalProductCTA
+        title={cta.title}
+        subtitle={cta.subtitle}
+        buttonLabel={cta.buttonLabel}
+      />
 
       <Footer />
     </div>

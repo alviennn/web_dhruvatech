@@ -154,32 +154,7 @@ export function About() {
       </section>
 
       {/* CTA */}
-      <section className="relative overflow-hidden bg-[#f5f5f5] py-24 lg:py-28 border-t border-[#1F2A1F]/10">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute left-1/2 top-1/2 h-[620px] w-[620px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#004B08]/[0.06] blur-3xl" />
-        </div>
-
-        <div className="relative mx-auto max-w-4xl px-6 lg:px-10 text-center">
-          <Reveal>
-            <h2 className="text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.05] tracking-tight text-[#1F2A1F]">
-              {t("about_cta")}
-            </h2>
-
-            <div className="mt-10 flex justify-center">
-              <Link
-                to="/contact"
-                className="group inline-flex items-center gap-2 rounded-full bg-[#004B08] px-7 py-3.5 text-[#F3EFDF] shadow-[0_16px_40px_rgba(0,75,8,0.16)] transition-colors hover:bg-[#24452A]"
-              >
-                {t("cta_start")}
-                <ArrowUpRight
-                  size={18}
-                  className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                />
-              </Link>
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      
     </>
   );
 }

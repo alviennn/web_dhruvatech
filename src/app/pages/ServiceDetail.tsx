@@ -1,7 +1,6 @@
 import { Check, AlertCircle } from "lucide-react";
 import {
   PageHero,
-  CTABlock,
   SectionHeader,
   ProcessStrip,
 } from "../components/shared";
@@ -159,7 +158,6 @@ export function WebsiteDevelopment() {
 
       <ProcessSection />
 
-      <CTABlock title={t("web_cta")} primaryTo="/contact?service=website" />
     </>
   );
 }
@@ -216,8 +214,6 @@ export function MobileAppDevelopment() {
       />
 
       <ProcessSection />
-
-      <CTABlock title={t("mob_cta")} primaryTo="/contact?service=mobile-app" />
     </>
   );
 }
@@ -298,8 +294,6 @@ export function AIMLSolutions() {
 
         <ServiceMotionStyle />
       </section>
-
-      <CTABlock title={t("ai_cta")} primaryTo="/contact?service=ai-ml" />
     </>
   );
 }

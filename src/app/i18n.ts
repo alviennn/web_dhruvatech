@@ -240,6 +240,43 @@ const en = {
   admin_delete_confirm: "Are you sure you want to delete this portfolio item?",
   admin_delete_success: "Portfolio item deleted successfully.",
   admin_empty_full: "No portfolio items added yet.",
+
+  // page CTA
+  services_cta_title: "Need the Right Digital Solution?",
+  services_cta_sub:
+    "Tell us your business goal and we’ll help define whether you need a website, mobile app, AI/ML solution, or a custom digital system.",
+  services_cta_button: "Discuss Your Needs",
+
+  web_cta_title: "Need a Better Website?",
+  web_cta_sub:
+    "Build a website that explains your value clearly, strengthens credibility, and helps visitors take action.",
+  web_cta_button: "Discuss Website Project",
+
+
+  mob_cta_title: "Planning a Mobile App?",
+  mob_cta_sub:
+    "Turn your service flow or product idea into a mobile experience that is easier to access and use.",
+  mob_cta_button: "Discuss App Project",
+
+  ai_cta_title: "Exploring AI for Business?",
+  ai_cta_sub:
+    "Use AI/ML for automation, data processing, prediction, computer vision, or smarter digital features.",
+  ai_cta_button: "Discuss AI/ML Project",
+
+  portfolio_cta_title: "Want Results Like This?",
+  portfolio_cta_sub:
+    "Use our previous work as a starting reference to build a digital product that fits your business needs.",
+  portfolio_cta_button: "Start Your Project",
+
+  about_cta_title: "Build with a Clear Process",
+  about_cta_sub:
+    "Work with a team that builds digital products through structured discovery, purposeful design, and reliable development.",
+  about_cta_button: "Talk With Us",
+
+  contact_cta_title: "Ready to Discuss?",
+  contact_cta_sub:
+    "Share your project idea, business problem, or digital product goal through the contact form.",
+  contact_cta_button: "Send Inquiry",
 };
 
 const id: Record<keyof typeof en, string> = {
@@ -463,6 +500,42 @@ const id: Record<keyof typeof en, string> = {
   admin_delete_confirm: "Apakah Anda yakin ingin menghapus portfolio ini?",
   admin_delete_success: "Portfolio berhasil dihapus.",
   admin_empty_full: "Belum ada portfolio yang ditambahkan.",
+
+  // page CTA
+  services_cta_title: "Butuh Solusi Digital yang Tepat?",
+  services_cta_sub:
+    "Ceritakan tujuan bisnis Anda, lalu kami bantu menentukan apakah Anda membutuhkan website, aplikasi mobile, solusi AI/ML, atau sistem digital khusus.",
+  services_cta_button: "Diskusikan Kebutuhan",
+
+  web_cta_title: "Butuh Website yang Lebih Baik?",
+  web_cta_sub:
+    "Bangun website yang menjelaskan nilai bisnis dengan jelas, memperkuat kredibilitas, dan mendorong pengunjung untuk bertindak.",
+  web_cta_button: "Diskusi Website",
+
+  mob_cta_title: "Merencanakan Aplikasi Mobile?",
+  mob_cta_sub:
+    "Ubah alur layanan atau ide produk Anda menjadi pengalaman mobile yang lebih mudah diakses dan digunakan.",
+  mob_cta_button: "Diskusi Aplikasi",
+
+  ai_cta_title: "Ingin Menerapkan AI?",
+  ai_cta_sub:
+    "Gunakan AI/ML untuk otomasi, pengolahan data, prediksi, computer vision, atau fitur digital yang lebih cerdas.",
+  ai_cta_button: "Diskusi AI/ML",
+
+  portfolio_cta_title: "Ingin Hasil Seperti Ini?",
+  portfolio_cta_sub:
+    "Gunakan karya sebelumnya sebagai referensi awal untuk membangun produk digital yang sesuai kebutuhan bisnis Anda.",
+  portfolio_cta_button: "Mulai Proyek",
+
+  about_cta_title: "Bangun dengan Proses yang Jelas",
+  about_cta_sub:
+    "Bekerja dengan tim yang membangun produk digital melalui discovery yang terstruktur, desain yang bertujuan, dan pengembangan yang andal.",
+  about_cta_button: "Diskusi Bersama",
+
+  contact_cta_title: "Siap Berdiskusi?",
+  contact_cta_sub:
+    "Bagikan ide proyek, masalah bisnis, atau tujuan produk digital Anda melalui form kontak.",
+  contact_cta_button: "Kirim Inquiry",
 };
 
 export const dict = { en, id };
