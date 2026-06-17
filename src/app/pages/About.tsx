@@ -138,7 +138,7 @@ export function About() {
                   {/* Watermark icon */}
                   <Icon
                     aria-hidden="true"
-                    size={92}
+                    size={76}
                     strokeWidth={1.6}
                     className="pointer-events-none absolute right-7 top-7 text-[#004B08]/[0.12] transition-all duration-500 group-hover:scale-[1.05] group-hover:text-[#C99A3D]/[0.20]"
                   />

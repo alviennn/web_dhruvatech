@@ -269,38 +269,36 @@ export function ProcessStrip({ compact = false }: { compact?: boolean }) {
   const items = compact ? steps.slice(0, 4) : steps;
 
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {items.map(({ title, desc, icon: Icon }, index) => (
         <div
           key={title}
-          className="group relative h-full overflow-hidden rounded-[30px] border border-[#1F2A1F]/10 bg-white/70 p-7 shadow-[0_20px_70px_rgba(31,42,31,0.06)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#C99A3D]/70 hover:shadow-[0_26px_90px_rgba(31,42,31,0.10)]"
+          className="group relative min-h-[175px] overflow-hidden rounded-[22px] border border-[#1F2A1F]/10 bg-white/75 px-6 py-5 shadow-[0_12px_38px_rgba(31,42,31,0.04)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#C99A3D]/55 hover:bg-white hover:shadow-[0_20px_60px_rgba(31,42,31,0.075)]"
         >
-          {/* Soft accent */}
-          <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-[#E0C16A]/10 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-20 -left-20 h-44 w-44 rounded-full bg-[#004B08]/[0.04] blur-3xl" />
 
-          <div className="relative z-10 flex min-h-[230px] flex-col">
-            <div className="flex items-start justify-between">
-              <div className="grid h-[58px] w-[58px] place-items-center rounded-[18px] border border-[#D7D2B8] bg-[#F7F6F0]/80 text-[#004B08] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-[#C99A3D] group-hover:bg-[#FFF8E6]/80">
-                <Icon size={22} strokeWidth={1.8} />
-              </div>
+          {/* Watermark icon */}
+          <Icon
+            aria-hidden="true"
+            size={76}
+            strokeWidth={1.5}
+            className="pointer-events-none absolute right-6 top-6 text-[#004B08]/[0.40] transition-all duration-500 group-hover:scale-[1.05] group-hover:text-[#C99A3D]/[0.20]"
+          />
 
-              <span className="text-sm font-medium tracking-wider text-[#C99A3D]">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-            </div>
+          {/* Soft glow */}
+          <div className="pointer-events-none absolute right-8 top-8 h-28 w-28 rounded-full bg-[#004B08]/[0.035] blur-2xl transition-all duration-500 group-hover:bg-[#C99A3D]/[0.07]" />
 
-            <div className="mt-auto">
-              <h3 className="text-xl tracking-tight text-[#1F2A1F]">
+          <div className="relative z-10 flex h-full min-h-[135px] flex-col justify-end">
+            <div className="max-w-[78%]">
+              <h3 className="text-xl font-medium tracking-tight text-[#1F2A1F]">
                 {title}
               </h3>
 
-              <p className="mt-3 max-w-[92%] text-sm leading-relaxed text-[#5F6756]">
+              <p className="mt-3 text-sm leading-relaxed text-[#5F6756]">
                 {desc}
               </p>
-            </div>
 
-            <div className="mt-7 h-px w-full bg-gradient-to-r from-[#C99A3D]/45 via-[#D7D2B8]/60 to-transparent" />
+              <div className="mt-5 h-px w-full bg-gradient-to-r from-[#C99A3D]/45 via-[#D7D2B8]/50 to-transparent" />
+            </div>
           </div>
         </div>
       ))}
