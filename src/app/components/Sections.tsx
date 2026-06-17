@@ -2,9 +2,9 @@ import { Link } from "react-router";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import {
-  listAdminPortfolioItems,
-  type AdminPortfolioItem,
-} from "../data/portfolioStore";
+  listPortfolioItems,
+  type PortfolioItem,
+} from "../data/api/api";
 import {
   ArrowUpRight,
   Compass,
@@ -64,10 +64,44 @@ function HomeTexture() {
 
 export function FeaturedWorkPreview() {
   const { t } = useT();
-  const [projects, setProjects] = useState<AdminPortfolioItem[]>([]);
+
+  const [projects, setProjects] = useState<PortfolioItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    setProjects(listAdminPortfolioItems().slice(0, 3));
+    let isMounted = true;
+
+    async function fetchFeaturedWorks() {
+      try {
+        setLoading(true);
+        setError("");
+
+        const data = await listPortfolioItems();
+
+        if (!isMounted) return;
+
+        setProjects(data.slice(0, 3));
+      } catch (err) {
+        if (!isMounted) return;
+
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Gagal mengambil data portfolio."
+        );
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    }
+
+    fetchFeaturedWorks();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
@@ -95,7 +129,19 @@ export function FeaturedWorkPreview() {
           </div>
         </Reveal>
 
-        {projects.length > 0 ? (
+        {loading ? (
+          <Reveal>
+            <div className="rounded-[28px] border border-[#1F2A1F]/10 bg-white/60 px-6 py-16 text-center text-[#5F6756] shadow-[0_16px_50px_rgba(31,42,31,0.045)] backdrop-blur">
+              Memuat featured work...
+            </div>
+          </Reveal>
+        ) : error ? (
+          <Reveal>
+            <div className="rounded-[28px] border border-red-200 bg-red-50 px-6 py-16 text-center text-red-700 shadow-[0_16px_50px_rgba(31,42,31,0.045)] backdrop-blur">
+              {error}
+            </div>
+          </Reveal>
+        ) : projects.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((p, i) => (
               <Reveal key={p.id} delay={i * 0.08}>
@@ -322,31 +368,40 @@ export function ServicesPreview() {
         <div className="grid md:grid-cols-3 gap-6 mt-14">
           {items.map(({ icon: Icon, titleKey, descKey, to }, i) => (
             <Reveal key={titleKey} delay={i * 0.08}>
-              <Link
-                to={to}
-                className="group block h-full rounded-[28px] bg-white/70 border border-[#1F2A1F]/10 p-8 shadow-[0_18px_60px_rgba(31,42,31,0.05)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_24px_80px_rgba(31,42,31,0.10)]"
-              >
-                <div className="mb-7 flex h-[58px] w-[58px] items-center justify-center rounded-[18px] border border-[#D7D2B8] bg-[#F7F6F0]/80 text-[#004B08] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-[#C99A3D] group-hover:bg-[#FFF8E6]/80">
-                  <Icon size={22} strokeWidth={1.8} />
+            <Link
+              to={to}
+              className="group relative block h-full min-h-[300px] overflow-hidden rounded-[30px] border border-[#1F2A1F]/10 bg-white/75 p-8 shadow-[0_18px_60px_rgba(31,42,31,0.045)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:bg-white hover:shadow-[0_26px_80px_rgba(31,42,31,0.09)]"
+            >
+              {/* Watermark icon */}
+              <Icon
+                aria-hidden="true"
+                size={76}
+                strokeWidth={1.5}
+                className="pointer-events-none absolute right-7 top-7 text-[#004B08]/[0.40] transition-all duration-500 group-hover:scale-[1.05] group-hover:text-[#C99A3D]/[0.15]"
+              />
+
+              <div className="relative z-10 flex h-full flex-col justify-end">
+                <div className="max-w-[82%]">
+                  <h3 className="mb-3 text-2xl font-medium tracking-tight text-[#1F2A1F]">
+                    {t(titleKey as any)}
+                  </h3>
+
+                  <p className="text-sm leading-relaxed text-[#5F6756]">
+                    {t(descKey as any)}
+                  </p>
+
+                  <div className="mt-7 inline-flex items-center gap-2 text-sm font-medium text-[#004B08]">
+                    {t("cta_learn_more")}
+                    <ArrowUpRight
+                      size={15}
+                      strokeWidth={2}
+                      className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    />
+                  </div>
                 </div>
-
-                <h3 className="text-xl mb-3 text-[#1F2A1F]">
-                  {t(titleKey as any)}
-                </h3>
-
-                <p className="text-[#5F6756] leading-relaxed text-sm mb-6">
-                  {t(descKey as any)}
-                </p>
-
-                <div className="inline-flex items-center gap-2 text-sm text-[#004B08]">
-                  {t("cta_learn_more")}
-                  <ArrowUpRight
-                    size={16}
-                    className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                  />
-                </div>
-              </Link>
-            </Reveal>
+              </div>
+            </Link>
+          </Reveal>
           ))}
         </div>
       </div>
@@ -362,12 +417,36 @@ export function ProcessPreview() {
   const { t } = useT();
 
   const steps = [
-    { icon: Compass, key: "step_discover" },
-    { icon: ClipboardList, key: "step_define" },
-    { icon: PenTool, key: "step_design" },
-    { icon: Code2, key: "step_develop" },
-    { icon: FlaskConical, key: "step_test" },
-    { icon: Rocket, key: "step_launch" },
+    {
+      icon: Compass,
+      key: "step_discover",
+      descKey: "step_discover_desc",
+    },
+    {
+      icon: ClipboardList,
+      key: "step_define",
+      descKey: "step_define_desc",
+    },
+    {
+      icon: PenTool,
+      key: "step_design",
+      descKey: "step_design_desc",
+    },
+    {
+      icon: Code2,
+      key: "step_develop",
+      descKey: "step_develop_desc",
+    },
+    {
+      icon: FlaskConical,
+      key: "step_test",
+      descKey: "step_test_desc",
+    },
+    {
+      icon: Rocket,
+      key: "step_launch",
+      descKey: "step_launch_desc",
+    },
   ] as const;
 
   return (
@@ -391,29 +470,36 @@ export function ProcessPreview() {
         </Reveal>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {steps.map(({ icon: Icon, key }, i) => (
-            <Reveal key={key} delay={i * 0.06}>
-              <div className="group relative overflow-hidden rounded-[30px] border border-[#D7D2B8]/80 bg-white/70 p-7 shadow-[0_20px_70px_rgba(31,42,31,0.06)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#C99A3D]/70 hover:shadow-[0_26px_90px_rgba(31,42,31,0.10)]">
-                <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-[#E0C16A]/10 blur-3xl" />
+          {steps.map(({ icon: Icon, key, descKey }, i) => (
+          <Reveal key={key} delay={i * 0.06}>
+            <div className="group relative min-h-[175px] overflow-hidden rounded-[22px] border border-[#1F2A1F]/10 bg-white/75 px-6 py-5 shadow-[0_12px_38px_rgba(31,42,31,0.04)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#C99A3D]/55 hover:bg-white hover:shadow-[0_20px_60px_rgba(31,42,31,0.075)]">
+              {/* Watermark icon */}
+              <Icon
+                aria-hidden="true"
+                size={76}
+                strokeWidth={1.5}
+                className="pointer-events-none absolute right-6 top-6 text-[#004B08]/[0.40] transition-all duration-500 group-hover:scale-[1.05] group-hover:text-[#C99A3D]/[0.20]"
+              />
 
-                <div className="relative flex items-start justify-between">
-                  <div className="grid h-[58px] w-[58px] place-items-center rounded-[18px] border border-[#D7D2B8] bg-[#F7F6F0]/80 text-[#004B08] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-[#C99A3D] group-hover:bg-[#FFF8E6]/80">
-                    <Icon size={22} strokeWidth={1.8} />
-                  </div>
+              {/* Soft glow */}
+              <div className="pointer-events-none absolute right-8 top-8 h-28 w-28 rounded-full bg-[#004B08]/[0.035] blur-2xl transition-all duration-500 group-hover:bg-[#C99A3D]/[0.07]" />
 
-                  <span className="text-sm font-medium tracking-wider text-[#C99A3D]">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
+              <div className="relative z-10 flex h-full flex-col justify-end">
+                <div className="max-w-[78%]">
+                  <h3 className="text-xl font-medium tracking-tight text-[#1F2A1F]">
+                    {t(key)}
+                  </h3>
+
+                  <p className="mt-3 text-sm leading-relaxed text-[#5F6756]">
+                    {t(descKey)}
+                  </p>
+
+                  <div className="mt-5 h-px w-full bg-gradient-to-r from-[#C99A3D]/45 via-[#D7D2B8]/50 to-transparent" />
                 </div>
-
-                <h3 className="relative mt-12 text-xl text-[#1F2A1F]">
-                  {t(key)}
-                </h3>
-
-                <div className="relative mt-8 h-px w-full bg-gradient-to-r from-[#C99A3D]/45 via-[#D7D2B8]/60 to-transparent" />
               </div>
-            </Reveal>
-          ))}
+            </div>
+          </Reveal>
+        ))}
         </div>
       </div>
     </section>
