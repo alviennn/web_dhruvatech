@@ -277,6 +277,98 @@ const en = {
   contact_cta_sub:
     "Share your project idea, business problem, or digital product goal through the contact form.",
   contact_cta_button: "Send Inquiry",
+
+  pricing_badge: "Website Packages",
+  pricing_title_1: "Choose the Package That Fits",
+  pricing_title_2: "Your Needs",
+  pricing_subtitle:
+    "From simple landing pages to websites with admin dashboards and custom features tailored to your business needs.",
+
+  pricing_basic_name: "Web Basic",
+  pricing_basic_price: "Around IDR 900K",
+  pricing_basic_note: "Landing page / non-CRUD",
+  pricing_basic_feature_1: "Free hosting & .com domain for 1 year",
+  pricing_basic_feature_2: "Free consultation",
+  pricing_basic_feature_3: "Social media integration",
+  pricing_basic_feature_4: "Simple and responsive website",
+  pricing_basic_feature_5: "User guide",
+  pricing_basic_feature_6:
+    "4 Pages, for example: Home, Products, About Us, Contact",
+
+  pricing_premium_name: "Web Premium",
+  pricing_premium_price: "IDR 1.5M - 2.5M",
+  pricing_premium_note: "Suitable for MSMEs, blogs, and company profiles",
+  pricing_premium_badge: "Most Recommended",
+  pricing_premium_feature_1: "Free hosting & .com domain for 1 year",
+  pricing_premium_feature_2: "User guide for client",
+  pricing_premium_feature_3: "Admin Dashboard",
+  pricing_premium_feature_4: "Payment gateway & product catalog optional",
+  pricing_premium_feature_5: "Website visitor statistics",
+
+  pricing_custom_name: "Web by Request",
+  pricing_custom_price: "Custom",
+  pricing_custom_note: "Adjusted to your feature and design needs",
+  pricing_custom_feature_1:
+    "Discuss your needs and features with our team",
+  pricing_custom_feature_2:
+    "Design and architecture based on project complexity",
+  pricing_custom_feature_3:
+    "Transparent price and timeline estimation",
+  pricing_custom_feature_4:
+    "Suitable for custom systems or complex features",
+
+  pricing_cta: "Consult This Package",
+  pricing_note:
+    "Prices may change depending on feature complexity and project requirements.",
+
+  pricing_wa_message:
+    "Hello DhruvaTech! I am interested in the {packageName} package and would like to consult about my project.",
+
+  web_type_company_profile: "Company Profile Website",
+  web_type_landing_page: "Sales Landing Page",
+  web_type_business: "Business Website",
+
+  web_feature_responsive: "Clear business message",
+  web_feature_uiux: "Modern and credible look",
+  web_feature_content_structure: "Content that guides visitors",
+  web_feature_service_pages: "Direct inquiry flow",
+  web_feature_portfolio: "Trust-building sections",
+  web_feature_contact_form: "Easy contact access",
+  web_feature_whatsapp: "WhatsApp-ready CTA",
+  web_feature_seo: "SEO-ready foundation",
+  web_feature_fast_loading: "Fast and responsive experience",
+
+  mob_type_service_app: "Service App",
+  mob_type_booking_app: "Booking App",
+  mob_type_educational_app: "Learning App",
+  mob_type_community_app: "Community App",
+  mob_type_business_app: "Business App",
+
+  mob_feature_user_friendly: "Simple user experience",
+  mob_feature_user_flow: "Clear action flow",
+  mob_feature_mobile_first: "Built for mobile users",
+  mob_feature_auth_flow: "Secure access flow",
+  mob_feature_booking_flow: "Smooth booking process",
+  mob_feature_notification: "Engagement-ready features",
+  mob_feature_admin: "Admin management planning",
+  mob_feature_api: "API integration ready",
+  mob_feature_prototype: "Prototype before build",
+  mob_feature_scalable: "Ready to grow",
+
+  ai_type_computer_vision: "Computer Vision",
+  ai_type_prediction: "Prediction System",
+  ai_type_classification: "Data Insight",
+  ai_type_features: "Smart Digital Features",
+  ai_type_automation: "Business Automation",
+
+  ai_usecase_image_detection: "Detect objects or images",
+  ai_usecase_object_classification: "Classify visual data",
+  ai_usecase_data_prediction: "Predict business data",
+  ai_usecase_data_processing: "Process repetitive data",
+  ai_usecase_recommendation: "Recommend better actions",
+  ai_usecase_dashboard: "Smarter dashboards",
+  ai_usecase_automation: "Automate manual workflows",
+  ai_usecase_cv_prototype: "Test AI ideas first",
 };
 
 const id: Record<keyof typeof en, string> = {
@@ -536,6 +628,96 @@ const id: Record<keyof typeof en, string> = {
   contact_cta_sub:
     "Bagikan ide proyek, masalah bisnis, atau tujuan produk digital Anda melalui form kontak.",
   contact_cta_button: "Kirim Inquiry",
+
+  pricing_badge: "Paket Website",
+  pricing_title_1: "Pilih Paket yang Sesuai",
+  pricing_title_2: "Kebutuhan Kamu",
+  pricing_subtitle:
+    "Mulai dari landing page sederhana hingga website dengan dashboard admin dan fitur khusus sesuai kebutuhan bisnis.",
+
+  pricing_basic_name: "Web Basic",
+  pricing_basic_price: "900rb-an",
+  pricing_basic_note: "Landing page / non-CRUD",
+  pricing_basic_feature_1: "Free hosting & domain (.com) 1 tahun",
+  pricing_basic_feature_2: "Free konsultasi",
+  pricing_basic_feature_3: "Integrasi sosial media",
+  pricing_basic_feature_4: "Website sederhana & responsif",
+  pricing_basic_feature_5: "User guide (panduan pakai)",
+  pricing_basic_feature_6:
+    "4 Halaman (Contoh): Beranda, Produk, Tentang Kami, Kontak",
+
+  pricing_premium_name: "Web Premium",
+  pricing_premium_price: "1,5 JT - 2,5 JT",
+  pricing_premium_note: "Cocok untuk UMKM, blog, company profile",
+  pricing_premium_badge: "Paling Direkomendasikan",
+  pricing_premium_feature_1: "Free hosting & domain (.com) 1 tahun",
+  pricing_premium_feature_2: "User guide (panduan untuk client)",
+  pricing_premium_feature_3: "Dashboard Admin",
+  pricing_premium_feature_4: "Payment gateway & katalog produk (opsional)",
+  pricing_premium_feature_5: "Statistik kunjungan website",
+
+  pricing_custom_name: "Web by Request",
+  pricing_custom_price: "Custom",
+  pricing_custom_note: "Menyesuaikan fitur & desain kebutuhan kamu",
+  pricing_custom_feature_1: "Diskusi kebutuhan & fitur bareng tim kami",
+  pricing_custom_feature_2:
+    "Desain & arsitektur sesuai kompleksitas project",
+  pricing_custom_feature_3: "Estimasi harga & timeline transparan",
+  pricing_custom_feature_4:
+    "Cocok untuk sistem khusus / fitur kompleks",
+
+  pricing_cta: "Konsultasi Paket Ini",
+  pricing_note:
+    "Harga dapat berubah sesuai kompleksitas fitur dan kebutuhan project.",
+
+  pricing_wa_message:
+    "Hallo DhruvaTech! Saya tertarik dengan paket {packageName}, saya ingin konsultasi mengenai project saya.",
+
+  web_type_company_profile: "Website Company Profile",
+  web_type_landing_page: "Landing Page Penjualan",
+  web_type_business: "Website Bisnis",
+
+  web_feature_responsive: "Pesan bisnis yang jelas",
+  web_feature_uiux: "Tampilan modern dan kredibel",
+  web_feature_content_structure: "Konten yang mengarahkan pengunjung",
+  web_feature_service_pages: "Alur inquiry yang jelas",
+  web_feature_portfolio: "Section pembangun kepercayaan",
+  web_feature_contact_form: "Akses kontak yang mudah",
+  web_feature_whatsapp: "CTA siap ke WhatsApp",
+  web_feature_seo: "Fondasi siap SEO",
+  web_feature_fast_loading: "Akses cepat dan responsif",
+
+  mob_type_service_app: "Aplikasi Layanan",
+  mob_type_booking_app: "Aplikasi Booking",
+  mob_type_educational_app: "Aplikasi Pembelajaran",
+  mob_type_community_app: "Aplikasi Komunitas",
+  mob_type_business_app: "Aplikasi Bisnis",
+
+  mob_feature_user_friendly: "Pengalaman pengguna sederhana",
+  mob_feature_user_flow: "Alur aksi yang jelas",
+  mob_feature_mobile_first: "Dibangun untuk pengguna mobile",
+  mob_feature_auth_flow: "Alur akses yang aman",
+  mob_feature_booking_flow: "Proses booking yang mudah",
+  mob_feature_notification: "Fitur siap engagement",
+  mob_feature_admin: "Perencanaan manajemen admin",
+  mob_feature_api: "Siap integrasi API",
+  mob_feature_prototype: "Prototipe sebelum development",
+  mob_feature_scalable: "Siap dikembangkan",
+
+  ai_type_computer_vision: "Computer Vision",
+  ai_type_prediction: "Sistem Prediksi",
+  ai_type_classification: "Insight dari Data",
+  ai_type_features: "Fitur Digital Cerdas",
+  ai_type_automation: "Otomasi Bisnis",
+
+  ai_usecase_image_detection: "Mendeteksi objek atau gambar",
+  ai_usecase_object_classification: "Mengklasifikasi data visual",
+  ai_usecase_data_prediction: "Memprediksi data bisnis",
+  ai_usecase_data_processing: "Memproses data berulang",
+  ai_usecase_recommendation: "Memberi rekomendasi tindakan",
+  ai_usecase_dashboard: "Dashboard yang lebih cerdas",
+  ai_usecase_automation: "Otomasi pekerjaan manual",
+  ai_usecase_cv_prototype: "Menguji ide AI lebih dulu",
 };
 
 export const dict = { en, id };

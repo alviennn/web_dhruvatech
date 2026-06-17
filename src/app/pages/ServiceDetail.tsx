@@ -1,63 +1,89 @@
-import { Check, AlertCircle, Sparkles, MessageCircle } from "lucide-react";
+import {
+  Check,
+  AlertCircle,
+  Sparkles,
+  MessageCircle,
+  type LucideIcon,
+  Building2,
+  LayoutTemplate,
+  BriefcaseBusiness,
+  GraduationCap,
+  FolderKanban,
+  MonitorSmartphone,
+  PencilRuler,
+  Files,
+  PanelsTopLeft,
+  ContactRound,
+  SearchCheck,
+  Rocket,
+  Smartphone,
+  CalendarCheck2,
+  UsersRound,
+  ShieldCheck,
+  BellRing,
+  DatabaseZap,
+  Cpu,
+  BrainCircuit,
+  Workflow,
+  ScanSearch,
+} from "lucide-react";
 import { PageHero, SectionHeader, ProcessStrip } from "../components/shared";
 
 import { useT } from "../providers";
 import type { Key } from "../i18n";
 
 type PricingPackage = {
-  name: string;
-  price: string;
-  priceNote?: string;
-  suitableFor?: string;
-  features: string[];
+  nameKey: Key;
+  priceKey: Key;
+  priceNoteKey?: Key;
+  featureKeys: Key[];
   highlight?: boolean;
-  badge?: string;
+  badgeKey?: Key;
 };
 
 const pricingPackages: PricingPackage[] = [
   {
-    name: "Web Basic",
-    price: "900rb-an",
-    priceNote: "Landing page / non-CRUD",
-    features: [
-      "Free hosting & domain (.com) 1 tahun",
-      "Free konsultasi",
-      "Integrasi sosial media",
-      "Website sederhana & responsif",
-      "User guide (panduan pakai)",
-      "4 Halaman (Contoh): Beranda, Produk, Tentang Kami, Kontak",
+    nameKey: "pricing_basic_name",
+    priceKey: "pricing_basic_price",
+    priceNoteKey: "pricing_basic_note",
+    featureKeys: [
+      "pricing_basic_feature_1",
+      "pricing_basic_feature_2",
+      "pricing_basic_feature_3",
+      "pricing_basic_feature_4",
+      "pricing_basic_feature_5",
+      "pricing_basic_feature_6",
     ],
   },
   {
-    name: "Web Premium",
-    price: "1,5 JT - 2,5 JT",
-    priceNote: "Cocok untuk UMKM, blog, company profile",
-    features: [
-      "Free hosting & domain (.com) 1 tahun",
-      "User guide (panduan untuk client)",
-      "Dashboard Admin",
-      "Payment gateway & katalog produk (opsional)",
-      "Statistik kunjungan website",
+    nameKey: "pricing_premium_name",
+    priceKey: "pricing_premium_price",
+    priceNoteKey: "pricing_premium_note",
+    featureKeys: [
+      "pricing_premium_feature_1",
+      "pricing_premium_feature_2",
+      "pricing_premium_feature_3",
+      "pricing_premium_feature_4",
+      "pricing_premium_feature_5",
     ],
     highlight: true,
-    badge: "Paling Direkomendasikan",
+    badgeKey: "pricing_premium_badge",
   },
   {
-    name: "Web by Request",
-    price: "Custom",
-    priceNote: "Menyesuaikan fitur & desain kebutuhan kamu",
-    features: [
-      "Diskusi kebutuhan & fitur bareng tim kami",
-      "Desain & arsitektur sesuai kompleksitas project",
-      "Estimasi harga & timeline transparan",
-      "Cocok untuk sistem khusus / fitur kompleks",
+    nameKey: "pricing_custom_name",
+    priceKey: "pricing_custom_price",
+    priceNoteKey: "pricing_custom_note",
+    featureKeys: [
+      "pricing_custom_feature_1",
+      "pricing_custom_feature_2",
+      "pricing_custom_feature_3",
+      "pricing_custom_feature_4",
     ],
   },
 ];
 
-function buildWaLink(packageName: string) {
-  const text = `Hallo DhurvaTech! Saya tertarik dengan paket ${packageName}, saya ingin konsultasi mengenai project saya.`;
-  return `https://wa.me/6289514693178?text=${encodeURIComponent(text)}`;
+function buildWaLink(message: string) {
+  return `https://wa.me/6289514693178?text=${encodeURIComponent(message)}`;
 }
 
 function ProblemSection({
@@ -68,28 +94,39 @@ function ProblemSection({
   accent: string;
 }) {
   return (
-    <section className="relative overflow-hidden bg-[#f5f5f5] py-20 lg:py-24 transition-colors">
-      <div className="pointer-events-none absolute inset-0 opacity-[0.14] service-texture" />
-      <div className="pointer-events-none absolute -top-40 right-[-160px] h-[540px] w-[540px] rounded-full bg-[#004B08]/[0.06] blur-3xl" />
+    <section className="relative overflow-hidden bg-[#f5f5f5] py-18 lg:py-20 transition-colors">
+      <div className="pointer-events-none absolute inset-0 opacity-[0.12] service-texture" />
+      <div className="pointer-events-none absolute -top-44 right-[-180px] h-[560px] w-[560px] rounded-full bg-[#004B08]/[0.06] blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-44 left-[-180px] h-[520px] w-[520px] rounded-full bg-[#C99A3D]/[0.055] blur-3xl" />
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-10 grid lg:grid-cols-12 gap-8 lg:gap-12">
+      <div className="relative mx-auto grid max-w-7xl gap-10 px-6 lg:grid-cols-12 lg:gap-14 lg:px-10">
         <div className="lg:col-span-5">
           <SectionHeader title={accent} />
         </div>
 
-        <div className="lg:col-span-7 space-y-4">
-          {problems.map((p) => (
-            <div
-              key={p}
-              className="group flex gap-4 rounded-[24px] border border-[#1F2A1F]/10 bg-white/70 p-5 shadow-[0_16px_50px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-[#C99A3D]/70 hover:shadow-[0_20px_70px_rgba(31,42,31,0.08)]"
-            >
-              <div className="grid h-11 w-11 flex-shrink-0 place-items-center rounded-[14px] border border-[#D7D2B8] bg-[#F7F6F0]/80 text-[#004B08] transition-all duration-300 group-hover:border-[#C99A3D] group-hover:bg-[#FFF8E6]/80">
-                <AlertCircle size={18} strokeWidth={1.8} />
-              </div>
+        <div className="lg:col-span-7">
+          <div className="grid gap-4">
+            {problems.map((problem, i) => (
+              <div
+                key={problem}
+                className="group relative overflow-hidden rounded-[28px] border border-[#1F2A1F]/10 bg-white/75 px-6 py-5 shadow-[0_16px_55px_rgba(31,42,31,0.045)] backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-[#C99A3D]/55 hover:bg-white hover:shadow-[0_22px_75px_rgba(31,42,31,0.08)]"
+              >
+                <div className="pointer-events-none absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-[#C99A3D]/70 via-[#E0C16A]/35 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-              <p className="leading-relaxed text-[#5F6756]">{p}</p>
-            </div>
-          ))}
+                <div className="pointer-events-none absolute right-6 top-1/2 h-16 w-16 -translate-y-1/2 rounded-full border border-[#004B08]/[0.08] bg-[#004B08]/[0.025] transition-all duration-500 group-hover:border-[#C99A3D]/25 group-hover:bg-[#C99A3D]/[0.05]" />
+
+                <div className="relative z-10 flex items-start gap-5">
+                  <span className="mt-1 inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-[#C99A3D]/35 bg-[#FFF8E6]/70 text-xs font-semibold text-[#004B08]">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+
+                  <p className="max-w-3xl text-base leading-relaxed text-[#5F6756]">
+                    {problem}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -98,27 +135,50 @@ function ProblemSection({
   );
 }
 
-function ListGrid({ title, items }: { title: string; items: string[] }) {
-  return (
-    <section className="relative overflow-hidden bg-[#f5f5f5] py-20 lg:py-24 border-y border-[#1F2A1F]/10 transition-colors">
-      <div className="pointer-events-none absolute inset-0 opacity-[0.12] service-texture" />
-      <div className="pointer-events-none absolute -bottom-44 left-[-160px] h-[520px] w-[520px] rounded-full bg-[#C99A3D]/[0.06] blur-3xl" />
+function ListGrid({
+  title,
+  items,
+}: {
+  title: string;
+  items: { labelKey: Key; icon: LucideIcon }[];
+}) {
+  const { t } = useT();
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
+  return (
+    <section className="relative overflow-hidden border-y border-[#1F2A1F]/10 bg-[#f5f5f5] py-18 lg:py-20 transition-colors">
+      <div className="pointer-events-none absolute inset-0 opacity-[0.10] service-texture" />
+      <div className="pointer-events-none absolute -bottom-44 left-[-180px] h-[540px] w-[540px] rounded-full bg-[#C99A3D]/[0.06] blur-3xl" />
+      <div className="pointer-events-none absolute -top-44 right-[-180px] h-[520px] w-[520px] rounded-full bg-[#004B08]/[0.04] blur-3xl" />
+
+      <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
         <SectionHeader title={title} />
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-10">
-          {items.map((it) => (
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {items.map(({ labelKey, icon: Icon }) => (
             <div
-              key={it}
-              className="group rounded-[24px] border border-[#1F2A1F]/10 bg-white/70 p-5 shadow-[0_16px_50px_rgba(31,42,31,0.045)] backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-[#C99A3D]/70 hover:shadow-[0_20px_70px_rgba(31,42,31,0.08)]"
+              key={labelKey}
+              className="group relative min-h-[156px] overflow-hidden rounded-[28px] border border-[#1F2A1F]/10 bg-white/78 px-6 py-5 shadow-[0_16px_50px_rgba(31,42,31,0.045)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#C99A3D]/55 hover:bg-white hover:shadow-[0_24px_75px_rgba(31,42,31,0.085)]"
             >
-              <div className="flex items-center gap-3">
-                <div className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-[14px] border border-[#D7D2B8] bg-[#F7F6F0]/80 text-[#004B08] transition-all duration-300 group-hover:border-[#C99A3D] group-hover:bg-[#FFF8E6]/80">
-                  <Check size={17} strokeWidth={1.9} />
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#C99A3D]/70 via-[#E0C16A]/35 to-transparent opacity-80" />
+
+              <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-[#004B08]/[0.035] blur-3xl transition-all duration-300 group-hover:bg-[#C99A3D]/[0.06]" />
+
+              <div className="relative z-10 flex h-full flex-col">
+                <div className="flex items-start justify-between">
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-[16px] border border-[#C99A3D]/30 bg-[#FFF8E6]/70 text-[#004B08] shadow-[0_10px_24px_rgba(31,42,31,0.04)] transition-all duration-300 group-hover:border-[#C99A3D]/50 group-hover:bg-white">
+                    <Icon size={20} strokeWidth={2.1} />
+                  </div>
+
+                  <span className="mt-1 h-2.5 w-2.5 rounded-full bg-[#C99A3D]/55 transition-colors duration-300 group-hover:bg-[#004B08]/45" />
                 </div>
 
-                <span className="text-[#1F2A1F] leading-snug">{it}</span>
+                <div className="mt-auto">
+                  <h3 className="max-w-[88%] text-[1.1rem] leading-snug text-[#1F2A1F]">
+                    {t(labelKey)}
+                  </h3>
+
+                  <div className="mt-5 h-px w-16 bg-gradient-to-r from-[#C99A3D]/55 via-[#D7D2B8]/50 to-transparent transition-all duration-300 group-hover:w-24" />
+                </div>
               </div>
             </div>
           ))}
@@ -134,11 +194,11 @@ function ProcessSection() {
   const { t } = useT();
 
   return (
-    <section className="relative overflow-hidden bg-[#f5f5f5] py-20 lg:py-24 transition-colors">
-      <div className="pointer-events-none absolute inset-0 opacity-[0.12] service-texture" />
-      <div className="pointer-events-none absolute -top-40 right-[-160px] h-[520px] w-[520px] rounded-full bg-[#004B08]/[0.06] blur-3xl" />
+    <section className="relative overflow-hidden bg-[#f5f5f5] py-16 lg:py-20 transition-colors">
+      <div className="pointer-events-none absolute inset-0 opacity-[0.10] service-texture" />
+      <div className="pointer-events-none absolute -top-44 right-[-180px] h-[540px] w-[540px] rounded-full bg-[#004B08]/[0.06] blur-3xl" />
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
+      <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
         <SectionHeader
           title={t("proc_section_title")}
           subtitle={t("proc_section_sub")}
@@ -155,122 +215,159 @@ function ProcessSection() {
 }
 
 function WebsitePricingSection() {
+  const { t } = useT();
+
   return (
-    <section className="relative overflow-hidden bg-[#1F2A1F] py-24 lg:py-28">
-      <div className="pointer-events-none absolute inset-0 opacity-[0.06] hero-grid-pricing" />
-      <div className="pointer-events-none absolute -top-32 left-[-120px] h-[420px] w-[420px] rounded-full bg-[#004B08]/25 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-32 right-[-120px] h-[420px] w-[420px] rounded-full bg-[#C99A3D]/15 blur-3xl" />
+    <section className="relative overflow-hidden bg-[#f5f5f5] py-24 lg:py-32">
+      <div className="pointer-events-none absolute inset-0 opacity-[0.12] service-texture" />
+
+      <div className="pointer-events-none absolute -top-40 left-[-160px] h-[520px] w-[520px] rounded-full bg-[#004B08]/[0.06] blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-44 right-[-160px] h-[560px] w-[560px] rounded-full bg-[#C99A3D]/[0.08] blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
-        {/* Heading */}
         <div className="mx-auto max-w-2xl text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-white/60">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#004B08]/10 bg-white/70 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-[#004B08] shadow-[0_12px_36px_rgba(31,42,31,0.04)] backdrop-blur">
             <Sparkles size={13} className="text-[#C99A3D]" />
-            Paket Website
+            {t("pricing_badge")}
           </div>
 
-          <h2 className="text-3xl font-medium leading-tight text-white lg:text-4xl">
-            Pilih Paket yang Sesuai{" "}
-            <span className="text-[#C99A3D]">Kebutuhan Kamu</span>
+          <h2 className="text-3xl font-medium leading-tight text-[#1F2A1F] lg:text-4xl">
+            {t("pricing_title_1")}{" "}
+            <span className="text-[#004B08]">{t("pricing_title_2")}</span>
           </h2>
 
-          <p className="mt-4 text-base leading-relaxed text-white/55">
-            Mulai dari landing page sederhana hingga website dengan dashboard
-            admin dan fitur khusus sesuai kebutuhan bisnis.
+          <p className="mt-4 text-base leading-relaxed text-[#5F6756]">
+            {t("pricing_subtitle")}
           </p>
         </div>
 
-        {/* Cards */}
-        <div className="mt-14 grid gap-6 lg:grid-cols-3 lg:items-center">
-          {pricingPackages.map((pkg) => (
-            <div
-              key={pkg.name}
-              className={`relative rounded-[28px] border p-8 transition-all duration-300 ${
-                pkg.highlight
-                  ? "border-[#C99A3D]/50 bg-gradient-to-b from-[#2A3A2A] to-[#1F2A1F] shadow-[0_30px_80px_rgba(201,154,61,0.18)] lg:scale-105"
-                  : "border-white/10 bg-white/[0.04]"
-              }`}
-            >
-              {pkg.badge && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[#C99A3D] px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-[#1F2A1F]">
-                  {pkg.badge}
-                </div>
-              )}
+        <div className="mt-16 grid gap-7 lg:grid-cols-3 lg:items-stretch">
+          {pricingPackages.map((pkg) => {
+            const packageName = t(pkg.nameKey);
+            const waMessage = t("pricing_wa_message").replace(
+              "{packageName}",
+              packageName
+            );
 
-              <h3
-                className={`text-lg font-medium ${
-                  pkg.highlight ? "text-[#C99A3D]" : "text-white"
-                }`}
-              >
-                {pkg.name}
-              </h3>
-
-              <div className="mt-3">
-                <div className="text-3xl font-semibold text-white">
-                  {pkg.price}
-                </div>
-
-                {pkg.priceNote && (
-                  <p className="mt-2 text-sm text-white/50">{pkg.priceNote}</p>
-                )}
-              </div>
-
+            return (
               <div
-                className={`my-6 h-px ${
-                  pkg.highlight ? "bg-[#C99A3D]/25" : "bg-white/10"
-                }`}
-              />
-
-              <ul className="space-y-3">
-                {pkg.features.map((feature) => (
-                  <li
-                    key={feature}
-                    className="flex items-start gap-3 text-sm text-white/70"
-                  >
-                    <Check
-                      size={16}
-                      className={
-                        pkg.highlight ? "text-[#C99A3D]" : "text-[#5FA86A]"
-                      }
-                    />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <a
-                href={buildWaLink(pkg.name)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`mt-8 flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-sm font-medium transition-all ${
+                key={pkg.nameKey}
+                className={`group relative flex h-full flex-col overflow-hidden rounded-[32px] border p-8 transition-all duration-300 ${
                   pkg.highlight
-                    ? "bg-[#C99A3D] text-[#1F2A1F] hover:bg-[#dba94a]"
-                    : "border border-white/15 bg-white/5 text-white hover:bg-white/10"
+                    ? "z-10 border-[#C99A3D]/70 bg-white ring-2 ring-[#C99A3D]/20 shadow-[0_30px_90px_rgba(31,42,31,0.12)]"
+                    : "border-[#1F2A1F]/10 bg-white/75 shadow-[0_20px_70px_rgba(31,42,31,0.07)] backdrop-blur hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_28px_90px_rgba(31,42,31,0.10)]"
                 }`}
               >
-                <MessageCircle size={16} />
-                Konsultasi Paket Ini
-              </a>
-            </div>
-          ))}
+                <div
+                  className={`absolute inset-x-0 top-0 h-1.5 ${
+                    pkg.highlight
+                      ? "bg-gradient-to-r from-[#C99A3D] via-[#E0C16A] to-[#C99A3D]"
+                      : "bg-gradient-to-r from-[#004B08]/25 via-[#C99A3D]/30 to-transparent"
+                  }`}
+                />
+
+                <div
+                  className={`pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full blur-3xl ${
+                    pkg.highlight ? "bg-[#C99A3D]/18" : "bg-[#004B08]/[0.05]"
+                  }`}
+                />
+                <div
+                  className={`pointer-events-none absolute -bottom-24 -left-24 h-56 w-56 rounded-full blur-3xl ${
+                    pkg.highlight ? "bg-[#004B08]/[0.07]" : "bg-[#C99A3D]/[0.05]"
+                  }`}
+                />
+
+                {pkg.badgeKey && (
+                  <div className="absolute right-4 top-5 rounded-full bg-[#C99A3D] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#1F2A1F] shadow-[0_10px_24px_rgba(201,154,61,0.24)]">
+                    {t(pkg.badgeKey)}
+                  </div>
+                )}
+
+                <div className={`relative ${pkg.badgeKey ? "pt-8" : ""}`}>
+                  <h3
+                    className={`text-xl font-semibold ${
+                      pkg.highlight ? "text-[#004B08]" : "text-[#1F2A1F]"
+                    }`}
+                  >
+                    {packageName}
+                  </h3>
+
+                  <div className="mt-4">
+                    <div
+                      className={`font-semibold tracking-tight text-[#1F2A1F] ${
+                        pkg.highlight
+                          ? "text-[2.35rem] leading-none"
+                          : "text-3xl"
+                      }`}
+                    >
+                      {t(pkg.priceKey)}
+                    </div>
+
+                    {pkg.priceNoteKey && (
+                      <p className="mt-3 min-h-[44px] text-sm leading-relaxed text-[#5F6756]">
+                        {t(pkg.priceNoteKey)}
+                      </p>
+                    )}
+                  </div>
+
+                  <div
+                    className={`my-7 h-px ${
+                      pkg.highlight
+                        ? "bg-gradient-to-r from-[#C99A3D]/60 via-[#C99A3D]/25 to-transparent"
+                        : "bg-[#1F2A1F]/10"
+                    }`}
+                  />
+
+                  <ul className="space-y-3.5">
+                    {pkg.featureKeys.map((featureKey) => (
+                      <li
+                        key={featureKey}
+                        className="flex items-start gap-3 text-sm leading-relaxed text-[#5F6756]"
+                      >
+                        <span
+                          className={`mt-0.5 grid h-5 w-5 flex-shrink-0 place-items-center rounded-full ${
+                            pkg.highlight
+                              ? "bg-[#C99A3D]/18 text-[#004B08]"
+                              : "bg-[#004B08]/8 text-[#004B08]"
+                          }`}
+                        >
+                          <Check size={13} strokeWidth={2.3} />
+                        </span>
+
+                        <span>{t(featureKey)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <a
+                  href={buildWaLink(waMessage)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`relative mt-auto flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-sm font-semibold transition-all ${
+                    pkg.highlight
+                      ? "bg-[#004B08] text-[#F3EFDF] shadow-[0_16px_38px_rgba(0,75,8,0.22)] hover:bg-[#24452A]"
+                      : "border border-[#004B08]/20 bg-[#F7F6F0] text-[#004B08] hover:bg-[#004B08] hover:text-[#F3EFDF]"
+                  }`}
+                >
+                  <MessageCircle size={16} />
+                  {t("pricing_cta")}
+                </a>
+              </div>
+            );
+          })}
         </div>
 
-        <p className="mt-10 text-center text-xs text-white/35">
-          Harga dapat berubah sesuai kompleksitas fitur dan kebutuhan project.
+        <p className="mt-14 text-center text-xs text-[#5F6756]">
+          {t("pricing_note")}
         </p>
       </div>
 
-      <style>{`
-        .hero-grid-pricing {
-          background-image:
-            linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
-          background-size: 60px 60px;
-        }
-      `}</style>
+      <ServiceMotionStyle />
     </section>
   );
 }
+
 /* ---------------- Website Development ---------------- */
 
 export function WebsiteDevelopment() {
@@ -288,34 +385,30 @@ export function WebsiteDevelopment() {
         }
         subtitle={t("web_hero_sub")}
       />
+
       <ProblemSection
         accent={t("web_problem_title")}
         problems={[t("web_problem_1"), t("web_problem_2"), t("web_problem_3")]}
       />
+
       <ListGrid
-        title={t("web_build_title")}
-        items={[
-          "Company Profile Website",
-          "Landing Page",
-          "Business Website",
-          "Educational Website",
-          "Portfolio Website",
-        ]}
-      />
-      <ListGrid
-        title={t("web_features_title")}
-        items={[
-          "Responsive design",
-          "Modern UI/UX",
-          "Clear content structure",
-          "Service pages",
-          "Portfolio section",
-          "Contact form",
-          "WhatsApp CTA",
-          "SEO-friendly structure",
-          "Fast loading experience",
-        ]}
-      />
+      title={t("web_build_title")}
+      items={[
+        { labelKey: "web_type_company_profile", icon: Building2 },
+        { labelKey: "web_type_landing_page", icon: LayoutTemplate },
+        { labelKey: "web_type_business", icon: BriefcaseBusiness },
+      ]}
+    />
+
+    <ListGrid
+      title={t("web_features_title")}
+      items={[
+        { labelKey: "web_feature_content_structure", icon: Files },
+        { labelKey: "web_feature_responsive", icon: MonitorSmartphone },
+        { labelKey: "web_feature_whatsapp", icon: MessageCircle },
+        { labelKey: "web_feature_seo", icon: SearchCheck },
+      ]}
+    />
 
       <ProcessSection />
       <WebsitePricingSection />
@@ -346,31 +439,24 @@ export function MobileAppDevelopment() {
       />
 
       <ListGrid
-        title={t("mob_build_title")}
-        items={[
-          "Service Application",
-          "Booking Application",
-          "Educational Application",
-          "Community Application",
-          "Business Application",
-        ]}
-      />
+      title={t("mob_build_title")}
+      items={[
+        { labelKey: "mob_type_service_app", icon: Smartphone },
+        { labelKey: "mob_type_booking_app", icon: CalendarCheck2 },
+        { labelKey: "mob_type_business_app", icon: BriefcaseBusiness },
+      ]}
+    />
 
-      <ListGrid
-        title={t("mob_features_title")}
-        items={[
-          "User-friendly interface",
-          "Clear user flow",
-          "Mobile-first experience",
-          "Authentication flow",
-          "Booking or service flow",
-          "Notification-ready structure",
-          "Admin integration planning",
-          "API integration planning",
-          "Prototype before development",
-          "Scalable feature planning",
-        ]}
-      />
+    <ListGrid
+      title={t("mob_features_title")}
+      items={[
+        { labelKey: "mob_feature_user_flow", icon: Workflow },
+        { labelKey: "mob_feature_mobile_first", icon: MonitorSmartphone },
+        { labelKey: "mob_feature_auth_flow", icon: ShieldCheck },
+        { labelKey: "mob_feature_api", icon: DatabaseZap },
+      ]}
+    />
+
       <ProcessSection />
     </>
   );
@@ -400,50 +486,44 @@ export function AIMLSolutions() {
       />
 
       <ListGrid
-        title={t("ai_build_title")}
-        items={[
-          "Computer Vision",
-          "Prediction System",
-          "Data Classification",
-          "AI-Powered Features",
-          "Automation Support",
-        ]}
-      />
+      title={t("ai_build_title")}
+      items={[
+        { labelKey: "ai_type_computer_vision", icon: ScanSearch },
+        { labelKey: "ai_type_prediction", icon: BrainCircuit },
+        { labelKey: "ai_type_automation", icon: Workflow },
+      ]}
+    />
 
-      <ListGrid
-        title={t("ai_usecases_title")}
-        items={[
-          "Image detection",
-          "Object classification",
-          "Data prediction",
-          "Data processing",
-          "Recommendation logic",
-          "Intelligent dashboard features",
-          "AI-assisted automation",
-          "Computer vision prototype",
-        ]}
-      />
+    <ListGrid
+      title={t("ai_usecases_title")}
+      items={[
+        { labelKey: "ai_usecase_image_detection", icon: ScanSearch },
+        { labelKey: "ai_usecase_data_prediction", icon: BrainCircuit },
+        { labelKey: "ai_usecase_dashboard", icon: PanelsTopLeft },
+        { labelKey: "ai_usecase_automation", icon: Workflow },
+      ]}
+    />
 
       <ProcessSection />
 
-      <section className="relative overflow-hidden bg-[#f5f5f5] py-20 border-y border-[#1F2A1F]/10 transition-colors">
-        <div className="pointer-events-none absolute inset-0 opacity-[0.12] service-texture" />
+      <section className="relative overflow-hidden border-y border-[#1F2A1F]/10 bg-[#f5f5f5] py-16 lg:py-20 transition-colors">
+        <div className="pointer-events-none absolute inset-0 opacity-[0.10] service-texture" />
         <div className="pointer-events-none absolute left-1/2 top-1/2 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#C99A3D]/[0.06] blur-3xl" />
 
-        <div className="relative max-w-4xl mx-auto px-6 lg:px-10">
-          <div className="group flex gap-5 rounded-[28px] border border-[#1F2A1F]/10 bg-white/70 p-7 shadow-[0_18px_60px_rgba(31,42,31,0.06)] backdrop-blur transition-all duration-300 hover:border-[#C99A3D]/70">
-            <div className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-[16px] border border-[#D7D2B8] bg-[#F7F6F0]/80 text-[#004B08] transition-all duration-300 group-hover:border-[#C99A3D] group-hover:bg-[#FFF8E6]/80">
-              <AlertCircle size={20} strokeWidth={1.8} />
-            </div>
+        <div className="relative mx-auto max-w-5xl px-6 lg:px-10">
+          <div className="group relative overflow-hidden rounded-[32px] border border-[#1F2A1F]/10 bg-white/75 p-8 shadow-[0_22px_80px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:border-[#C99A3D]/55 hover:bg-white">
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-[#C99A3D]/60 via-[#E0C16A]/35 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-            <div>
-              <h4 className="mb-2 text-xl text-[#1F2A1F]">
+            <div className="relative z-10 max-w-3xl">
+              <h4 className="mb-3 text-2xl font-medium tracking-tight text-[#1F2A1F]">
                 {t("ai_feasibility_title")}
               </h4>
 
-              <p className="leading-relaxed text-[#5F6756]">
+              <p className="max-w-2xl leading-relaxed text-[#5F6756]">
                 {t("ai_feasibility")}
               </p>
+
+              <div className="mt-7 h-px w-full max-w-xl bg-gradient-to-r from-[#C99A3D]/45 via-[#D7D2B8]/50 to-transparent" />
             </div>
           </div>
         </div>

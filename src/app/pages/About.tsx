@@ -82,19 +82,34 @@ export function About() {
             <SectionHeader title={t("mindset_title")} />
           </Reveal>
 
-          <div className="grid md:grid-cols-3 gap-6 mt-12">
+          <div className="grid md:grid-cols-3 gap-5 mt-12">
             {philosophy.map(({ icon: Icon, titleKey, descKey }, index) => (
               <Reveal key={titleKey} delay={index * 0.08}>
-                <div className="group h-full rounded-[28px] border border-[#1F2A1F]/10 bg-white/70 p-8 shadow-[0_18px_60px_rgba(31,42,31,0.05)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_24px_80px_rgba(31,42,31,0.10)]">
-                  <IconBox icon={Icon} />
+                <div className="group relative flex min-h-[280px] h-full overflow-hidden rounded-[30px] border border-[#1F2A1F]/10 bg-white/75 p-8 shadow-[0_18px_60px_rgba(31,42,31,0.045)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:bg-white hover:shadow-[0_26px_80px_rgba(31,42,31,0.09)]">
+                  {/* Soft glow */}
+                  <div className="pointer-events-none absolute right-6 top-6 h-28 w-28 rounded-full bg-[#004B08]/[0.035] blur-2xl transition-all duration-500 group-hover:bg-[#C99A3D]/[0.08]" />
 
-                  <h3 className="text-2xl text-[#1F2A1F] mb-3">
-                    {t(titleKey)}
-                  </h3>
+                  {/* Watermark icon */}
+                  <Icon
+                    aria-hidden="true"
+                    size={92}
+                    strokeWidth={1.6}
+                    className="pointer-events-none absolute right-7 top-7 text-[#004B08]/[0.12] transition-all duration-500 group-hover:scale-[1.05] group-hover:text-[#C99A3D]/[0.20]"
+                  />
 
-                  <p className="text-[#5F6756] leading-relaxed">
-                    {t(descKey)}
-                  </p>
+                  <div className="relative z-10 flex h-full flex-col justify-end">
+                    <div className="max-w-[86%]">
+                      <h3 className="mb-3 text-2xl font-medium tracking-tight text-[#1F2A1F]">
+                        {t(titleKey)}
+                      </h3>
+
+                      <p className="text-sm leading-relaxed text-[#5F6756]">
+                        {t(descKey)}
+                      </p>
+
+                      <div className="mt-7 h-px w-full bg-gradient-to-r from-[#C99A3D]/45 via-[#D7D2B8]/50 to-transparent" />
+                    </div>
+                  </div>
                 </div>
               </Reveal>
             ))}
@@ -113,19 +128,34 @@ export function About() {
             <SectionHeader title={t("about_focus_title")} />
           </Reveal>
 
-          <div className="grid md:grid-cols-3 gap-6 mt-12">
+          <div className="grid md:grid-cols-3 gap-5 mt-12">
             {focus.map(({ icon: Icon, titleKey, descKey }, index) => (
               <Reveal key={titleKey} delay={index * 0.08}>
-                <div className="group h-full rounded-[28px] border border-[#1F2A1F]/10 bg-white/70 p-8 shadow-[0_18px_60px_rgba(31,42,31,0.05)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_24px_80px_rgba(31,42,31,0.10)]">
-                  <IconBox icon={Icon} />
+                <div className="group relative flex min-h-[280px] h-full overflow-hidden rounded-[30px] border border-[#1F2A1F]/10 bg-white/75 p-8 shadow-[0_18px_60px_rgba(31,42,31,0.045)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:bg-white hover:shadow-[0_26px_80px_rgba(31,42,31,0.09)]">
+                  {/* Soft glow */}
+                  <div className="pointer-events-none absolute right-6 top-6 h-28 w-28 rounded-full bg-[#004B08]/[0.035] blur-2xl transition-all duration-500 group-hover:bg-[#C99A3D]/[0.08]" />
 
-                  <h3 className="text-xl text-[#1F2A1F] mb-3">
-                    {t(titleKey)}
-                  </h3>
+                  {/* Watermark icon */}
+                  <Icon
+                    aria-hidden="true"
+                    size={92}
+                    strokeWidth={1.6}
+                    className="pointer-events-none absolute right-7 top-7 text-[#004B08]/[0.12] transition-all duration-500 group-hover:scale-[1.05] group-hover:text-[#C99A3D]/[0.20]"
+                  />
 
-                  <p className="text-[#5F6756] leading-relaxed">
-                    {t(descKey)}
-                  </p>
+                  <div className="relative z-10 flex h-full flex-col justify-end">
+                    <div className="max-w-[86%]">
+                      <h3 className="mb-3 text-2xl font-medium tracking-tight text-[#1F2A1F]">
+                        {t(titleKey)}
+                      </h3>
+
+                      <p className="text-sm leading-relaxed text-[#5F6756]">
+                        {t(descKey)}
+                      </p>
+
+                      <div className="mt-7 h-px w-full bg-gradient-to-r from-[#C99A3D]/45 via-[#D7D2B8]/50 to-transparent" />
+                    </div>
+                  </div>
                 </div>
               </Reveal>
             ))}
