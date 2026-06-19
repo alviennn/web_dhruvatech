@@ -281,31 +281,36 @@ const en = {
   portfolio_cta: "Have a Similar Project in Mind?",
 
   // about page
-  about_hero_t1: "Building Digital Products with",
-  about_hero_t2: "Stability",
-  about_hero_t3: "and Purpose",
+  about_hero_t1: "Software house for",
+  about_hero_t2: "digital solutions",
+  about_hero_t3: "with real value",
   about_hero_sub:
-    "Dhruva Tech is a software house focused on creating websites, mobile applications, and AI-powered digital solutions that help businesses grow through technology.",
-  about_compass: "Our Compass",
-  about_quote: "“Stable foundations.\nPurposeful design.\nEvolving products.”",
-  about_title: "A software house with stable foundations",
+    "Dhruva Tech helps businesses build websites, applications, and technology solutions that are ready to use.",
+  about_title:
+    "A technology partner for businesses that want to grow digitally",
   about_p1:
-    "Dhruva Tech is a software house focused on building websites, mobile applications, and AI-powered systems that help businesses look professional, work efficiently, and grow through technology.",
+    "Dhruva Tech is a software house that helps businesses design and build digital products such as websites, mobile applications, and AI/ML-based solutions.",
   about_p2:
-    "We believe good technology is not only about modern visuals or complex features. Good technology should clarify business value, improve user experience, and support real business goals.",
-  about_focus_title: "Three things we keep returning to",
-  about_focus_1_title: "Business outcomes first",
-  about_focus_1_desc:
-    "We start every project with the problem to solve and the user it serves, not the tech.",
-  about_focus_2_title: "Clarity over complexity",
-  about_focus_2_desc:
-    "We choose the simplest path that delivers the value the business needs.",
-  about_focus_3_title: "Long-term maintainability",
-  about_focus_3_desc:
-    "We pick technology that can be supported, extended, and trusted over years.",
-  about_work_title: "A clear six-step process",
-  about_work_sub:
-    "From discovery to launch, predictable steps, with room to adapt to what each project actually needs.",
+    "We first understand the business needs, then shape a solution that is relevant, realistic, and ready to grow.",
+  about_help_title: "How we help clients",
+
+  about_help_desc:
+    "We act as a technical partner that helps digital development move with clearer, cleaner, and more focused direction.",
+
+  about_help_1_title: "Understanding the needs",
+
+  about_help_1_desc:
+    "We start from the goals, challenges, and business processes that need improvement.",
+
+  about_help_2_title: "Shaping the solution",
+
+  about_help_2_desc:
+    "We define the flow, structure, and core features so the project stays focused.",
+
+  about_help_3_title: "Building the product",
+
+  about_help_3_desc:
+    "We build products that are responsive, functional, and ready to use.",
   about_cta: "Want to Work With a Team That Builds with Purpose?",
 
   // insights page
@@ -944,32 +949,40 @@ const id: Record<keyof typeof en, string> = {
   portfolio_cta: "Punya Proyek Serupa?",
 
   // about page
-  about_hero_t1: "Membangun Produk Digital dengan",
-  about_hero_t2: "Stabilitas",
-  about_hero_t3: "dan Tujuan",
+  about_hero_t1: "Software house untuk",
+  about_hero_t2: "solusi digital",
+  about_hero_t3: "yang bernilai",
   about_hero_sub:
-    "Dhruva Tech adalah software house yang fokus membangun website, aplikasi mobile, dan solusi digital berbasis AI yang membantu bisnis tumbuh lewat teknologi.",
-  about_compass: "Kompas Kami",
-  about_quote:
-    "“Fondasi yang stabil.\nDesain yang bertujuan.\nProduk yang berkembang.”",
-  about_title: "Software house dengan fondasi yang stabil",
+    "Dhruva Tech membantu bisnis membangun website, aplikasi, dan solusi teknologi yang siap digunakan.",
+
+  about_title:
+    "Partner teknologi untuk bisnis yang ingin bertumbuh secara digital",
+
   about_p1:
-    "Dhruva Tech adalah software house yang fokus membangun website, aplikasi mobile, dan sistem berbasis AI yang membantu bisnis tampil profesional, bekerja efisien, dan tumbuh lewat teknologi.",
+    "Dhruva Tech adalah software house yang membantu bisnis merancang dan membangun produk digital seperti website, aplikasi mobile, dan solusi berbasis AI/ML.",
+
   about_p2:
-    "Kami percaya teknologi yang baik bukan hanya tentang tampilan modern atau fitur kompleks. Teknologi yang baik harus memperjelas nilai bisnis, meningkatkan pengalaman pengguna, dan mendukung tujuan bisnis nyata.",
-  about_focus_title: "Tiga hal yang selalu kami pegang",
-  about_focus_1_title: "Hasil bisnis di atas segalanya",
-  about_focus_1_desc:
-    "Kami memulai setiap proyek dengan masalah yang harus diselesaikan dan pengguna yang dilayani, bukan teknologi.",
-  about_focus_2_title: "Kejelasan di atas kompleksitas",
-  about_focus_2_desc:
-    "Kami memilih jalur paling sederhana yang memberikan nilai yang dibutuhkan bisnis.",
-  about_focus_3_title: "Mudah dirawat dalam jangka panjang",
-  about_focus_3_desc:
-    "Kami memilih teknologi yang bisa didukung, dikembangkan, dan diandalkan selama bertahun-tahun.",
-  about_work_title: "Proses enam langkah yang jelas",
-  about_work_sub:
-    "Dari discovery hingga peluncuran langkah yang dapat diprediksi, dengan ruang untuk menyesuaikan kebutuhan tiap proyek.",
+    "Kami memahami kebutuhan bisnis terlebih dahulu, lalu menyusun solusi yang relevan, realistis, dan mudah dikembangkan.",
+
+  about_help_title: "Bagaimana kami membantu client",
+
+  about_help_desc:
+    "Kami hadir sebagai partner teknis yang membantu proses digital berjalan lebih jelas, rapi, dan terarah.",
+
+  about_help_1_title: "Memahami kebutuhan",
+
+  about_help_1_desc:
+    "Kami mulai dari tujuan, kendala, dan proses bisnis yang ingin diperbaiki.",
+
+  about_help_2_title: "Menyusun solusi",
+
+  about_help_2_desc:
+    "Kami menentukan alur, struktur, dan fitur utama agar project tetap fokus.",
+
+  about_help_3_title: "Membangun produk",
+
+  about_help_3_desc:
+    "Kami membangun produk yang responsif, fungsional, dan siap digunakan.",
   about_cta:
     "Ingin Bekerja dengan Tim yang Membangun dengan Tujuan?",
 

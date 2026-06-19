@@ -681,10 +681,7 @@ export function AIMLSolutions() {
       <section className="bg-[#f5f5f5] py-14 lg:py-20">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="mx-auto max-w-4xl border-t border-[#1F2A1F]/10 pt-10 text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#004B08]/70">
-              {t("ai_feasibility_title")}
-            </p>
-
+            
             <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-[#5F6756]">
               {t("ai_feasibility")}
             </p>
