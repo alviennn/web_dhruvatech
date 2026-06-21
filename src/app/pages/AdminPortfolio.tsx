@@ -29,7 +29,7 @@ import {
 const ACCEPTED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const PROJECT_TYPES: PortfolioType[] = ["Website", "Mobile Apps", "AI/ML"];
 const TITLE_MAX_LENGTH = 45;
-const DESCRIPTION_MAX_LENGTH = 130;
+const DESCRIPTION_MAX_LENGTH = 250;
 const MAX_IMAGES = 8;
 
 // ─── Login Screen ─────────────────────────────────────────────────────────────
@@ -262,6 +262,7 @@ export function AdminPortfolio() {
   const [title, setTitle] = useState("");
   const [type, setType] = useState<PortfolioType | "">("");
   const [description, setDescription] = useState("");
+  const [en_description, setEn_description] = useState("");
   const [keyFeatures, setKeyFeatures] = useState("");
   const [techStack, setTechStack] = useState("");
 
@@ -363,6 +364,12 @@ export function AdminPortfolio() {
       setError(`Deskripsi maksimal ${DESCRIPTION_MAX_LENGTH} karakter.`);
       return;
     }
+    if (en_description.trim().length > DESCRIPTION_MAX_LENGTH) {
+      setError(
+        `Deskripsi (Inggris) maksimal ${DESCRIPTION_MAX_LENGTH} karakter.`,
+      );
+      return;
+    }
 
     const features = keyFeatures
       .split(",")
@@ -379,6 +386,7 @@ export function AdminPortfolio() {
         title: title.trim(),
         type: type as PortfolioType,
         description: description.trim(),
+        en_description: en_description.trim(),
         keyFeatures: features,
         techStack: techs,
         imageFiles, // ← kirim array
@@ -390,6 +398,7 @@ export function AdminPortfolio() {
       setTitle("");
       setType("");
       setDescription("");
+      setEn_description("");
       setKeyFeatures("");
       setTechStack("");
       imagePreviews.forEach((url) => URL.revokeObjectURL(url));
@@ -568,6 +577,34 @@ export function AdminPortfolio() {
               </div>
             </AdminField>
 
+            {/* English Description */}
+            <AdminField label="Deskripsi (Inggris)" required>
+              <textarea
+                value={en_description}
+                onChange={(e) => {
+                  setEn_description(e.target.value);
+                  setError("");
+                  setSuccess(false);
+                }}
+                rows={4}
+                maxLength={DESCRIPTION_MAX_LENGTH}
+                className={`${adminInput} ${descriptionTooLong ? "border-[#C99A3D]" : ""}`}
+                placeholder="Describe this project in English..."
+              />
+              <div className="mt-1 flex justify-between gap-3 text-xs">
+                <p className="text-[#5F6756]">
+                  Maksimal {DESCRIPTION_MAX_LENGTH} karakter.
+                </p>
+                <p
+                  className={
+                    descriptionTooLong ? "text-[#C99A3D]" : "text-[#5F6756]"
+                  }
+                >
+                  {description.length}/{DESCRIPTION_MAX_LENGTH}
+                </p>
+              </div>
+            </AdminField>
+
             {/* Key Features */}
             <AdminField label="Fitur Kunci">
               <input
@@ -711,6 +748,10 @@ export function AdminPortfolio() {
                     </h3>
                     <p className="line-clamp-3 text-sm leading-relaxed text-[#5F6756]">
                       {description || "Deskripsi project..."}
+                    </p>
+                    <p className="line-clamp-3 text-sm leading-relaxed text-[#5F6756]">
+                      {en_description ||
+                        "Deskripsi project (Bahasa Inggris)..."}
                     </p>
 
                     {keyFeatures && (

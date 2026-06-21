@@ -2,7 +2,7 @@
 // File: src/app/data/api.ts
 
 const API_URL =
-  import.meta.env.VITE_API_URL || "http://dhruvatech-api.test:8001/api";
+  import.meta.env.VITE_API_URL;
 
 const AUTH_URL = `${API_URL}/auth/`;
 const PORTFOLIO_URL = `${API_URL}/portfolio/`;
@@ -14,7 +14,6 @@ export function getToken(): string | null {
 export function setToken(token: string): void {
   localStorage.setItem("dt-admin-token", token);
 }
-
 export function removeToken(): void {
   localStorage.removeItem("dt-admin-token");
 }
@@ -36,6 +35,7 @@ export type PortfolioItem = {
   title: string;
   type: PortfolioType;
   description: string;
+  en_description: string;
   keyFeatures: string[];
   techStack: string[];
   coverImage: string;
@@ -136,6 +136,7 @@ export async function addPortfolioItem(input: {
   title: string;
   type: PortfolioType;
   description: string;
+  en_description: string;
   keyFeatures: string[];
   techStack: string[];
   imageFiles: File[];
@@ -145,6 +146,7 @@ export async function addPortfolioItem(input: {
   formData.append("title", input.title);
   formData.append("type", input.type);
   formData.append("description", input.description);
+  formData.append("en_description", input.en_description);
   formData.append("keyFeatures", JSON.stringify(input.keyFeatures));
   formData.append("techStack", JSON.stringify(input.techStack));
 
