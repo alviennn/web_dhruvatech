@@ -19,12 +19,14 @@ import {
   Lightbulb,
   Layers,
   MessageCircle,
+  ChevronDown,
 } from "lucide-react";
 import { SectionHeader } from "./shared";
 import { useT } from "../providers";
 import logo from "../../imports/8.png";
 import ctaImage from "../../imports/cta.png";
 import ctaLogoMark from "../../imports/dhruva-mark.png";
+import why from "../../imports/why.png";
 
 /* ---------------- ANIMATION WRAPPER ---------------- */
 
@@ -63,7 +65,7 @@ function HomeTexture() {
 /* ---------------- FEATURED WORK ---------------- */
 
 export function FeaturedWorkPreview() {
-  const { t } = useT();
+  const { t, lang } = useT();
 
   const [projects, setProjects] = useState<PortfolioItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -88,7 +90,7 @@ export function FeaturedWorkPreview() {
         setError(
           err instanceof Error
             ? err.message
-            : "Gagal mengambil data portfolio."
+            : t("portfolio_error_load")
         );
       } finally {
         if (isMounted) {
@@ -102,7 +104,31 @@ export function FeaturedWorkPreview() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [t]);
+
+  const getPortfolioTitle = (item: PortfolioItem) => {
+    if (lang === "en") {
+      return item.title || item.title;
+    }
+
+    return item.title;
+  };
+
+  const getPortfolioType = (item: PortfolioItem) => {
+    if (lang === "en") {
+      return item.type || item.type;
+    }
+
+    return item.type;
+  };
+
+  const getPortfolioDescription = (item: PortfolioItem) => {
+    if (lang === "en") {
+      return item.en_description || item.description;
+    }
+
+    return item.description;
+  };
 
   return (
     <section className="relative overflow-hidden bg-[#f5f5f5] py-16 sm:py-20 lg:py-28">
@@ -132,7 +158,7 @@ export function FeaturedWorkPreview() {
         {loading ? (
           <Reveal>
             <div className="rounded-[24px] border border-[#1F2A1F]/10 bg-white/60 px-5 py-12 text-center text-sm text-[#5F6756] shadow-[0_16px_50px_rgba(31,42,31,0.045)] backdrop-blur sm:rounded-[28px] sm:px-6 sm:py-16">
-              Memuat featured work...
+              {t("featured_loading")}
             </div>
           </Reveal>
         ) : error ? (
@@ -143,35 +169,41 @@ export function FeaturedWorkPreview() {
           </Reveal>
         ) : projects.length > 0 ? (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-            {projects.map((p, i) => (
-              <Reveal key={p.id} delay={i * 0.08}>
-                <article className="group h-full overflow-hidden rounded-[24px] border border-[#1F2A1F]/10 bg-white/70 shadow-[0_16px_50px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_24px_80px_rgba(31,42,31,0.10)] sm:rounded-[28px] lg:rounded-[30px]">
-                  <div className="relative aspect-[16/11] overflow-hidden bg-[#1F2A1F] sm:aspect-[4/3]">
-                    <img
-                      src={p.coverImage}
-                      alt={p.title}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
-                    />
+            {projects.map((p, i) => {
+              const title = getPortfolioTitle(p);
+              const type = getPortfolioType(p);
+              const description = getPortfolioDescription(p);
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#1F2A1F]/35 via-transparent to-transparent opacity-70" />
-                  </div>
+              return (
+                <Reveal key={p.id} delay={i * 0.08}>
+                  <article className="group h-full overflow-hidden rounded-[24px] border border-[#1F2A1F]/10 bg-white/70 shadow-[0_16px_50px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_24px_80px_rgba(31,42,31,0.10)] sm:rounded-[28px] lg:rounded-[30px]">
+                    <div className="relative aspect-[16/11] overflow-hidden bg-[#1F2A1F] sm:aspect-[4/3]">
+                      <img
+                        src={p.coverImage}
+                        alt={title}
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
+                      />
 
-                  <div className="p-5 sm:p-6">
-                    <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#004B08] sm:text-xs">
-                      {p.type}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#1F2A1F]/35 via-transparent to-transparent opacity-70" />
                     </div>
 
-                    <h3 className="mb-3 line-clamp-2 text-lg leading-snug text-[#1F2A1F] sm:text-xl">
-                      {p.title}
-                    </h3>
+                    <div className="p-5 sm:p-6">
+                      <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#004B08] sm:text-xs">
+                        {type}
+                      </div>
 
-                    <p className="line-clamp-3 text-sm leading-relaxed text-[#5F6756]">
-                      {p.description}
-                    </p>
-                  </div>
-                </article>
-              </Reveal>
-            ))}
+                      <h3 className="mb-3 line-clamp-2 text-lg leading-snug text-[#1F2A1F] sm:text-xl">
+                        {title}
+                      </h3>
+
+                      <p className="line-clamp-3 text-sm leading-relaxed text-[#5F6756]">
+                        {description}
+                      </p>
+                    </div>
+                  </article>
+                </Reveal>
+              );
+            })}
           </div>
         ) : (
           <Reveal>
@@ -510,21 +542,32 @@ export function ProcessPreview() {
   );
 }
 
-/* ---------------- MINDSET PREVIEW ---------------- */
+/* ---------------- WHY CHOOSE ---------------- */
 
-/* ---------------- MINDSET PREVIEW ---------------- */
-
-export function MindsetPreview() {
+export function WhyChoosePreview() {
   const { t } = useT();
 
-  const values = [
-    { icon: Layers, titleKey: "val_stable", descKey: "val_stable_desc" },
+  const items = [
     {
-      icon: Lightbulb,
-      titleKey: "val_purposeful",
-      descKey: "val_purposeful_desc",
+      icon: Layers,
+      titleKey: "home_why_2_title",
+      descKey: "home_why_2_desc",
     },
-    { icon: Cpu, titleKey: "val_evolving", descKey: "val_evolving_desc" },
+    {
+      icon: Smartphone,
+      titleKey: "home_why_3_title",
+      descKey: "home_why_3_desc",
+    },
+    {
+      icon: ClipboardList,
+      titleKey: "home_why_4_title",
+      descKey: "home_why_4_desc",
+    },
+    {
+      icon: MessageCircle,
+      titleKey: "home_why_5_title",
+      descKey: "home_why_5_desc",
+    },
   ] as const;
 
   return (
@@ -536,41 +579,182 @@ export function MindsetPreview() {
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
         <Reveal>
-          <SectionHeader
-            title={t("mindset_title")}
-            subtitle={t("mindset_sub")}
-          />
+          <div className="mx-auto max-w-3xl text-center">
+            <SectionHeader
+              title={t("home_why_title")}
+            />
+
+            <p className="mt-5 text-sm leading-relaxed text-[#5F6756] sm:text-base">
+              {t("home_why_desc")}
+            </p>
+          </div>
         </Reveal>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3 lg:gap-6">
-          {values.map(({ icon: Icon, titleKey, descKey }, i) => (
-            <Reveal key={titleKey} delay={i * 0.08}>
-              <div className="group relative h-full min-h-[160px] overflow-hidden rounded-[24px] border border-[#1F2A1F]/10 bg-white/75 p-6 shadow-[0_16px_50px_rgba(31,42,31,0.045)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:bg-white hover:shadow-[0_24px_75px_rgba(31,42,31,0.09)] sm:min-h-[230px] sm:rounded-[28px] sm:p-7 lg:min-h-[210px] lg:rounded-[30px] lg:p-8">
-                {/* Watermark icon */}
-                <Icon
-                  aria-hidden="true"
-                  size={64}
-                  strokeWidth={1.5}
-                  className="pointer-events-none absolute right-5 top-5 text-[#004B08]/[0.32] transition-all duration-500 group-hover:scale-[1.05] group-hover:text-[#C99A3D]/[0.15] sm:right-7 sm:top-7"
-                />
+        <div className="mt-12 grid gap-10 lg:mt-16 lg:grid-cols-12 lg:items-center lg:gap-14">
+          {/* Image area - no border, no card */}
+          <Reveal className="lg:col-span-6">
+            <div className="relative">
+              <div className="absolute -left-10 top-10 h-56 w-56 rounded-full bg-[#004B08]/10 blur-3xl" />
+              <div className="absolute -bottom-8 right-4 h-52 w-52 rounded-full bg-[#C99A3D]/15 blur-3xl" />
 
-                {/* Soft glow */}
-                <div className="pointer-events-none absolute right-8 top-8 h-24 w-24 rounded-full bg-[#004B08]/[0.035] blur-2xl transition-all duration-500 group-hover:bg-[#C99A3D]/[0.07] sm:h-28 sm:w-28" />
+              <img
+                src={why}
+                alt={t("home_why_image_alt")}
+                className="relative z-10 w-full max-w-[620px] rounded-[32px] object-cover lg:max-w-none"
+              />
+            </div>
+          </Reveal>
 
-                <div className="relative z-10 flex h-full flex-col justify-end">
-                  <div className="max-w-[86%] sm:max-w-[82%]">
-                    <h3 className="mb-3 text-xl font-medium tracking-tight text-[#1F2A1F] sm:text-2xl">
-                      {t(titleKey)}
-                    </h3>
+          {/* Text list area - stacked vertically */}
+          <div className="lg:col-span-6">
+            <div className="space-y-6">
+              {items.map(({ icon: Icon, titleKey, descKey }, i) => (
+                <Reveal key={titleKey} delay={i * 0.07}>
+                  <div className="group flex gap-5">
+                    <div className="mt-1 flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#004B08]/10 text-[#004B08] transition-colors duration-300 group-hover:bg-[#004B08] group-hover:text-[#F3EFDF]">
+                      <Icon size={20} strokeWidth={1.8} />
+                    </div>
 
-                    <p className="text-sm leading-relaxed text-[#5F6756]">
-                      {t(descKey)}
-                    </p>
+                    <div className="border-b border-[#1F2A1F]/10 pb-6 last:border-b-0">
+                      <h3 className="text-lg font-medium tracking-tight text-[#1F2A1F] sm:text-xl">
+                        {t(titleKey)}
+                      </h3>
 
-                    <div className="mt-6 h-px w-full bg-gradient-to-r from-[#C99A3D]/45 via-[#D7D2B8]/50 to-transparent" />
+                      <p className="mt-2 max-w-xl text-sm leading-relaxed text-[#5F6756] sm:text-base">
+                        {t(descKey)}
+                      </p>
+                    </div>
                   </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <HomeMotionStyle />
+    </section>
+  );
+}
+
+/* ---------------- ABOUT PREVIEW ---------------- */
+
+export function HomeAboutPreview() {
+  const { t } = useT();
+
+  return (
+    <section className="relative overflow-hidden bg-[#f5f5f5] py-16 sm:py-20 lg:py-28">
+      <div className="absolute inset-x-0 top-0 h-px bg-[#1F2A1F]/10" />
+      <HomeTexture />
+
+      <img
+        src={ctaLogoMark}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute right-[-40px] top-1/2 h-56 w-56 -translate-y-1/2 object-contain opacity-[0.045] sm:h-72 sm:w-72 lg:right-[5%] lg:h-96 lg:w-96"
+      />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+        <Reveal>
+          <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
+            <div className="lg:col-span-5">
+              <SectionHeader
+                title={t("home_about_title")}
+                subtitle={t("home_about_sub")}
+              />
+            </div>
+
+            <div className="lg:col-span-7">
+              <p className="max-w-3xl text-sm leading-relaxed text-[#5F6756] sm:text-base">
+                {t("home_about_desc")}
+              </p>
+
+              <Link
+                to="/about"
+                className="mt-7 inline-flex w-fit items-center gap-2 rounded-full border border-[#004B08]/35 bg-white/60 px-5 py-3 text-sm text-[#004B08] backdrop-blur transition-colors hover:bg-[#004B08] hover:text-[#F3EFDF]"
+              >
+                {t("cta_more_about_dt")}
+                <ArrowUpRight size={16} />
+              </Link>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+
+      <HomeMotionStyle />
+    </section>
+  );
+}
+
+/* ---------------- HOME FAQ ---------------- */
+
+export function HomeFAQ() {
+  const { t } = useT();
+
+  const faqs = [
+    {
+      q: "home_faq_1_q",
+      a: "home_faq_1_a",
+    },
+    {
+      q: "home_faq_2_q",
+      a: "home_faq_2_a",
+    },
+    {
+      q: "home_faq_3_q",
+      a: "home_faq_3_a",
+    },
+    {
+      q: "home_faq_4_q",
+      a: "home_faq_4_a",
+    },
+    {
+      q: "home_faq_5_q",
+      a: "home_faq_5_a",
+    },
+  ] as const;
+
+  return (
+    <section className="relative overflow-hidden bg-[#f5f5f5] py-16 sm:py-20 lg:py-28">
+      <HomeTexture />
+
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-10">
+        <Reveal>
+          <div className="mx-auto mb-10 max-w-3xl text-center sm:mb-12">
+            <h2 className="text-4xl font-semibold tracking-tight text-[#1F2A1F] sm:text-5xl">
+              FAQ
+            </h2>
+
+            <div className="mt-5 flex items-center justify-center gap-2">
+              <span className="h-1 w-20 rounded-full bg-[#C99A3D]" />
+              <span className="h-1 w-5 rounded-full bg-[#C99A3D]" />
+              <span className="h-1 w-1.5 rounded-full bg-[#C99A3D]" />
+            </div>
+
+            <p className="mx-auto mt-6 max-w-2xl text-sm leading-relaxed text-[#5F6756] sm:text-base">
+              {t("home_faq_sub")}
+            </p>
+          </div>
+        </Reveal>
+
+        <div className="mx-auto max-w-5xl space-y-4">
+          {faqs.map((item, index) => (
+            <Reveal key={item.q} delay={index * 0.05}>
+              <details className="group overflow-hidden rounded-2xl bg-white shadow-[0_12px_35px_rgba(31,42,31,0.035)]">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-5 px-5 py-5 text-left text-base font-semibold text-[#1F2A1F] sm:px-7 sm:py-6 sm:text-lg">
+                  <span>{t(item.q)}</span>
+
+                  <ChevronDown
+                    size={20}
+                    strokeWidth={2}
+                    className="shrink-0 text-[#1F2A1F] transition-transform duration-300 group-open:rotate-180"
+                  />
+                </summary>
+
+                <div className="px-5 pb-5 pr-12 text-sm leading-relaxed text-[#5F6756] sm:px-7 sm:pb-6 sm:pr-16 sm:text-base">
+                  {t(item.a)}
                 </div>
-              </div>
+              </details>
             </Reveal>
           ))}
         </div>
@@ -675,12 +859,6 @@ export function DigitalProductCTA({
                     />
                   </Link>
                 </div>
-
-                {note && (
-                  <p className="mt-5 max-w-xl text-sm leading-relaxed text-[#F3EFDF]/65">
-                    {note}
-                  </p>
-                )}
               </div>
             </div>
           </div>

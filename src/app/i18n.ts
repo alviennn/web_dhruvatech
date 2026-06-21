@@ -30,7 +30,7 @@ const en = {
   hero_title_1: "Got a big tech idea?",
   hero_title_accent: "We got you",
   hero_sub:
-    "Dhruva Tech helps businesses turn ideas into reliable websites, applications, dashboards, and digital systems. We combine strategy, design, and technology to build products with clear purpose and long-term value.",
+    "Dhruva Tech helps businesses build useful, reliable, and growth ready digital products.",
 
   // home intro
   home_intro: "Dhruva Tech is a software house building",
@@ -39,20 +39,88 @@ const en = {
     "that help businesses look professional, work efficiently, and grow through technology.",
 
   // services preview
-  services_preview_title: "Three Core Capabilities",
+  services_preview_title: "Digital Services for Business Needs",
   services_preview_sub:
-    "From websites that build trust to mobile apps and AI/ML systems that automate and amplify, we build digital products with clear purpose.",
+    "Dhruva Tech builds websites, mobile apps, and AI/ML solutions adjusted to each project goal, scale, and business need.",
+
   svc_website_desc:
-    "Professional websites that strengthen credibility, explain services clearly, and help customers take action.",
+    "Professional websites for company profiles, landing pages, business catalogs, portfolios, and web-based systems.",
+
   svc_mobile_desc:
-    "Mobile applications that make services easier to access and create better interaction with users.",
+    "Mobile apps for service access, booking flows, operations, or digital platforms.",
+
   svc_ai_desc:
-    "AI-powered solutions for automation, data processing, computer vision, prediction, and intelligent features.",
+    "AI/ML solutions for computer vision, automation, data classification, prediction, and intelligent features.",
+
+  // why choose
+  home_why_title: "Why Choose Dhruva Tech",
+  home_why_sub:
+    "Digital products should help your business work better, not just look better.",
+  home_why_desc:
+    "We help turn business needs into structured digital direction, usable interfaces, and implementation that supports real operations.",
+
+  home_why_badge: "Main Advantage",
+
+  home_why_1_title: "Business First",
+  home_why_1_desc:
+    "We do not start from templates. We first understand your goal, users, and business flow so the solution is relevant from the beginning.",
+
+  home_why_2_title: "Custom Solution",
+  home_why_2_desc:
+    "Your website or application is shaped around the project needs, brand character, and the way users actually interact.",
+
+  home_why_3_title: "Responsive UX",
+  home_why_3_desc:
+    "The user experience is prepared to stay readable and comfortable across desktop, tablet, and mobile devices.",
+
+  home_why_4_title: "Clear Direction",
+  home_why_4_desc:
+    "Scope, feature priorities, and project direction are prepared early so the work stays focused and controlled.",
+
+  home_why_5_title: "Handover Support",
+  home_why_5_desc:
+    "After delivery, clients receive basic usage guidance so the product can be used with more confidence.",
+
+  home_why_image_alt:
+    "Digital product planning and development illustration",
+
+// featured work
+featured_title: "Projects Built from Real Needs",
+featured_sub:
+  "Each project has its own context, problem, and goal. We show how digital solutions can help businesses explain services, improve flows, and strengthen credibility.",
+
+// about preview
+home_about_title: "Built with the Right Direction",
+home_about_sub:
+  "Every project starts with proper understanding before design and development begin.",
+home_about_desc:
+  "We help keep each project focused, realistic, and aligned with business goals. From structuring needs and setting priorities to building digital solutions that are ready to use.",
+
+// home faq
+home_faq_title: "Frequently Asked Questions",
+home_faq_sub:
+  "Questions clients usually ask before starting a project.",
+home_faq_desc:
+  "Before building a website or application, it is important to clarify the goal, feature needs, design direction, estimated timeline, and support after launch.",
+home_faq_1_q: "Can I consult before starting?",
+home_faq_1_a:
+  "Yes. Initial consultation helps align the business goal, feature needs, and project scope before development begins.",
+home_faq_2_q: "Do you create custom designs?",
+home_faq_2_a:
+  "Yes. The design can be adjusted to the brand identity, business needs, and target user characteristics.",
+home_faq_3_q: "Can websites include extra features?",
+home_faq_3_a:
+  "Yes. Websites can include WhatsApp integration, contact forms, catalogs, admin dashboards, or other features based on project needs.",
+home_faq_4_q: "How long does a project take?",
+home_faq_4_a:
+  "The timeline depends on the number of pages, feature complexity, material readiness, and revision needs.",
+home_faq_5_q: "Is support available after launch?",
+home_faq_5_a:
+  "Support can be adjusted based on the project agreement, especially for basic guidance, light fixes, or further development needs.",
+home_faq_cta_text: "Still have questions about your project?",
+home_faq_cta_button: "Ask Us Directly",
 
   // featured work
-  featured_title: "Selected Projects & Concepts",
-  featured_sub:
-    "Every project is built to solve a specific business need from improving digital credibility to building intelligent systems that make operations more efficient.",
   concept_badge: "Concept Work",
   real_badge: "Real Project",
 
@@ -664,6 +732,12 @@ const en = {
   portfolio_detail_other_projects: "Other Projects",
   portfolio_detail_view_all: "View all",
   portfolio_detail_photos: "photos",
+
+  portfolio_error_load: "Failed to load portfolio. Please try again.",
+  portfolio_key_features: "Key Features",
+  portfolio_tech_stack: "Tech Stack",
+
+  featured_loading: "Loading featured work...",
 };
 
 const id: Record<keyof typeof en, string> = {
@@ -696,7 +770,7 @@ const id: Record<keyof typeof en, string> = {
   hero_title_1: "Punya ide teknologi besar?",
   hero_title_accent: "Kami siap membantu",
   hero_sub:
-    "Dhruva Tech membantu bisnis mengubah ide menjadi website, aplikasi, dashboard, dan sistem digital yang andal. Kami memadukan strategi, desain, dan teknologi untuk membangun produk dengan tujuan yang jelas dan nilai jangka panjang.",
+    "Dhruva Tech membantu bisnis membangun produk digital yang berguna, andal, dan siap berkembang.",
 
   // home intro
   home_intro: "Dhruva Tech adalah software house yang membangun",
@@ -705,20 +779,80 @@ const id: Record<keyof typeof en, string> = {
     "yang membantu bisnis tampil profesional, bekerja efisien, dan tumbuh lewat teknologi.",
 
   // services preview
-  services_preview_title: "Tiga Kapabilitas Utama",
-  services_preview_sub:
-    "Dari website yang membangun kepercayaan hingga aplikasi mobile dan sistem AI/ML yang mengotomatisasi dan memperkuat, kami membangun produk digital dengan tujuan yang jelas.",
-  svc_website_desc:
-    "Website profesional yang memperkuat kredibilitas, menjelaskan layanan dengan jelas, dan mendorong pelanggan untuk bertindak.",
-  svc_mobile_desc:
-    "Aplikasi mobile yang memudahkan akses layanan dan menciptakan interaksi lebih baik dengan pengguna.",
-  svc_ai_desc:
-    "Solusi berbasis AI untuk otomasi, pengolahan data, computer vision, prediksi, dan fitur cerdas.",
+services_preview_title: "Layanan Digital untuk Kebutuhan Bisnis",
+services_preview_sub:
+  "Dhruva Tech membantu membangun produk digital mulai dari website company profile, aplikasi mobile, hingga solusi berbasis AI/ML. Setiap layanan disesuaikan dengan tujuan, skala, dan kebutuhan project.",
+svc_website_desc:
+  "Website profesional untuk company profile, landing page, katalog bisnis, portofolio, hingga sistem berbasis web yang membantu bisnis tampil kredibel dan mudah diakses.",
+svc_mobile_desc:
+  "Aplikasi mobile untuk mendukung akses layanan, alur pemesanan, operasional, atau platform digital agar pengguna dapat berinteraksi lebih mudah melalui perangkat mereka.",
+svc_ai_desc:
+  "Solusi AI/ML untuk computer vision, otomasi, klasifikasi data, prediksi, dan fitur cerdas yang mendukung alur kerja bisnis secara nyata.",
+
+// why choose
+home_why_title: "Bukan Sekadar Tampilan",
+home_why_sub:
+  "Produk digital yang baik perlu memiliki arah, struktur, dan fungsi yang jelas.",
+home_why_desc:
+  "Dhruva Tech mengutamakan pemahaman kebutuhan bisnis, struktur informasi, kenyamanan pengguna, dan kualitas implementasi agar hasil akhirnya tidak hanya menarik, tetapi juga siap digunakan.",
+home_why_1_title: "Business First",
+home_why_1_desc:
+  "Kami memahami tujuan bisnis terlebih dahulu sebelum menentukan bentuk website, aplikasi, atau fitur yang perlu dibangun.",
+home_why_2_title: "Custom Solution",
+home_why_2_desc:
+  "Setiap produk digital disusun sesuai kebutuhan project, target pengguna, dan karakter brand.",
+home_why_3_title: "Responsive UX",
+home_why_3_desc:
+  "Tampilan disiapkan agar tetap jelas dan nyaman digunakan di desktop, tablet, maupun mobile.",
+home_why_4_title: "Clear Direction",
+home_why_4_desc:
+  "Scope, prioritas fitur, dan arah pengerjaan dibuat jelas sejak awal agar proses kerja lebih terkontrol.",
+home_why_5_title: "Handover Support",
+home_why_5_desc:
+  "Client mendapat arahan penggunaan dasar agar hasil project bisa digunakan dengan lebih percaya diri.",
+
+home_why_badge: "Keunggulan Utama",
+
+home_why_image_alt:
+  "Ilustrasi perencanaan dan pengembangan produk digital",
+
+// featured work
+featured_title: "Project yang Dibangun dari Kebutuhan Nyata",
+featured_sub:
+  "Setiap project memiliki konteks, masalah, dan tujuan yang berbeda. Kami menampilkan bagaimana solusi digital membantu bisnis menjelaskan layanan, memperbaiki alur, dan meningkatkan kredibilitas.",
+
+// about preview
+home_about_title: "Dibangun dengan Arah yang Tepat",
+home_about_sub:
+  "Setiap project dimulai dari pemahaman yang benar sebelum masuk ke desain dan development.",
+home_about_desc:
+  "Kami membantu menjaga arah project tetap fokus, realistis, dan sesuai tujuan bisnis. Mulai dari menyusun kebutuhan, menentukan prioritas, hingga membangun solusi digital yang siap digunakan.",
+
+// home faq
+home_faq_title: "Pertanyaan yang Sering Ditanyakan",
+home_faq_sub:
+  "Hal yang biasanya ditanyakan client sebelum memulai project.",
+home_faq_desc:
+  "Sebelum membangun website atau aplikasi, penting untuk memperjelas tujuan, kebutuhan fitur, arah desain, estimasi pengerjaan, dan support setelah launch.",
+home_faq_1_q: "Apakah bisa konsultasi dulu?",
+home_faq_1_a:
+  "Bisa. Konsultasi awal membantu menyamakan tujuan bisnis, kebutuhan fitur, dan gambaran scope sebelum development dimulai.",
+home_faq_2_q: "Apakah desainnya custom?",
+home_faq_2_a:
+  "Ya. Desain dapat disesuaikan dengan identitas brand, kebutuhan bisnis, dan karakter target pengguna.",
+home_faq_3_q: "Apakah bisa tambah fitur?",
+home_faq_3_a:
+  "Bisa. Website dapat dilengkapi integrasi WhatsApp, formulir kontak, katalog, dashboard admin, atau fitur lain sesuai kebutuhan project.",
+home_faq_4_q: "Berapa lama pengerjaannya?",
+home_faq_4_a:
+  "Estimasi tergantung pada jumlah halaman, kompleksitas fitur, kesiapan materi, dan kebutuhan revisi.",
+home_faq_5_q: "Apakah ada support setelah selesai?",
+home_faq_5_a:
+  "Support dapat disesuaikan dengan kesepakatan project, terutama untuk arahan penggunaan, perbaikan ringan, atau pengembangan lanjutan.",
+home_faq_cta_text: "Masih punya pertanyaan tentang project Anda?",
+home_faq_cta_button: "Tanya Langsung",
 
   // featured work
-  featured_title: "Proyek & Konsep Pilihan",
-  featured_sub:
-    "Setiap proyek dibangun untuk menyelesaikan kebutuhan bisnis tertentu, mulai dari meningkatkan kredibilitas digital hingga membangun sistem cerdas yang membuat operasional lebih efisien.",
   concept_badge: "Karya Konsep",
   real_badge: "Proyek Nyata",
 
@@ -1351,6 +1485,13 @@ const id: Record<keyof typeof en, string> = {
   portfolio_detail_other_projects: "Project Lainnya",
   portfolio_detail_view_all: "Lihat semua",
   portfolio_detail_photos: "foto",
+
+  portfolio_error_load: "Gagal memuat portfolio. Silakan coba lagi.",
+  portfolio_key_features: "Fitur Kunci",
+  portfolio_tech_stack: "Tech Stack",
+
+  featured_loading: "Memuat karya pilihan...",
+
 };
 
 export const dict = { en, id };
