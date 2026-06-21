@@ -1,34 +1,24 @@
+import type { ComponentType } from "react";
 import {
   Check,
-  AlertCircle,
   Sparkles,
   MessageCircle,
-  type LucideIcon,
   Building2,
   LayoutTemplate,
   BriefcaseBusiness,
-  GraduationCap,
-  FolderKanban,
   MonitorSmartphone,
-  PencilRuler,
   Files,
-  PanelsTopLeft,
-  ContactRound,
   SearchCheck,
-  Rocket,
   Smartphone,
   CalendarCheck2,
-  UsersRound,
   ShieldCheck,
-  BellRing,
   DatabaseZap,
-  Cpu,
+  PanelsTopLeft,
   BrainCircuit,
   Workflow,
   ScanSearch,
 } from "lucide-react";
-import { PageHero, SectionHeader, ProcessStrip } from "../components/shared";
-
+import { PageHero } from "../components/shared";
 import { useT } from "../providers";
 import type { Key } from "../i18n";
 
@@ -39,6 +29,21 @@ type PricingPackage = {
   featureKeys: Key[];
   highlight?: boolean;
   badgeKey?: Key;
+};
+
+type IconDetailItem = {
+  titleKey: Key;
+  descKey: Key;
+  icon: ComponentType<{
+    size?: number;
+    strokeWidth?: number;
+    className?: string;
+  }>;
+};
+
+type ProcessStep = {
+  titleKey: Key;
+  descKey: Key;
 };
 
 const pricingPackages: PricingPackage[] = [
@@ -86,42 +91,163 @@ function buildWaLink(message: string) {
   return `https://wa.me/6289514693178?text=${encodeURIComponent(message)}`;
 }
 
-function ProblemSection({
-  problems,
-  accent,
+function ServiceIntroSection({
+  title,
+  description,
+  points,
 }: {
-  problems: string[];
-  accent: string;
+  title: string;
+  description: string;
+  points: string[];
 }) {
   return (
-    <section className="relative overflow-hidden bg-[#f5f5f5] py-18 lg:py-20 transition-colors">
-      <div className="pointer-events-none absolute inset-0 opacity-[0.12] service-texture" />
-      <div className="pointer-events-none absolute -top-44 right-[-180px] h-[560px] w-[560px] rounded-full bg-[#004B08]/[0.06] blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-44 left-[-180px] h-[520px] w-[520px] rounded-full bg-[#C99A3D]/[0.055] blur-3xl" />
+    <section className="bg-[#f5f5f5] py-14 lg:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+        <div className="grid gap-10 border-b border-[#1F2A1F]/10 pb-14 lg:grid-cols-12 lg:items-start">
+          <div className="lg:col-span-5">
+            <h2 className="max-w-xl text-2xl font-semibold tracking-tight text-[#1F2A1F] sm:text-3xl md:text-4xl">
+              {title}
+            </h2>
+          </div>
 
-      <div className="relative mx-auto grid max-w-7xl gap-10 px-6 lg:grid-cols-12 lg:gap-14 lg:px-10">
-        <div className="lg:col-span-5">
-          <SectionHeader title={accent} />
+          <div className="lg:col-span-7">
+            <p className="max-w-3xl text-sm leading-7 text-[#5F6756] md:text-base md:leading-8">
+              {description}
+            </p>
+
+            <div className="mt-8 space-y-4">
+              {points.map((point) => (
+                <div
+                  key={point}
+                  className="grid grid-cols-[14px_1fr] gap-3 sm:grid-cols-[16px_1fr]"
+                >
+                  <span className="mt-[7px] h-2.5 w-2.5 rounded-full bg-[#004B08]" />
+
+                  <p className="max-w-3xl text-sm leading-6 text-[#5F6756]">
+                    {point}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
+      </div>
+    </section>
+  );
+}
 
-        <div className="lg:col-span-7">
-          <div className="grid gap-4">
-            {problems.map((problem, i) => (
+function CapabilitySection({
+  title,
+  description,
+  items,
+  reverse = false,
+}: {
+  title: string;
+  description: string;
+  items: IconDetailItem[];
+  reverse?: boolean;
+}) {
+  const { t } = useT();
+
+  return (
+    <section className="bg-[#f5f5f5] py-14 lg:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+        <div
+          className={`grid gap-10 border-b border-[#1F2A1F]/10 pb-14 lg:grid-cols-12 lg:items-start ${
+            reverse ? "lg:[&>*:first-child]:order-2" : ""
+          }`}
+        >
+          <div className="lg:col-span-5">
+            <h2 className="max-w-xl text-2xl font-semibold tracking-tight text-[#1F2A1F] sm:text-3xl md:text-4xl">
+              {title}
+            </h2>
+
+            <p className="mt-5 max-w-lg text-sm leading-7 text-[#5F6756] md:text-base">
+              {description}
+            </p>
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2 lg:col-span-7">
+            {items.map(({ titleKey, descKey, icon: Icon }) => (
               <div
-                key={problem}
-                className="group relative overflow-hidden rounded-[28px] border border-[#1F2A1F]/10 bg-white/75 px-6 py-5 shadow-[0_16px_55px_rgba(31,42,31,0.045)] backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-[#C99A3D]/55 hover:bg-white hover:shadow-[0_22px_75px_rgba(31,42,31,0.08)]"
+                key={titleKey}
+                className="rounded-[22px] border border-[#1F2A1F]/10 bg-white/65 p-5 shadow-[0_14px_42px_rgba(31,42,31,0.04)] backdrop-blur sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none"
               >
-                <div className="pointer-events-none absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-[#C99A3D]/70 via-[#E0C16A]/35 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#004B08]/10 text-[#004B08] sm:bg-transparent">
+                    <Icon
+                      size={24}
+                      strokeWidth={1.8}
+                      className="text-[#004B08] sm:size-[28px]"
+                    />
+                  </div>
 
-                <div className="pointer-events-none absolute right-6 top-1/2 h-16 w-16 -translate-y-1/2 rounded-full border border-[#004B08]/[0.08] bg-[#004B08]/[0.025] transition-all duration-500 group-hover:border-[#C99A3D]/25 group-hover:bg-[#C99A3D]/[0.05]" />
+                  <div>
+                    <h3 className="text-base font-semibold leading-snug text-[#1F2A1F] sm:text-lg">
+                      {t(titleKey)}
+                    </h3>
 
-                <div className="relative z-10 flex items-start gap-5">
-                  <span className="mt-1 inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-[#C99A3D]/35 bg-[#FFF8E6]/70 text-xs font-semibold text-[#004B08]">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
+                    <p className="mt-2 max-w-sm text-sm leading-6 text-[#5F6756]">
+                      {t(descKey)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-                  <p className="max-w-3xl text-base leading-relaxed text-[#5F6756]">
-                    {problem}
+function MethodologySection() {
+  const { t } = useT();
+
+  const methodologyItems = [
+    {
+      titleKey: "method_agile_title",
+      descKey: "method_agile_desc",
+    },
+    {
+      titleKey: "method_transparency_title",
+      descKey: "method_transparency_desc",
+    },
+    {
+      titleKey: "method_iteration_title",
+      descKey: "method_iteration_desc",
+    },
+  ] as const;
+
+  return (
+    <section className="bg-[#f5f5f5] py-14 lg:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+        <div className="grid gap-10 border-b border-[#1F2A1F]/10 pb-14 lg:grid-cols-12 lg:items-start">
+          <div className="lg:col-span-5">
+            <h2 className="max-w-xl text-2xl font-semibold tracking-tight text-[#1F2A1F] sm:text-3xl md:text-4xl">
+              {t("method_section_title")}
+            </h2>
+
+            <p className="mt-5 max-w-lg text-sm leading-7 text-[#5F6756] md:text-base">
+              {t("method_section_sub")}
+            </p>
+          </div>
+
+          <div className="space-y-6 lg:col-span-7">
+            {methodologyItems.map((item) => (
+              <div
+                key={item.titleKey}
+                className="grid grid-cols-[14px_1fr] gap-4"
+              >
+                <span className="mt-[9px] h-2.5 w-2.5 rounded-full bg-[#C99A3D]" />
+
+                <div>
+                  <h3 className="text-lg font-semibold leading-snug text-[#1F2A1F] sm:text-xl">
+                    {t(item.titleKey)}
+                  </h3>
+
+                  <p className="mt-2 max-w-2xl text-sm leading-7 text-[#5F6756]">
+                    {t(item.descKey)}
                   </p>
                 </div>
               </div>
@@ -129,63 +255,6 @@ function ProblemSection({
           </div>
         </div>
       </div>
-
-      <ServiceMotionStyle />
-    </section>
-  );
-}
-
-function ListGrid({
-  title,
-  items,
-}: {
-  title: string;
-  items: { labelKey: Key; icon: LucideIcon }[];
-}) {
-  const { t } = useT();
-
-  return (
-    <section className="relative overflow-hidden border-y border-[#1F2A1F]/10 bg-[#f5f5f5] py-18 lg:py-20 transition-colors">
-      <div className="pointer-events-none absolute inset-0 opacity-[0.10] service-texture" />
-      <div className="pointer-events-none absolute -bottom-44 left-[-180px] h-[540px] w-[540px] rounded-full bg-[#C99A3D]/[0.06] blur-3xl" />
-      <div className="pointer-events-none absolute -top-44 right-[-180px] h-[520px] w-[520px] rounded-full bg-[#004B08]/[0.04] blur-3xl" />
-
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
-        <SectionHeader title={title} />
-
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map(({ labelKey, icon: Icon }) => (
-            <div
-              key={labelKey}
-              className="group relative min-h-[156px] overflow-hidden rounded-[28px] border border-[#1F2A1F]/10 bg-white/78 px-6 py-5 shadow-[0_16px_50px_rgba(31,42,31,0.045)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#C99A3D]/55 hover:bg-white hover:shadow-[0_24px_75px_rgba(31,42,31,0.085)]"
-            >
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#C99A3D]/70 via-[#E0C16A]/35 to-transparent opacity-80" />
-
-              <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-[#004B08]/[0.035] blur-3xl transition-all duration-300 group-hover:bg-[#C99A3D]/[0.06]" />
-
-              <div className="relative z-10 flex h-full flex-col">
-                <div className="flex items-start justify-between">
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-[16px] border border-[#C99A3D]/30 bg-[#FFF8E6]/70 text-[#004B08] shadow-[0_10px_24px_rgba(31,42,31,0.04)] transition-all duration-300 group-hover:border-[#C99A3D]/50 group-hover:bg-white">
-                    <Icon size={20} strokeWidth={2.1} />
-                  </div>
-
-                  <span className="mt-1 h-2.5 w-2.5 rounded-full bg-[#C99A3D]/55 transition-colors duration-300 group-hover:bg-[#004B08]/45" />
-                </div>
-
-                <div className="mt-auto">
-                  <h3 className="max-w-[88%] text-[1.1rem] leading-snug text-[#1F2A1F]">
-                    {t(labelKey)}
-                  </h3>
-
-                  <div className="mt-5 h-px w-16 bg-gradient-to-r from-[#C99A3D]/55 via-[#D7D2B8]/50 to-transparent transition-all duration-300 group-hover:w-24" />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <ServiceMotionStyle />
     </section>
   );
 }
@@ -193,23 +262,75 @@ function ListGrid({
 function ProcessSection() {
   const { t } = useT();
 
+  const steps: ProcessStep[] = [
+    {
+      titleKey: "process_prepare_title",
+      descKey: "process_prepare_desc",
+    },
+    {
+      titleKey: "process_define_title",
+      descKey: "process_define_desc",
+    },
+    {
+      titleKey: "process_design_title",
+      descKey: "process_design_desc",
+    },
+    {
+      titleKey: "process_develop_title",
+      descKey: "process_develop_desc",
+    },
+    {
+      titleKey: "process_polish_title",
+      descKey: "process_polish_desc",
+    },
+    {
+      titleKey: "process_launch_title",
+      descKey: "process_launch_desc",
+    },
+  ];
+
   return (
-    <section className="relative overflow-hidden bg-[#f5f5f5] py-16 lg:py-20 transition-colors">
-      <div className="pointer-events-none absolute inset-0 opacity-[0.10] service-texture" />
-      <div className="pointer-events-none absolute -top-44 right-[-180px] h-[540px] w-[540px] rounded-full bg-[#004B08]/[0.06] blur-3xl" />
+    <section className="bg-[#f5f5f5] py-14 lg:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+        <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
+          <div className="lg:col-span-4">
+            <h2 className="max-w-xl text-2xl font-semibold tracking-tight text-[#1F2A1F] sm:text-3xl md:text-4xl">
+              {t("proc_section_title")}
+            </h2>
 
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
-        <SectionHeader
-          title={t("proc_section_title")}
-          subtitle={t("proc_section_sub")}
-        />
+            <p className="mt-5 max-w-lg text-sm leading-7 text-[#5F6756] md:text-base">
+              {t("proc_section_sub")}
+            </p>
+          </div>
 
-        <div className="mt-10">
-          <ProcessStrip />
+          <div className="lg:col-span-8">
+            <div className="relative space-y-8 sm:space-y-10">
+              <div className="absolute left-[19px] top-2 hidden h-[calc(100%-24px)] w-px bg-[#1F2A1F]/10 sm:block" />
+
+              {steps.map((step, index) => (
+                <div
+                  key={step.titleKey}
+                  className="relative grid grid-cols-[40px_1fr] gap-4"
+                >
+                  <span className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#004B08] text-xs font-semibold text-[#F3EFDF]">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+
+                  <div>
+                    <h3 className="text-lg font-semibold leading-snug text-[#1F2A1F] sm:text-xl">
+                      {t(step.titleKey)}
+                    </h3>
+
+                    <p className="mt-2 max-w-2xl text-sm leading-7 text-[#5F6756]">
+                      {t(step.descKey)}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-
-      <ServiceMotionStyle />
     </section>
   );
 }
@@ -218,20 +339,15 @@ function WebsitePricingSection() {
   const { t } = useT();
 
   return (
-    <section className="relative overflow-hidden bg-[#f5f5f5] py-24 lg:py-32">
-      <div className="pointer-events-none absolute inset-0 opacity-[0.12] service-texture" />
-
-      <div className="pointer-events-none absolute -top-40 left-[-160px] h-[520px] w-[520px] rounded-full bg-[#004B08]/[0.06] blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-44 right-[-160px] h-[560px] w-[560px] rounded-full bg-[#C99A3D]/[0.08] blur-3xl" />
-
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
+    <section className="bg-[#f5f5f5] py-16 lg:py-24">
+      <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="mx-auto max-w-2xl text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#004B08]/10 bg-white/70 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-[#004B08] shadow-[0_12px_36px_rgba(31,42,31,0.04)] backdrop-blur">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#004B08]/10 bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-[#004B08]">
             <Sparkles size={13} className="text-[#C99A3D]" />
             {t("pricing_badge")}
           </div>
 
-          <h2 className="text-3xl font-medium leading-tight text-[#1F2A1F] lg:text-4xl">
+          <h2 className="text-3xl font-semibold leading-tight text-[#1F2A1F] lg:text-4xl">
             {t("pricing_title_1")}{" "}
             <span className="text-[#004B08]">{t("pricing_title_2")}</span>
           </h2>
@@ -241,7 +357,7 @@ function WebsitePricingSection() {
           </p>
         </div>
 
-        <div className="mt-16 grid gap-7 lg:grid-cols-3 lg:items-stretch">
+        <div className="mt-14 grid gap-6 lg:grid-cols-3">
           {pricingPackages.map((pkg) => {
             const packageName = t(pkg.nameKey);
             const waMessage = t("pricing_wa_message").replace(
@@ -252,54 +368,25 @@ function WebsitePricingSection() {
             return (
               <div
                 key={pkg.nameKey}
-                className={`group relative flex h-full flex-col overflow-hidden rounded-[32px] border p-8 transition-all duration-300 ${
+                className={`relative flex h-full flex-col rounded-[28px] border bg-white p-7 ${
                   pkg.highlight
-                    ? "z-10 border-[#C99A3D]/70 bg-white ring-2 ring-[#C99A3D]/20 shadow-[0_30px_90px_rgba(31,42,31,0.12)]"
-                    : "border-[#1F2A1F]/10 bg-white/75 shadow-[0_20px_70px_rgba(31,42,31,0.07)] backdrop-blur hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_28px_90px_rgba(31,42,31,0.10)]"
+                    ? "border-[#C99A3D]/70 shadow-[0_24px_70px_rgba(31,42,31,0.10)]"
+                    : "border-[#1F2A1F]/10"
                 }`}
               >
-                <div
-                  className={`absolute inset-x-0 top-0 h-1.5 ${
-                    pkg.highlight
-                      ? "bg-gradient-to-r from-[#C99A3D] via-[#E0C16A] to-[#C99A3D]"
-                      : "bg-gradient-to-r from-[#004B08]/25 via-[#C99A3D]/30 to-transparent"
-                  }`}
-                />
-
-                <div
-                  className={`pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full blur-3xl ${
-                    pkg.highlight ? "bg-[#C99A3D]/18" : "bg-[#004B08]/[0.05]"
-                  }`}
-                />
-                <div
-                  className={`pointer-events-none absolute -bottom-24 -left-24 h-56 w-56 rounded-full blur-3xl ${
-                    pkg.highlight ? "bg-[#004B08]/[0.07]" : "bg-[#C99A3D]/[0.05]"
-                  }`}
-                />
-
                 {pkg.badgeKey && (
-                  <div className="absolute right-4 top-5 rounded-full bg-[#C99A3D] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#1F2A1F] shadow-[0_10px_24px_rgba(201,154,61,0.24)]">
+                  <span className="absolute right-5 top-5 rounded-full bg-[#C99A3D] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#1F2A1F]">
                     {t(pkg.badgeKey)}
-                  </div>
+                  </span>
                 )}
 
-                <div className={`relative ${pkg.badgeKey ? "pt-8" : ""}`}>
-                  <h3
-                    className={`text-xl font-semibold ${
-                      pkg.highlight ? "text-[#004B08]" : "text-[#1F2A1F]"
-                    }`}
-                  >
+                <div className={pkg.badgeKey ? "pt-8" : ""}>
+                  <h3 className="text-xl font-semibold text-[#1F2A1F]">
                     {packageName}
                   </h3>
 
                   <div className="mt-4">
-                    <div
-                      className={`font-semibold tracking-tight text-[#1F2A1F] ${
-                        pkg.highlight
-                          ? "text-[2.35rem] leading-none"
-                          : "text-3xl"
-                      }`}
-                    >
+                    <div className="text-3xl font-semibold tracking-tight text-[#004B08]">
                       {t(pkg.priceKey)}
                     </div>
 
@@ -310,13 +397,7 @@ function WebsitePricingSection() {
                     )}
                   </div>
 
-                  <div
-                    className={`my-7 h-px ${
-                      pkg.highlight
-                        ? "bg-gradient-to-r from-[#C99A3D]/60 via-[#C99A3D]/25 to-transparent"
-                        : "bg-[#1F2A1F]/10"
-                    }`}
-                  />
+                  <div className="my-7 h-px bg-[#1F2A1F]/10" />
 
                   <ul className="space-y-3.5">
                     {pkg.featureKeys.map((featureKey) => (
@@ -324,13 +405,7 @@ function WebsitePricingSection() {
                         key={featureKey}
                         className="flex items-start gap-3 text-sm leading-relaxed text-[#5F6756]"
                       >
-                        <span
-                          className={`mt-0.5 grid h-5 w-5 flex-shrink-0 place-items-center rounded-full ${
-                            pkg.highlight
-                              ? "bg-[#C99A3D]/18 text-[#004B08]"
-                              : "bg-[#004B08]/8 text-[#004B08]"
-                          }`}
-                        >
+                        <span className="mt-0.5 grid h-5 w-5 flex-shrink-0 place-items-center rounded-full bg-[#004B08]/10 text-[#004B08]">
                           <Check size={13} strokeWidth={2.3} />
                         </span>
 
@@ -344,9 +419,9 @@ function WebsitePricingSection() {
                   href={buildWaLink(waMessage)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`relative mt-auto flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-sm font-semibold transition-all ${
+                  className={`mt-8 flex w-full items-center justify-center gap-2 rounded-md px-5 py-3.5 text-sm font-semibold transition-colors ${
                     pkg.highlight
-                      ? "bg-[#004B08] text-[#F3EFDF] shadow-[0_16px_38px_rgba(0,75,8,0.22)] hover:bg-[#24452A]"
+                      ? "bg-[#004B08] text-[#F3EFDF] hover:bg-[#24452A]"
                       : "border border-[#004B08]/20 bg-[#F7F6F0] text-[#004B08] hover:bg-[#004B08] hover:text-[#F3EFDF]"
                   }`}
                 >
@@ -358,12 +433,10 @@ function WebsitePricingSection() {
           })}
         </div>
 
-        <p className="mt-14 text-center text-xs text-[#5F6756]">
+        <p className="mt-10 text-center text-xs text-[#5F6756]">
           {t("pricing_note")}
         </p>
       </div>
-
-      <ServiceMotionStyle />
     </section>
   );
 }
@@ -386,30 +459,63 @@ export function WebsiteDevelopment() {
         subtitle={t("web_hero_sub")}
       />
 
-      <ProblemSection
-        accent={t("web_problem_title")}
-        problems={[t("web_problem_1"), t("web_problem_2"), t("web_problem_3")]}
+      <ServiceIntroSection
+        title={t("web_intro_title")}
+        description={t("web_intro_desc")}
+        points={[t("web_problem_1"), t("web_problem_2"), t("web_problem_3")]}
       />
 
-      <ListGrid
-      title={t("web_build_title")}
-      items={[
-        { labelKey: "web_type_company_profile", icon: Building2 },
-        { labelKey: "web_type_landing_page", icon: LayoutTemplate },
-        { labelKey: "web_type_business", icon: BriefcaseBusiness },
-      ]}
-    />
+      <CapabilitySection
+        title={t("web_build_title")}
+        description={t("web_capability_desc")}
+        items={[
+          {
+            titleKey: "web_type_company_profile",
+            descKey: "web_type_company_profile_desc",
+            icon: Building2,
+          },
+          {
+            titleKey: "web_type_landing_page",
+            descKey: "web_type_landing_page_desc",
+            icon: LayoutTemplate,
+          },
+          {
+            titleKey: "web_type_business",
+            descKey: "web_type_business_desc",
+            icon: BriefcaseBusiness,
+          },
+        ]}
+      />
 
-    <ListGrid
-      title={t("web_features_title")}
-      items={[
-        { labelKey: "web_feature_content_structure", icon: Files },
-        { labelKey: "web_feature_responsive", icon: MonitorSmartphone },
-        { labelKey: "web_feature_whatsapp", icon: MessageCircle },
-        { labelKey: "web_feature_seo", icon: SearchCheck },
-      ]}
-    />
+      <CapabilitySection
+        reverse
+        title={t("web_features_title")}
+        description={t("web_deliverable_desc")}
+        items={[
+          {
+            titleKey: "web_feature_content_structure",
+            descKey: "web_feature_content_structure_desc",
+            icon: Files,
+          },
+          {
+            titleKey: "web_feature_responsive",
+            descKey: "web_feature_responsive_desc",
+            icon: MonitorSmartphone,
+          },
+          {
+            titleKey: "web_feature_whatsapp",
+            descKey: "web_feature_whatsapp_desc",
+            icon: MessageCircle,
+          },
+          {
+            titleKey: "web_feature_seo",
+            descKey: "web_feature_seo_desc",
+            icon: SearchCheck,
+          },
+        ]}
+      />
 
+      <MethodologySection />
       <ProcessSection />
       <WebsitePricingSection />
     </>
@@ -433,30 +539,63 @@ export function MobileAppDevelopment() {
         subtitle={t("mob_hero_sub")}
       />
 
-      <ProblemSection
-        accent={t("mob_problem_title")}
-        problems={[t("mob_problem_1"), t("mob_problem_2"), t("mob_problem_3")]}
+      <ServiceIntroSection
+        title={t("mob_intro_title")}
+        description={t("mob_intro_desc")}
+        points={[t("mob_problem_1"), t("mob_problem_2"), t("mob_problem_3")]}
       />
 
-      <ListGrid
-      title={t("mob_build_title")}
-      items={[
-        { labelKey: "mob_type_service_app", icon: Smartphone },
-        { labelKey: "mob_type_booking_app", icon: CalendarCheck2 },
-        { labelKey: "mob_type_business_app", icon: BriefcaseBusiness },
-      ]}
-    />
+      <CapabilitySection
+        title={t("mob_build_title")}
+        description={t("mob_capability_desc")}
+        items={[
+          {
+            titleKey: "mob_type_service_app",
+            descKey: "mob_type_service_app_desc",
+            icon: Smartphone,
+          },
+          {
+            titleKey: "mob_type_booking_app",
+            descKey: "mob_type_booking_app_desc",
+            icon: CalendarCheck2,
+          },
+          {
+            titleKey: "mob_type_business_app",
+            descKey: "mob_type_business_app_desc",
+            icon: BriefcaseBusiness,
+          },
+        ]}
+      />
 
-    <ListGrid
-      title={t("mob_features_title")}
-      items={[
-        { labelKey: "mob_feature_user_flow", icon: Workflow },
-        { labelKey: "mob_feature_mobile_first", icon: MonitorSmartphone },
-        { labelKey: "mob_feature_auth_flow", icon: ShieldCheck },
-        { labelKey: "mob_feature_api", icon: DatabaseZap },
-      ]}
-    />
+      <CapabilitySection
+        reverse
+        title={t("mob_features_title")}
+        description={t("mob_deliverable_desc")}
+        items={[
+          {
+            titleKey: "mob_feature_user_flow",
+            descKey: "mob_feature_user_flow_desc",
+            icon: Workflow,
+          },
+          {
+            titleKey: "mob_feature_mobile_first",
+            descKey: "mob_feature_mobile_first_desc",
+            icon: MonitorSmartphone,
+          },
+          {
+            titleKey: "mob_feature_auth_flow",
+            descKey: "mob_feature_auth_flow_desc",
+            icon: ShieldCheck,
+          },
+          {
+            titleKey: "mob_feature_api",
+            descKey: "mob_feature_api_desc",
+            icon: DatabaseZap,
+          },
+        ]}
+      />
 
+      <MethodologySection />
       <ProcessSection />
     </>
   );
@@ -480,88 +619,76 @@ export function AIMLSolutions() {
         subtitle={t("ai_hero_sub")}
       />
 
-      <ProblemSection
-        accent={t("ai_problem_title")}
-        problems={[t("ai_problem_1"), t("ai_problem_2"), t("ai_problem_3")]}
+      <ServiceIntroSection
+        title={t("ai_intro_title")}
+        description={t("ai_intro_desc")}
+        points={[t("ai_problem_1"), t("ai_problem_2"), t("ai_problem_3")]}
       />
 
-      <ListGrid
-      title={t("ai_build_title")}
-      items={[
-        { labelKey: "ai_type_computer_vision", icon: ScanSearch },
-        { labelKey: "ai_type_prediction", icon: BrainCircuit },
-        { labelKey: "ai_type_automation", icon: Workflow },
-      ]}
-    />
+      <CapabilitySection
+        title={t("ai_build_title")}
+        description={t("ai_capability_desc")}
+        items={[
+          {
+            titleKey: "ai_type_computer_vision",
+            descKey: "ai_type_computer_vision_desc",
+            icon: ScanSearch,
+          },
+          {
+            titleKey: "ai_type_prediction",
+            descKey: "ai_type_prediction_desc",
+            icon: BrainCircuit,
+          },
+          {
+            titleKey: "ai_type_automation",
+            descKey: "ai_type_automation_desc",
+            icon: Workflow,
+          },
+        ]}
+      />
 
-    <ListGrid
-      title={t("ai_usecases_title")}
-      items={[
-        { labelKey: "ai_usecase_image_detection", icon: ScanSearch },
-        { labelKey: "ai_usecase_data_prediction", icon: BrainCircuit },
-        { labelKey: "ai_usecase_dashboard", icon: PanelsTopLeft },
-        { labelKey: "ai_usecase_automation", icon: Workflow },
-      ]}
-    />
+      <CapabilitySection
+        reverse
+        title={t("ai_usecases_title")}
+        description={t("ai_deliverable_desc")}
+        items={[
+          {
+            titleKey: "ai_usecase_image_detection",
+            descKey: "ai_usecase_image_detection_desc",
+            icon: ScanSearch,
+          },
+          {
+            titleKey: "ai_usecase_data_prediction",
+            descKey: "ai_usecase_data_prediction_desc",
+            icon: BrainCircuit,
+          },
+          {
+            titleKey: "ai_usecase_dashboard",
+            descKey: "ai_usecase_dashboard_desc",
+            icon: PanelsTopLeft,
+          },
+          {
+            titleKey: "ai_usecase_automation",
+            descKey: "ai_usecase_automation_desc",
+            icon: Workflow,
+          },
+        ]}
+      />
 
+      <MethodologySection />
       <ProcessSection />
 
-      <section className="relative overflow-hidden border-y border-[#1F2A1F]/10 bg-[#f5f5f5] py-16 lg:py-20 transition-colors">
-        <div className="pointer-events-none absolute inset-0 opacity-[0.10] service-texture" />
-        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#C99A3D]/[0.06] blur-3xl" />
-
-        <div className="relative mx-auto max-w-5xl px-6 lg:px-10">
-          <div className="group relative overflow-hidden rounded-[32px] border border-[#1F2A1F]/10 bg-white/75 p-8 shadow-[0_22px_80px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:border-[#C99A3D]/55 hover:bg-white">
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-[#C99A3D]/60 via-[#E0C16A]/35 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
-            <div className="relative z-10 max-w-3xl">
-              <h4 className="mb-3 text-2xl font-medium tracking-tight text-[#1F2A1F]">
-                {t("ai_feasibility_title")}
-              </h4>
-
-              <p className="max-w-2xl leading-relaxed text-[#5F6756]">
-                {t("ai_feasibility")}
-              </p>
-
-              <div className="mt-7 h-px w-full max-w-xl bg-gradient-to-r from-[#C99A3D]/45 via-[#D7D2B8]/50 to-transparent" />
-            </div>
+      <section className="bg-[#f5f5f5] py-14 lg:py-20">
+        <div className="mx-auto max-w-7xl px-6 lg:px-10">
+          <div className="mx-auto max-w-4xl border-t border-[#1F2A1F]/10 pt-10 text-center">
+            
+            <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-[#5F6756]">
+              {t("ai_feasibility")}
+            </p>
           </div>
         </div>
-
-        <ServiceMotionStyle />
       </section>
     </>
-  );
-}
-
-/* ---------------- LOCAL STYLE ---------------- */
-
-function ServiceMotionStyle() {
-  return (
-    <style>{`
-      @keyframes serviceTextureMove {
-        0% {
-          background-position: 0 0;
-        }
-        100% {
-          background-position: 72px 72px;
-        }
-      }
-
-      .service-texture {
-        background-image:
-          linear-gradient(rgba(31, 42, 31, 0.055) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(31, 42, 31, 0.055) 1px, transparent 1px);
-        background-size: 72px 72px;
-        animation: serviceTextureMove 24s linear infinite;
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        .service-texture {
-          animation: none;
-        }
-      }
-    `}</style>
   );
 }
 
