@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { listPortfolioItems, type PortfolioItem } from "../data/api/api";
 import { getTechLogo } from "../data/techLogos";
+import type { Lang } from "../i18n";
 import { useT } from "../providers";
 
 /* ──────────────────────────────────────────────────────────────
@@ -363,9 +364,7 @@ function Lightbox({
                 transition: "width 0.3s ease",
               }}
               className={`h-1.5 rounded-full ${
-                index === current
-                  ? "bg-white"
-                  : "bg-white/30 hover:bg-white/60"
+                index === current ? "bg-white" : "bg-white/30 hover:bg-white/60"
               }`}
               aria-label={`${t("portfolio_detail_image")} ${index + 1}`}
             />
@@ -441,6 +440,14 @@ function MetaPill({
   );
 }
 
+// Tambah helper di atas komponen PortfolioDetail
+function useLocalizedDescription(item: PortfolioItem | null, lang: Lang) {
+  if (!item) return "";
+  return lang === "en" && item.en_description
+    ? item.en_description
+    : item.description;
+}
+
 /* ──────────────────────────────────────────────────────────────
    Main Page
 ────────────────────────────────────────────────────────────── */
@@ -456,6 +463,8 @@ export function PortfolioDetail() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [pageVisible, setPageVisible] = useState(false);
   const [heroVisible, setHeroVisible] = useState(false);
+
+  const description = useLocalizedDescription(item, lang);
 
   useEffect(() => {
     const pageTimer = setTimeout(() => setPageVisible(true), 50);
@@ -473,6 +482,9 @@ export function PortfolioDetail() {
     listPortfolioItems()
       .then((items) => {
         const found = items.find((portfolioItem) => portfolioItem.id === id);
+
+        console.log("found item:", found); // ← tambah ini
+        console.log("lang:", lang);
 
         if (!found) {
           navigate("/portfolio", { replace: true });
@@ -544,8 +556,7 @@ export function PortfolioDetail() {
             style={{
               opacity: heroVisible ? 1 : 0,
               transform: heroVisible ? "translateY(0)" : "translateY(20px)",
-              transition:
-                "opacity 0.6s ease 0.1s, transform 0.6s ease 0.1s",
+              transition: "opacity 0.6s ease 0.1s, transform 0.6s ease 0.1s",
             }}
           >
             <Link
@@ -560,8 +571,8 @@ export function PortfolioDetail() {
               {item.title}
             </h1>
 
-            <p className="mt-6 max-w-3xl text-sm leading-7 text-white/68 sm:text-base sm:leading-8 lg:text-lg">
-              {item.description}
+            <p className="mt-6 max-w-3xl text-sm leading-7 text-white/68 ...">
+              {description}
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -602,8 +613,7 @@ export function PortfolioDetail() {
             style={{
               opacity: pageVisible ? 1 : 0,
               transform: pageVisible ? "translateY(0)" : "translateY(20px)",
-              transition:
-                "opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s",
+              transition: "opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s",
             }}
           >
             <div id="project-gallery" className="space-y-8 scroll-mt-28">
@@ -627,8 +637,7 @@ export function PortfolioDetail() {
                     </div>
 
                     <span className="rounded-full bg-[#1F2A1F]/[0.06] px-4 py-2 text-xs text-[#5F6756]">
-                      {item.techStack.length}{" "}
-                      {t("portfolio_detail_tech_count")}
+                      {item.techStack.length} {t("portfolio_detail_tech_count")}
                     </span>
                   </div>
 
@@ -747,7 +756,9 @@ export function PortfolioDetail() {
                         </h3>
 
                         <p className="mt-2 line-clamp-2 text-sm leading-6 text-[#5F6756]">
-                          {project.description}
+                          {lang === "en" && project.en_description
+                            ? project.en_description
+                            : project.description}
                         </p>
                       </div>
                     </article>
