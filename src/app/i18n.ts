@@ -30,13 +30,13 @@ const en = {
   hero_title_1: "Got a big tech idea?",
   hero_title_accent: "We got you",
   hero_sub:
-    "Dhruva Tech helps businesses turn ideas into reliable websites, applications, dashboards, and digital systems. We combine strategy, design, and technology to build products with clear purpose and long-term value.",
+    "Dhruva Tech help your businesses turn ideas into reliable websites, applications, dashboards, and digital systems. We combine strategy, design, and technology to build products with clear purpose and long-term value.",
 
   // home intro
   home_intro: "Dhruva Tech is a software house building",
   home_intro_accent: "websites, mobile apps, and AI/ML solutions",
   home_intro_tail:
-    "that help businesses look professional, work efficiently, and grow through technology.",
+    "that help your businesses look professional, work efficiently, and grow through technology.",
 
   // services preview
   services_preview_title: "Three Core Capabilities",
@@ -105,7 +105,7 @@ const en = {
   services_hero_t1: "Digital Services Built for",
   services_hero_t2: "Real Business Needs",
   services_hero_sub:
-    "Dhruva Tech helps businesses plan, design, and build digital products that are clear, useful, and ready to support growth.",
+    "Dhruva Tech helps your businesses plan, design, and build digital products that are clear, useful, and ready to support growth.",
 
   services_detail_title: "Services Designed Around Your Business Goals",
   services_detail_sub:
@@ -227,7 +227,7 @@ const en = {
   mob_hero_t1: "Mobile Applications That Make Services",
   mob_hero_t2: "Easier to Access",
   mob_hero_sub:
-    "Dhruva Tech helps businesses plan, design, and develop mobile application solutions that improve user access, interaction, and digital service experience.",
+    "Dhruva Tech helps your businesses plan, design, and develop mobile application solutions that improve user access, interaction, and digital service experience.",
   mob_problem_title:
     "Mobile expectations have changed your service should meet users where they are.",
   mob_problem_1:
@@ -245,7 +245,7 @@ const en = {
   ai_hero_t2: "Smarter",
   ai_hero_t3: "Digital Products",
   ai_hero_sub:
-    "Dhruva Tech helps businesses explore AI and machine learning solutions for automation, data processing, prediction, computer vision, and intelligent digital features.",
+    "Dhruva Tech helps your businesses explore AI and machine learning solutions for automation, data processing, prediction, computer vision, and intelligent digital features.",
   ai_problem_title:
     "AI is powerful, but only when applied to the right problem.",
   ai_problem_1:
@@ -285,11 +285,11 @@ const en = {
   about_hero_t2: "digital solutions",
   about_hero_t3: "with real value",
   about_hero_sub:
-    "Dhruva Tech helps businesses build websites, applications, and technology solutions that are ready to use.",
+    "Dhruva Tech helps your businesses build websites, applications, and technology solutions that are ready to use.",
   about_title:
     "A technology partner for businesses that want to grow digitally",
   about_p1:
-    "Dhruva Tech is a software house that helps businesses design and build digital products such as websites, mobile applications, and AI/ML-based solutions.",
+    "Dhruva Tech is a software house that helps your businesses design and build digital products such as websites, mobile applications, and AI/ML-based solutions.",
   about_p2:
     "We first understand the business needs, then shape a solution that is relevant, realistic, and ready to grow.",
   about_help_title: "How we help clients",
@@ -694,9 +694,9 @@ const id: Record<keyof typeof en, string> = {
 
   // home hero
   hero_title_1: "Punya ide teknologi besar?",
-  hero_title_accent: "Kami siap membantu",
+  hero_title_accent: "Dhruva Tech siap membantu!",
   hero_sub:
-    "Dhruva Tech membantu bisnis mengubah ide menjadi website, aplikasi, dashboard, dan sistem digital yang andal. Kami memadukan strategi, desain, dan teknologi untuk membangun produk dengan tujuan yang jelas dan nilai jangka panjang.",
+    "Dhruva Tech membantu bisnis anda untuk mengubah ide menjadi website, aplikasi, dashboard, dan sistem digital yang andal. Kami memadukan strategi, desain, dan teknologi untuk membangun produk dengan tujuan yang jelas dan nilai jangka panjang.",
 
   // home intro
   home_intro: "Dhruva Tech adalah software house yang membangun",
@@ -726,12 +726,12 @@ const id: Record<keyof typeof en, string> = {
   process_title: "Cara Kami Mengubah Ide Menjadi Produk Digital",
   process_sub:
     "Kami mulai dengan memahami masalah bisnis, tujuan produk, dan kebutuhan pengguna, bukan dengan desain atau kode.",
-  step_discover: "Discover",
-  step_define: "Define",
-  step_design: "Design",
-  step_develop: "Develop",
-  step_test: "Test",
-  step_launch: "Launch",
+  step_discover: "Telusuri",
+  step_define: "Definisikan",
+  step_design: "Desain",
+  step_develop: "Pengembangan",
+  step_test: "Pengujian",
+  step_launch: "Peluncuran",
   step_discover_desc:
     "Memahami masalah bisnis, tujuan, dan konteks pengguna.",
   step_define_desc:
@@ -748,7 +748,7 @@ const id: Record<keyof typeof en, string> = {
   // mindset
   mindset_title: "Stabil. Bertujuan. Berkembang.",
   mindset_sub:
-    "Dhruva mewakili stabilitas, konsistensi, dan kepercayaan. Nilai-nilai ini membentuk cara kami membangun produk digital.",
+    "Dhruva mewakili stabilitas, konsistensi, dan kepercayaan. Nilai-nilai ini membentuk cara kami membangun produk digital anda.",
   val_stable: "Stabil",
   val_purposeful: "Bertujuan",
   val_evolving: "Berkembang",
@@ -762,7 +762,7 @@ const id: Record<keyof typeof en, string> = {
   // home CTA
   home_cta_title: "Punya Ide Digital?",
   home_cta_sub:
-    "Diskusikan ide Anda dan ubah menjadi website, aplikasi mobile, dashboard, atau produk digital berbasis AI yang lebih terarah.",
+    "Diskusikan ide Anda bersama Kami dan ubah menjadi website, aplikasi mobile, dashboard, atau produk digital berbasis AI yang lebih terarah.",
   home_cta_button: "Konsultasi Sekarang",
   home_cta_note:
     "Dapatkan arah yang jelas sebelum memulai desain dan pengembangan.",
@@ -771,7 +771,7 @@ const id: Record<keyof typeof en, string> = {
   services_hero_t1: "Layanan Digital untuk",
   services_hero_t2: "Kebutuhan Bisnis Nyata",
   services_hero_sub:
-    "Dhruva Tech membantu bisnis merancang, mendesain, dan membangun produk digital yang jelas, berguna, dan siap mendukung pertumbuhan.",
+    "Dhruva Tech membantu bisnis anda merancang, mendesain, dan membangun produk digital yang jelas, berguna, dan siap mendukung pertumbuhan.",
 
   services_detail_title: "Layanan yang Dirancang Sesuai Tujuan Bisnis",
   services_detail_sub:
@@ -895,7 +895,7 @@ const id: Record<keyof typeof en, string> = {
   mob_hero_t1: "Aplikasi Mobile yang Memudahkan",
   mob_hero_t2: "Akses Layanan",
   mob_hero_sub:
-    "Dhruva Tech membantu bisnis merencanakan, mendesain, dan mengembangkan solusi aplikasi mobile yang meningkatkan akses, interaksi, dan pengalaman layanan digital.",
+    "Dhruva Tech membantu bisnis anda,merencanakan, mendesain, dan mengembangkan solusi aplikasi mobile yang meningkatkan akses, interaksi, dan pengalaman layanan digital.",
   mob_problem_title:
     "Ekspektasi mobile telah berubah, layanan Anda harus menjangkau pengguna di mana mereka berada.",
   mob_problem_1:
@@ -913,7 +913,7 @@ const id: Record<keyof typeof en, string> = {
   ai_hero_t2: "Produk Digital",
   ai_hero_t3: "yang Lebih Cerdas",
   ai_hero_sub:
-    "Dhruva Tech membantu bisnis mengeksplorasi solusi AI dan machine learning untuk otomasi, pengolahan data, prediksi, computer vision, dan fitur digital cerdas.",
+    "Dhruva Tech membantu bisnis anda mengeksplorasi solusi AI dan machine learning untuk otomasi, pengolahan data, prediksi, computer vision, dan fitur digital cerdas.",
   ai_problem_title:
     "AI itu kuat, tapi hanya jika diterapkan pada masalah yang tepat.",
   ai_problem_1:
@@ -953,13 +953,13 @@ const id: Record<keyof typeof en, string> = {
   about_hero_t2: "solusi digital",
   about_hero_t3: "yang bernilai",
   about_hero_sub:
-    "Dhruva Tech membantu bisnis membangun website, aplikasi, dan solusi teknologi yang siap digunakan.",
+    "Dhruva Tech membantu bisnis anda membangun website, aplikasi, dan solusi teknologi yang siap digunakan.",
 
   about_title:
     "Partner teknologi untuk bisnis yang ingin bertumbuh secara digital",
 
   about_p1:
-    "Dhruva Tech adalah software house yang membantu bisnis merancang dan membangun produk digital seperti website, aplikasi mobile, dan solusi berbasis AI/ML.",
+    "Dhruva Tech adalah software house yang membantu bisnis andamerancang dan membangun produk digital seperti website, aplikasi mobile, dan solusi berbasis AI/ML.",
 
   about_p2:
     "Kami memahami kebutuhan bisnis terlebih dahulu, lalu menyusun solusi yang relevan, realistis, dan mudah dikembangkan.",
