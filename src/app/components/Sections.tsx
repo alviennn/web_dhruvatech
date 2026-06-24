@@ -1,10 +1,7 @@
 import { Link } from "react-router";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import {
-  listPortfolioItems,
-  type PortfolioItem,
-} from "../data/api/api";
+import { listPortfolioItems, type PortfolioItem } from "../data/api/api";
 import {
   ArrowUpRight,
   Compass,
@@ -88,7 +85,7 @@ export function FeaturedWorkPreview() {
         setError(
           err instanceof Error
             ? err.message
-            : "Gagal mengambil data portfolio."
+            : "Gagal mengambil data portfolio.",
         );
       } finally {
         if (isMounted) {
@@ -805,23 +802,27 @@ export function Footer() {
           <FooterTitle>{t("footer_contact")}</FooterTitle>
           <ul className="space-y-3 text-sm sm:text-base">
             <li>
-              <a href="#" className="transition-colors hover:text-[#E0C16A]">
+              <a
+                href="https://wa.me/6289514693178?text=Hello%20Dhruva%20Tech!"
+                className="transition-colors hover:text-[#E0C16A]"
+              >
                 WhatsApp
               </a>
             </li>
             <li>
-              <a href="#" className="transition-colors hover:text-[#E0C16A]">
+              <a
+                href="mailto:info@dhruvatech.com"
+                className="transition-colors hover:text-[#E0C16A]"
+              >
                 Email
               </a>
             </li>
             <li>
-              <a href="#" className="transition-colors hover:text-[#E0C16A]">
+              <a
+                href="https://www.instagram.com/dhruvatech_/"
+                className="transition-colors hover:text-[#E0C16A]"
+              >
                 Instagram
-              </a>
-            </li>
-            <li>
-              <a href="#" className="transition-colors hover:text-[#E0C16A]">
-                LinkedIn
               </a>
             </li>
           </ul>
