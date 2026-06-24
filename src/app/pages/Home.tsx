@@ -2,15 +2,10 @@ import {
   ServicesPreview,
   WhyChoosePreview,
   FeaturedWorkPreview,
-<<<<<<< HEAD
   HomeAboutPreview,
   HomeFAQ,
   DigitalProductCTA,
   Footer,
-=======
-  ProcessPreview,
-  MindsetPreview,
->>>>>>> aeb3390fe11b63c5cd73d3232debd9036691fd6e
 } from "../components/Sections";
 import { Hero } from "../components/Hero";
 import { useT } from "../providers";
@@ -27,7 +22,6 @@ export function Home() {
       <WhyChoosePreview />
 
       <FeaturedWorkPreview />
-<<<<<<< HEAD
 
       <HomeAboutPreview />
 
@@ -41,10 +35,6 @@ export function Home() {
       />
 
       <Footer />
-=======
-      <ProcessPreview />
-      <MindsetPreview />
->>>>>>> aeb3390fe11b63c5cd73d3232debd9036691fd6e
     </>
   );
 }
