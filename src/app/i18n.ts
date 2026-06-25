@@ -53,7 +53,7 @@ const en = {
     "AI/ML solutions for computer vision, automation, data classification, prediction, and intelligent features.",
 
   // why choose
-  home_why_title: "Why Choose Dhruva Tech",
+  home_why_title: "Why Choose Dhruva Tech?",
   home_why_sub:
     "Digital products should help your business work better, not just look better.",
   home_why_desc:
@@ -790,7 +790,7 @@ svc_ai_desc:
   "Solusi AI/ML untuk computer vision, otomasi, klasifikasi data, prediksi, dan fitur cerdas yang mendukung alur kerja bisnis secara nyata.",
 
 // why choose
-home_why_title: "Bukan Sekadar Tampilan",
+home_why_title: "Kenapa Memilih Dhruva Tech?",
 home_why_sub:
   "Produk digital yang baik perlu memiliki arah, struktur, dan fungsi yang jelas.",
 home_why_desc:
