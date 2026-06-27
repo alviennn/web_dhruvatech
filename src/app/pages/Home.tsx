@@ -33,8 +33,6 @@ export function Home() {
         buttonLabel={t("home_cta_button")}
         note={t("home_cta_note")}
       />
-
-      <Footer />
     </>
   );
 }
