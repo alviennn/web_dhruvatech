@@ -783,14 +783,6 @@ export function HomeIntro() {
             <span className="text-[#004B08]">{t("home_intro_accent")}</span>{" "}
             {t("home_intro_tail")}
           </p>
-
-          <Link
-            to="/about"
-            className="mt-7 inline-flex items-center gap-2 text-sm text-[#004B08] hover:text-[#24452A] sm:mt-8 sm:text-base"
-          >
-            {t("cta_more_about_dt")}
-            <ArrowUpRight size={16} />
-          </Link>
         </Reveal>
       </div>
     </section>

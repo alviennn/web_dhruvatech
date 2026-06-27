@@ -10,10 +10,7 @@ type CTAContent = {
   buttonLabel: string;
 };
 
-function getCTAContent(
-  pathname: string,
-  t: (key: Key) => string
-): CTAContent {
+function getCTAContent(pathname: string, t: (key: Key) => string): CTAContent {
   if (pathname === "/") {
     return {
       title: t("home_cta_title"),
