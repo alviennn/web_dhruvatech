@@ -29,7 +29,7 @@ import {
 const ACCEPTED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const PROJECT_TYPES: PortfolioType[] = ["Website", "Mobile Apps", "AI/ML"];
 const TITLE_MAX_LENGTH = 45;
-const DESCRIPTION_MAX_LENGTH = 250;
+const DESCRIPTION_MAX_LENGTH = 1000;
 const MAX_IMAGES = 8;
 
 // ─── Login Screen ─────────────────────────────────────────────────────────────
