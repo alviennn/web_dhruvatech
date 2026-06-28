@@ -11,6 +11,11 @@ import {
   Eye,
   EyeOff,
   X,
+  Pencil,
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  Save,
 } from "lucide-react";
 import { useT } from "../providers";
 import {
@@ -20,6 +25,7 @@ import {
   isLoggedIn,
   listPortfolioItems,
   addPortfolioItem,
+  updatePortfolioItem,
   deletePortfolioItem,
   changePassword,
   type PortfolioItem,
@@ -252,33 +258,591 @@ function ImageThumb({
   );
 }
 
+// ─── Tinjauan Modal ────────────────────────────────────────────────────────────
+
+function TinjauanModal({
+  item,
+  onClose,
+  onEdit,
+}: {
+  item: PortfolioItem;
+  onClose: () => void;
+  onEdit: () => void;
+}) {
+  const [activeImg, setActiveImg] = useState(0);
+  const images = item.images?.length ? item.images : [item.coverImage];
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-6 overflow-y-auto">
+      <div className="relative w-full max-w-2xl rounded-[28px] border border-[#1F2A1F]/10 bg-white shadow-2xl overflow-hidden">
+        {/* Close */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-[#1F2A1F] shadow hover:bg-white"
+        >
+          <X size={16} />
+        </button>
+
+        {/* Image carousel */}
+        <div className="relative aspect-video bg-[#f5f5f5]">
+          <img
+            src={images[activeImg]}
+            alt={`${item.title} — gambar ${activeImg + 1}`}
+            className="h-full w-full object-cover"
+          />
+          {images.length > 1 && (
+            <>
+              <button
+                type="button"
+                onClick={() =>
+                  setActiveImg((p) => (p - 1 + images.length) % images.length)
+                }
+                className="absolute left-3 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-[#1F2A1F] shadow hover:bg-white"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveImg((p) => (p + 1) % images.length)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-[#1F2A1F] shadow hover:bg-white"
+              >
+                <ChevronRight size={16} />
+              </button>
+              {/* Dot nav */}
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+                {images.map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setActiveImg(i)}
+                    className={`h-1.5 rounded-full transition-all ${
+                      i === activeImg ? "w-5 bg-white" : "w-1.5 bg-white/50"
+                    }`}
+                  />
+                ))}
+              </div>
+              {/* Counter */}
+              <span className="absolute right-3 bottom-3 rounded-full bg-black/40 px-2 py-0.5 text-xs text-white">
+                {activeImg + 1} / {images.length}
+              </span>
+            </>
+          )}
+        </div>
+
+        {/* Thumbnail strip */}
+        {images.length > 1 && (
+          <div className="flex gap-2 overflow-x-auto px-6 py-3 border-b border-[#1F2A1F]/8">
+            {images.map((src, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setActiveImg(i)}
+                className={`shrink-0 h-14 w-14 rounded-xl overflow-hidden border-2 transition-colors ${
+                  i === activeImg ? "border-[#004B08]" : "border-transparent"
+                }`}
+              >
+                <img src={src} alt="" className="h-full w-full object-cover" />
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Content */}
+        <div className="p-6 space-y-4">
+          <div>
+            <div className="mb-1 text-xs font-semibold uppercase tracking-[0.22em] text-[#004B08]">
+              {item.type}
+            </div>
+            <h2 className="text-2xl leading-snug text-[#1F2A1F]">
+              {item.title}
+            </h2>
+          </div>
+
+          <div className="space-y-1">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#5F6756]/60">
+              Deskripsi (ID)
+            </p>
+            <p className="text-sm leading-relaxed text-[#5F6756]">
+              {item.description}
+            </p>
+          </div>
+
+          {item.en_description && (
+            <div className="space-y-1">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#5F6756]/60">
+                Description (EN)
+              </p>
+              <p className="text-sm leading-relaxed text-[#5F6756]">
+                {item.en_description}
+              </p>
+            </div>
+          )}
+
+          {item.keyFeatures?.length > 0 && (
+            <div className="space-y-2">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#004B08]/60">
+                Fitur Kunci
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {item.keyFeatures.map((f, i) => (
+                  <span
+                    key={i}
+                    className="rounded-full bg-[#004B08]/8 px-3 py-1 text-xs text-[#004B08]"
+                  >
+                    {f}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {item.techStack?.length > 0 && (
+            <div className="space-y-2">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#5F6756]/60">
+                Tech Stack
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {item.techStack.map((t, i) => (
+                  <span
+                    key={i}
+                    className="rounded-full border border-[#1F2A1F]/10 bg-white px-3 py-1 text-xs text-[#5F6756]"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Actions */}
+          <div className="flex gap-3 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 rounded-full border border-[#1F2A1F]/15 px-4 py-2.5 text-sm text-[#1F2A1F] hover:bg-[#f5f5f5] transition-colors"
+            >
+              Tutup
+            </button>
+            <button
+              type="button"
+              onClick={onEdit}
+              className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-[#004B08] px-4 py-2.5 text-sm text-[#F3EFDF] hover:bg-[#24452A] transition-colors"
+            >
+              <Pencil size={14} /> Edit Project
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Edit Modal ────────────────────────────────────────────────────────────────
+
+function EditModal({
+  item,
+  onClose,
+  onSaved,
+}: {
+  item: PortfolioItem;
+  onClose: () => void;
+  onSaved: (updated: PortfolioItem) => void;
+}) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Text fields — prefill dari data lama
+  const [title, setTitle] = useState(item.title);
+  const [type, setType] = useState<PortfolioType | "">(item.type);
+  const [description, setDescription] = useState(item.description);
+  const [en_description, setEn_description] = useState(
+    item.en_description ?? "",
+  );
+  const [keyFeatures, setKeyFeatures] = useState(
+    item.keyFeatures?.join(", ") ?? "",
+  );
+  const [techStack, setTechStack] = useState(item.techStack?.join(", ") ?? "");
+
+  // Gambar lama (URL dari server) — bisa dihapus
+  const existingImages = item.images?.length ? item.images : [item.coverImage];
+  const [keptImages, setKeptImages] = useState<string[]>(existingImages);
+
+  // Gambar baru (File) yang ditambahkan
+  const [newFiles, setNewFiles] = useState<File[]>([]);
+  const [newPreviews, setNewPreviews] = useState<string[]>([]);
+
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const totalImages = keptImages.length + newFiles.length;
+
+  const removeKept = (index: number) => {
+    setKeptImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const removeNew = (index: number) => {
+    URL.revokeObjectURL(newPreviews[index]);
+    setNewFiles((prev) => prev.filter((_, i) => i !== index));
+    setNewPreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    if (!files.length) return;
+    setError("");
+
+    const remaining = MAX_IMAGES - totalImages;
+    if (remaining <= 0) {
+      setError(`Maksimal ${MAX_IMAGES} gambar.`);
+      return;
+    }
+
+    const valid: File[] = [];
+    const previews: string[] = [];
+
+    for (const file of files.slice(0, remaining)) {
+      if (!ACCEPTED_TYPES.includes(file.type)) {
+        setError("Format tidak didukung. Gunakan JPG, PNG, atau WebP.");
+        continue;
+      }
+      valid.push(file);
+      previews.push(URL.createObjectURL(file));
+    }
+
+    setNewFiles((prev) => [...prev, ...valid]);
+    setNewPreviews((prev) => [...prev, ...previews]);
+
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (!title.trim() || !type || !description.trim()) {
+      setError("Title, kategori, dan deskripsi wajib diisi.");
+      return;
+    }
+    if (totalImages === 0) {
+      setError("Minimal 1 gambar harus ada.");
+      return;
+    }
+    if (title.trim().length > TITLE_MAX_LENGTH) {
+      setError(`Judul maksimal ${TITLE_MAX_LENGTH} karakter.`);
+      return;
+    }
+
+    const features = keyFeatures
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const techs = techStack
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    setLoading(true);
+    try {
+      const updated = await updatePortfolioItem(item.id, {
+        title: title.trim(),
+        type: type as PortfolioType,
+        description: description.trim(),
+        en_description: en_description.trim(),
+        keyFeatures: features,
+        techStack: techs,
+        keptImageUrls: keptImages, // URL lama yang masih dipertahankan
+        newImageFiles: newFiles, // File baru yang ditambahkan
+      });
+      newPreviews.forEach((url) => URL.revokeObjectURL(url));
+      onSaved(updated);
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error ? err.message : "Gagal menyimpan perubahan.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const titleTooLong = title.length > TITLE_MAX_LENGTH;
+  const descTooLong = description.length > DESCRIPTION_MAX_LENGTH;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 overflow-y-auto px-4 py-8">
+      <div className="relative w-full max-w-2xl rounded-[28px] border border-[#1F2A1F]/10 bg-white shadow-2xl">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-[#1F2A1F]/8 px-7 py-5">
+          <div>
+            <p className="text-xs uppercase tracking-[0.2em] text-[#004B08]/60">
+              Edit Project
+            </p>
+            <h2 className="text-lg text-[#1F2A1F] leading-tight">
+              {item.title}
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-[#1F2A1F]/10 text-[#5F6756] hover:bg-[#f5f5f5]"
+          >
+            <X size={16} />
+          </button>
+        </div>
+
+        <form onSubmit={handleSave} className="space-y-5 p-7">
+          {/* Title */}
+          <AdminField label="Nama Project" required>
+            <input
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+                setError("");
+              }}
+              className={`${adminInput} ${titleTooLong ? "border-[#C99A3D]" : ""}`}
+              type="text"
+              maxLength={TITLE_MAX_LENGTH}
+            />
+            <div className="mt-1 flex justify-between text-xs">
+              <span className="text-[#5F6756]">
+                Maks. {TITLE_MAX_LENGTH} karakter
+              </span>
+              <span
+                className={titleTooLong ? "text-[#C99A3D]" : "text-[#5F6756]"}
+              >
+                {title.length}/{TITLE_MAX_LENGTH}
+              </span>
+            </div>
+          </AdminField>
+
+          {/* Type */}
+          <AdminField label="Kategori" required>
+            <select
+              value={type}
+              onChange={(e) => {
+                setType(e.target.value as PortfolioType);
+                setError("");
+              }}
+              className={adminInput}
+            >
+              <option value="">Pilih kategori...</option>
+              {PROJECT_TYPES.map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
+            </select>
+          </AdminField>
+
+          {/* Description */}
+          <AdminField label="Deskripsi (ID)" required>
+            <textarea
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+                setError("");
+              }}
+              rows={4}
+              maxLength={DESCRIPTION_MAX_LENGTH}
+              className={`${adminInput} ${descTooLong ? "border-[#C99A3D]" : ""}`}
+            />
+            <div className="mt-1 flex justify-between text-xs">
+              <span className="text-[#5F6756]">
+                Maks. {DESCRIPTION_MAX_LENGTH} karakter
+              </span>
+              <span
+                className={descTooLong ? "text-[#C99A3D]" : "text-[#5F6756]"}
+              >
+                {description.length}/{DESCRIPTION_MAX_LENGTH}
+              </span>
+            </div>
+          </AdminField>
+
+          {/* English Description */}
+          <AdminField label="Deskripsi (EN)" required>
+            <textarea
+              value={en_description}
+              onChange={(e) => {
+                setEn_description(e.target.value);
+                setError("");
+              }}
+              rows={4}
+              maxLength={DESCRIPTION_MAX_LENGTH}
+              className={adminInput}
+              placeholder="Describe this project in English..."
+            />
+          </AdminField>
+
+          {/* Key Features */}
+          <AdminField label="Fitur Kunci">
+            <input
+              value={keyFeatures}
+              onChange={(e) => setKeyFeatures(e.target.value)}
+              className={adminInput}
+              type="text"
+              placeholder="Admin Dashboard, Laporan PDF, Multi-User"
+            />
+            <p className="mt-1 text-xs text-[#5F6756]">Pisahkan dengan koma.</p>
+          </AdminField>
+
+          {/* Tech Stack */}
+          <AdminField label="Tech Stack">
+            <input
+              value={techStack}
+              onChange={(e) => setTechStack(e.target.value)}
+              className={adminInput}
+              type="text"
+              placeholder="React, Node.js, PostgreSQL, Tailwind"
+            />
+            <p className="mt-1 text-xs text-[#5F6756]">Pisahkan dengan koma.</p>
+          </AdminField>
+
+          {/* Gambar */}
+          <AdminField label="Gambar Project" required>
+            <p className="mb-3 text-xs text-[#5F6756]">
+              Gambar pertama jadi cover. Hapus gambar lama atau tambah yang
+              baru. Total maks. {MAX_IMAGES} gambar.
+            </p>
+
+            {/* Gambar lama */}
+            {keptImages.length > 0 && (
+              <div className="mb-3">
+                <p className="mb-2 text-xs font-medium text-[#5F6756]">
+                  Gambar saat ini
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {keptImages.map((src, i) => (
+                    <div key={src} className="relative group">
+                      <img
+                        src={src}
+                        alt={`Gambar ${i + 1}`}
+                        className="h-24 w-24 rounded-2xl object-cover border border-[#1F2A1F]/10 bg-[#f5f5f5]"
+                      />
+                      {i === 0 && (
+                        <span className="absolute bottom-1 left-1 rounded-full bg-[#004B08] px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white">
+                          Cover
+                        </span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => removeKept(i)}
+                        className="absolute -right-1.5 -top-1.5 hidden h-5 w-5 items-center justify-center rounded-full bg-[#C99A3D] text-white shadow group-hover:flex"
+                        aria-label="Hapus gambar"
+                      >
+                        <X size={11} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Gambar baru */}
+            {newFiles.length > 0 && (
+              <div className="mb-3">
+                <p className="mb-2 text-xs font-medium text-[#5F6756]">
+                  Gambar baru ditambahkan
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {newPreviews.map((src, i) => (
+                    <ImageThumb
+                      key={src}
+                      src={src}
+                      index={i}
+                      isFirst={keptImages.length === 0 && i === 0}
+                      onRemove={() => removeNew(i)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Tombol upload */}
+            {totalImages < MAX_IMAGES && (
+              <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border border-dashed border-[#1F2A1F]/15 bg-[#f5f5f5]/80 px-4 py-5 text-[#5F6756] transition-colors hover:border-[#C99A3D]/70 hover:bg-white">
+                <ImageIcon size={18} />
+                <span className="text-sm">
+                  {totalImages === 0
+                    ? "Klik untuk upload gambar"
+                    : `Tambah gambar (${totalImages}/${MAX_IMAGES})`}
+                </span>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
+                  multiple
+                  onChange={onFileChange}
+                  className="hidden"
+                />
+              </label>
+            )}
+          </AdminField>
+
+          {error && (
+            <p className="rounded-2xl border border-[#C99A3D]/30 bg-[#C99A3D]/10 px-4 py-3 text-sm text-[#8A641E]">
+              {error}
+            </p>
+          )}
+
+          {/* Footer */}
+          <div className="flex gap-3 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 rounded-full border border-[#1F2A1F]/15 px-4 py-2.5 text-sm text-[#1F2A1F] hover:bg-[#f5f5f5] transition-colors"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-[#004B08] px-4 py-2.5 text-sm text-[#F3EFDF] hover:bg-[#24452A] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+            >
+              {loading ? (
+                "Menyimpan..."
+              ) : (
+                <>
+                  <Save size={14} /> Simpan Perubahan
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Admin Dashboard ──────────────────────────────────────────────────────
 
 export function AdminPortfolio() {
   const { t } = useT();
   const [authed, setAuthed] = useState<boolean | null>(null);
 
-  // Form state
+  // Form state (tambah baru)
   const [title, setTitle] = useState("");
   const [type, setType] = useState<PortfolioType | "">("");
   const [description, setDescription] = useState("");
   const [en_description, setEn_description] = useState("");
   const [keyFeatures, setKeyFeatures] = useState("");
   const [techStack, setTechStack] = useState("");
-
-  // ← ganti: dari satu coverImageFile → array imageFiles + previews
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Items & UI state
+  const [items, setItems] = useState<PortfolioItem[]>([]);
+  const [fetchError, setFetchError] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [deletedNotice, setDeletedNotice] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [items, setItems] = useState<PortfolioItem[]>([]);
-  const [fetchError, setFetchError] = useState("");
   const [showChangePw, setShowChangePw] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Modal state
+  const [tinjauanItem, setTinjauanItem] = useState<PortfolioItem | null>(null);
+  const [editItem, setEditItem] = useState<PortfolioItem | null>(null);
 
   useEffect(() => {
     if (!isLoggedIn()) {
@@ -302,7 +866,7 @@ export function AdminPortfolio() {
     setAuthed(false);
   };
 
-  // ── Image handling ──────────────────────────────────────────────────────────
+  // ── Image handling (form tambah) ───────────────────────────────────────────
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
@@ -330,8 +894,6 @@ export function AdminPortfolio() {
 
     setImageFiles((prev) => [...prev, ...valid]);
     setImagePreviews((prev) => [...prev, ...previews]);
-
-    // reset input supaya file yang sama bisa dipilih ulang
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -341,7 +903,7 @@ export function AdminPortfolio() {
     setImagePreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // ── Submit ──────────────────────────────────────────────────────────────────
+  // ── Submit (tambah baru) ───────────────────────────────────────────────────
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -389,12 +951,9 @@ export function AdminPortfolio() {
         en_description: en_description.trim(),
         keyFeatures: features,
         techStack: techs,
-        imageFiles, // ← kirim array
+        imageFiles,
       });
-
       setItems((prev) => [created, ...prev]);
-
-      // reset form
       setTitle("");
       setType("");
       setDescription("");
@@ -427,7 +986,15 @@ export function AdminPortfolio() {
     }
   };
 
-  // ── Render States ────────────────────────────────────────────────────────────
+  // ── Filter ─────────────────────────────────────────────────────────────────
+
+  const filteredItems = items.filter(
+    (it) =>
+      it.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      it.type.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
+  // ── Render States ─────────────────────────────────────────────────────────
 
   if (authed === null) {
     return (
@@ -446,8 +1013,33 @@ export function AdminPortfolio() {
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-[#f5f5f5] px-6 pb-20 pt-16 lg:px-10">
+      {/* Modals */}
       {showChangePw && (
         <ChangePasswordModal onClose={() => setShowChangePw(false)} />
+      )}
+
+      {tinjauanItem && (
+        <TinjauanModal
+          item={tinjauanItem}
+          onClose={() => setTinjauanItem(null)}
+          onEdit={() => {
+            setEditItem(tinjauanItem);
+            setTinjauanItem(null);
+          }}
+        />
+      )}
+
+      {editItem && (
+        <EditModal
+          item={editItem}
+          onClose={() => setEditItem(null)}
+          onSaved={(updated) => {
+            setItems((prev) =>
+              prev.map((it) => (it.id === updated.id ? updated : it)),
+            );
+            setEditItem(null);
+          }}
+        />
       )}
 
       <div className="pointer-events-none absolute inset-0 opacity-[0.14] admin-texture" />
@@ -465,8 +1057,8 @@ export function AdminPortfolio() {
               Kelola Portfolio
             </h1>
             <p className="mt-2 max-w-2xl text-[#5F6756]">
-              Tambah, lihat, dan hapus project portfolio yang tampil di halaman
-              publik.
+              Tambah, lihat, edit, dan hapus project portfolio yang tampil di
+              halaman publik.
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
@@ -494,7 +1086,7 @@ export function AdminPortfolio() {
         )}
 
         <div className="grid gap-8 lg:grid-cols-5">
-          {/* Form */}
+          {/* Form Tambah */}
           <form
             onSubmit={onSubmit}
             className="space-y-5 rounded-[28px] border border-[#1F2A1F]/10 bg-white/70 p-6 shadow-[0_18px_60px_rgba(31,42,31,0.06)] backdrop-blur lg:col-span-3 lg:p-8"
@@ -503,7 +1095,6 @@ export function AdminPortfolio() {
               Tambah Project Baru
             </h2>
 
-            {/* Title */}
             <AdminField label="Nama Project" required>
               <input
                 value={title}
@@ -529,7 +1120,6 @@ export function AdminPortfolio() {
               </div>
             </AdminField>
 
-            {/* Type */}
             <AdminField label="Kategori" required>
               <select
                 value={type}
@@ -549,7 +1139,6 @@ export function AdminPortfolio() {
               </select>
             </AdminField>
 
-            {/* Description */}
             <AdminField label="Deskripsi Singkat" required>
               <textarea
                 value={description}
@@ -577,7 +1166,6 @@ export function AdminPortfolio() {
               </div>
             </AdminField>
 
-            {/* English Description */}
             <AdminField label="Deskripsi (Inggris)" required>
               <textarea
                 value={en_description}
@@ -588,7 +1176,7 @@ export function AdminPortfolio() {
                 }}
                 rows={4}
                 maxLength={DESCRIPTION_MAX_LENGTH}
-                className={`${adminInput} ${descriptionTooLong ? "border-[#C99A3D]" : ""}`}
+                className={adminInput}
                 placeholder="Describe this project in English..."
               />
               <div className="mt-1 flex justify-between gap-3 text-xs">
@@ -605,7 +1193,6 @@ export function AdminPortfolio() {
               </div>
             </AdminField>
 
-            {/* Key Features */}
             <AdminField label="Fitur Kunci">
               <input
                 value={keyFeatures}
@@ -619,7 +1206,6 @@ export function AdminPortfolio() {
               </p>
             </AdminField>
 
-            {/* Tech Stack */}
             <AdminField label="Tech Stack">
               <input
                 value={techStack}
@@ -633,9 +1219,7 @@ export function AdminPortfolio() {
               </p>
             </AdminField>
 
-            {/* ── Gambar (Multiple) ── */}
             <AdminField label="Gambar Project" required>
-              {/* Thumbnail strip */}
               {imagePreviews.length > 0 && (
                 <div className="mb-3 flex flex-wrap gap-2">
                   {imagePreviews.map((src, i) => (
@@ -649,8 +1233,6 @@ export function AdminPortfolio() {
                   ))}
                 </div>
               )}
-
-              {/* Upload button — sembunyikan kalau sudah max */}
               {imageFiles.length < MAX_IMAGES && (
                 <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border border-dashed border-[#1F2A1F]/15 bg-[#f5f5f5]/80 px-4 py-5 text-[#5F6756] transition-colors hover:border-[#C99A3D]/70 hover:bg-white">
                   <ImageIcon size={18} />
@@ -669,7 +1251,6 @@ export function AdminPortfolio() {
                   />
                 </label>
               )}
-
               <p className="mt-2 text-xs leading-relaxed text-[#5F6756]">
                 Gambar pertama otomatis jadi cover. Rekomendasi: 1200×900px,
                 rasio 4:3, WebP/JPG, maks 5MB per file. Bisa upload hingga{" "}
@@ -725,7 +1306,6 @@ export function AdminPortfolio() {
                     )}
                   </div>
 
-                  {/* Dot indicator kalau ada lebih dari 1 gambar */}
                   {imagePreviews.length > 1 && (
                     <div className="flex justify-center gap-1 border-t border-[#1F2A1F]/6 py-2">
                       {imagePreviews.map((_, i) => (
@@ -810,24 +1390,46 @@ export function AdminPortfolio() {
 
         {/* Items List */}
         <div className="mt-12">
-          <div className="mb-5 flex items-center justify-between">
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-xl text-[#1F2A1F]">
-              Project Tersimpan ({items.length})
+              Project Tersimpan ({filteredItems.length}
+              {searchQuery && items.length !== filteredItems.length
+                ? ` dari ${items.length}`
+                : ""}
+              )
             </h2>
-            {deletedNotice && (
-              <span className="text-sm text-[#004B08]">
-                ✓ Project berhasil dihapus.
-              </span>
-            )}
+            <div className="flex items-center gap-3">
+              {deletedNotice && (
+                <span className="text-sm text-[#004B08]">
+                  ✓ Project berhasil dihapus.
+                </span>
+              )}
+              {/* Search */}
+              <div className="relative">
+                <Search
+                  size={14}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-[#5F6756]"
+                />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Cari project..."
+                  className="rounded-full border border-[#1F2A1F]/10 bg-white py-2 pl-8 pr-4 text-sm text-[#1F2A1F] placeholder:text-[#5F6756]/60 focus:border-[#C99A3D] focus:outline-none"
+                />
+              </div>
+            </div>
           </div>
 
-          {items.length === 0 ? (
+          {filteredItems.length === 0 ? (
             <div className="rounded-[28px] border border-dashed border-[#1F2A1F]/15 bg-white/60 p-10 text-center text-[#5F6756]">
-              Belum ada project. Tambahkan project pertamamu di form di atas.
+              {searchQuery
+                ? `Tidak ada project yang cocok dengan "${searchQuery}".`
+                : "Belum ada project. Tambahkan project pertamamu di form di atas."}
             </div>
           ) : (
             <ul className="grid gap-4 sm:grid-cols-2">
-              {items.map((it) => (
+              {filteredItems.map((it) => (
                 <li
                   key={it.id}
                   className="flex gap-4 rounded-[24px] border border-[#1F2A1F]/10 bg-white/70 p-4 shadow-[0_12px_40px_rgba(31,42,31,0.045)] backdrop-blur"
@@ -838,7 +1440,6 @@ export function AdminPortfolio() {
                       alt={it.title}
                       className="h-24 w-24 rounded-2xl border border-[#1F2A1F]/10 object-cover bg-[#f5f5f5]"
                     />
-                    {/* Badge jumlah gambar */}
                     {it.images?.length > 1 && (
                       <span className="absolute bottom-1 right-1 rounded-full bg-black/50 px-1.5 py-0.5 text-[9px] text-white">
                         +{it.images.length - 1}
@@ -878,7 +1479,22 @@ export function AdminPortfolio() {
                       </div>
                     )}
 
-                    <div className="mt-auto pt-3">
+                    {/* Action buttons */}
+                    <div className="mt-auto flex items-center gap-2 pt-3">
+                      <button
+                        type="button"
+                        onClick={() => setTinjauanItem(it)}
+                        className="inline-flex items-center gap-1.5 rounded-full border border-[#1F2A1F]/10 px-3 py-1.5 text-sm text-[#1F2A1F] transition-colors hover:border-[#004B08] hover:text-[#004B08]"
+                      >
+                        <Eye size={14} /> Tinjauan
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setEditItem(it)}
+                        className="inline-flex items-center gap-1.5 rounded-full border border-[#1F2A1F]/10 px-3 py-1.5 text-sm text-[#1F2A1F] transition-colors hover:border-[#004B08] hover:text-[#004B08]"
+                      >
+                        <Pencil size={14} /> Edit
+                      </button>
                       <button
                         type="button"
                         onClick={() => setDeleteId(it.id)}

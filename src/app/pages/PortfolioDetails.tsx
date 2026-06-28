@@ -1,1586 +1,791 @@
-// Admin page — dilindungi login, connect ke backend PHP
-// File ini menggantikan src/app/pages/AdminPortfolio.tsx
-
-import { useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ComponentType,
+  type PointerEvent,
+} from "react";
+import { Link, useNavigate, useParams } from "react-router";
 import {
   ArrowUpRight,
-  Image as ImageIcon,
-  Trash2,
-  LogOut,
-  Lock,
-  Eye,
-  EyeOff,
-  X,
-  Pencil,
-  Search,
+  Calendar,
   ChevronLeft,
   ChevronRight,
-  Save,
+  Layers,
+  Tag,
+  X,
+  Zap,
 } from "lucide-react";
+import { listPortfolioItems, type PortfolioItem } from "../data/api/api";
+import { getTechLogo } from "../data/techLogos";
+import type { Lang } from "../i18n";
 import { useT } from "../providers";
-import {
-  loginAdmin,
-  verifyToken,
-  removeToken,
-  isLoggedIn,
-  listPortfolioItems,
-  addPortfolioItem,
-  updatePortfolioItem,
-  deletePortfolioItem,
-  changePassword,
-  type PortfolioItem,
-  type PortfolioType,
-} from "../data/api/api";
 
-const ACCEPTED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-const PROJECT_TYPES: PortfolioType[] = ["Website", "Mobile Apps", "AI/ML"];
-const TITLE_MAX_LENGTH = 45;
-const DESCRIPTION_MAX_LENGTH = 1000;
-const MAX_IMAGES = 8;
+/* ──────────────────────────────────────────────────────────────
+   Carousel
+────────────────────────────────────────────────────────────── */
 
-// ─── Login Screen ─────────────────────────────────────────────────────────────
-
-function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPw, setShowPw] = useState(false);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-    try {
-      await loginAdmin(username.trim(), password);
-      onSuccess();
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Login gagal.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-[#f5f5f5] flex items-center justify-center px-6">
-      <div className="w-full max-w-sm">
-        <div className="rounded-[28px] border border-[#1F2A1F]/10 bg-white/80 p-8 shadow-[0_24px_80px_rgba(31,42,31,0.09)] backdrop-blur">
-          <div className="mb-7 text-center">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#004B08]/10">
-              <Lock size={22} className="text-[#004B08]" />
-            </div>
-            <h1 className="text-2xl tracking-tight text-[#1F2A1F]">
-              Admin Login
-            </h1>
-            <p className="mt-1 text-sm text-[#5F6756]">
-              Dhruva Tech Portfolio Admin
-            </p>
-          </div>
-
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="mb-2 block text-sm text-[#1F2A1F]">
-                Username <span className="text-[#C99A3D]">*</span>
-              </label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => {
-                  setUsername(e.target.value);
-                  setError("");
-                }}
-                className={adminInput}
-                placeholder="admin"
-                autoComplete="username"
-                autoFocus
-              />
-            </div>
-
-            <div>
-              <label className="mb-2 block text-sm text-[#1F2A1F]">
-                Password <span className="text-[#C99A3D]">*</span>
-              </label>
-              <div className="relative">
-                <input
-                  type={showPw ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    setError("");
-                  }}
-                  className={`${adminInput} pr-12`}
-                  placeholder="••••••••"
-                  autoComplete="current-password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPw(!showPw)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#5F6756] hover:text-[#1F2A1F]"
-                >
-                  {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
-              </div>
-            </div>
-
-            {error && (
-              <p className="rounded-2xl border border-[#C99A3D]/30 bg-[#C99A3D]/10 px-4 py-3 text-sm text-[#8A641E]">
-                {error}
-              </p>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="group w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#004B08] px-6 py-3 text-[#F3EFDF] shadow-[0_16px_40px_rgba(0,75,8,0.16)] transition-colors hover:bg-[#24452A] disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              {loading ? "Masuk..." : "Masuk"}
-              {!loading && (
-                <ArrowUpRight
-                  size={18}
-                  className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                />
-              )}
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─── Change Password Modal ─────────────────────────────────────────────────────
-
-function ChangePasswordModal({ onClose }: { onClose: () => void }) {
-  const [currentPw, setCurrentPw] = useState("");
-  const [newPw, setNewPw] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    if (newPw.length < 6) {
-      setError("Password baru minimal 6 karakter.");
-      return;
-    }
-    setLoading(true);
-    try {
-      await changePassword(currentPw, newPw);
-      setSuccess(true);
-      setTimeout(onClose, 1500);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Gagal ubah password.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6">
-      <div className="w-full max-w-sm rounded-[28px] border border-[#1F2A1F]/10 bg-white p-7 shadow-2xl">
-        <h2 className="mb-5 text-lg text-[#1F2A1F]">Ganti Password</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="password"
-            value={currentPw}
-            onChange={(e) => setCurrentPw(e.target.value)}
-            className={adminInput}
-            placeholder="Password lama"
-          />
-          <input
-            type="password"
-            value={newPw}
-            onChange={(e) => setNewPw(e.target.value)}
-            className={adminInput}
-            placeholder="Password baru (min. 6 karakter)"
-          />
-          {error && <p className="text-sm text-[#8A641E]">{error}</p>}
-          {success && (
-            <p className="text-sm text-[#004B08]">Password berhasil diubah!</p>
-          )}
-          <div className="flex gap-3">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 rounded-full border border-[#1F2A1F]/15 px-4 py-2.5 text-sm text-[#1F2A1F] hover:bg-[#f5f5f5]"
-            >
-              Batal
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 rounded-full bg-[#004B08] px-4 py-2.5 text-sm text-[#F3EFDF] hover:bg-[#24452A] disabled:opacity-60"
-            >
-              {loading ? "Menyimpan..." : "Simpan"}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
-
-// ─── Image Preview Item ────────────────────────────────────────────────────────
-
-function ImageThumb({
-  src,
-  index,
-  isFirst,
-  onRemove,
+function Carousel({
+  images,
+  title,
+  onOpenLightbox,
 }: {
-  src: string;
-  index: number;
-  isFirst: boolean;
-  onRemove: () => void;
+  images: string[];
+  title: string;
+  onOpenLightbox: (index: number) => void;
 }) {
-  return (
-    <div className="relative group">
-      <img
-        src={src}
-        alt={`Preview ${index + 1}`}
-        className="h-24 w-24 rounded-2xl object-cover border border-[#1F2A1F]/10 bg-[#f5f5f5]"
-      />
-      {isFirst && (
-        <span className="absolute bottom-1 left-1 rounded-full bg-[#004B08] px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white">
-          Cover
-        </span>
-      )}
-      <button
-        type="button"
-        onClick={onRemove}
-        className="absolute -right-1.5 -top-1.5 hidden h-5 w-5 items-center justify-center rounded-full bg-[#C99A3D] text-white shadow group-hover:flex"
-        aria-label="Hapus gambar"
-      >
-        <X size={11} />
-      </button>
-    </div>
-  );
-}
-
-// ─── Tinjauan Modal ────────────────────────────────────────────────────────────
-
-function TinjauanModal({
-  item,
-  onClose,
-  onEdit,
-}: {
-  item: PortfolioItem;
-  onClose: () => void;
-  onEdit: () => void;
-}) {
-  const [activeImg, setActiveImg] = useState(0);
-  const images = item.images?.length ? item.images : [item.coverImage];
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-6 overflow-y-auto">
-      <div className="relative w-full max-w-2xl rounded-[28px] border border-[#1F2A1F]/10 bg-white shadow-2xl overflow-hidden">
-        {/* Close */}
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-[#1F2A1F] shadow hover:bg-white"
-        >
-          <X size={16} />
-        </button>
-
-        {/* Image carousel */}
-        <div className="relative aspect-video bg-[#f5f5f5]">
-          <img
-            src={images[activeImg]}
-            alt={`${item.title} — gambar ${activeImg + 1}`}
-            className="h-full w-full object-cover"
-          />
-          {images.length > 1 && (
-            <>
-              <button
-                type="button"
-                onClick={() =>
-                  setActiveImg((p) => (p - 1 + images.length) % images.length)
-                }
-                className="absolute left-3 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-[#1F2A1F] shadow hover:bg-white"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveImg((p) => (p + 1) % images.length)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-[#1F2A1F] shadow hover:bg-white"
-              >
-                <ChevronRight size={16} />
-              </button>
-              {/* Dot nav */}
-              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
-                {images.map((_, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => setActiveImg(i)}
-                    className={`h-1.5 rounded-full transition-all ${
-                      i === activeImg ? "w-5 bg-white" : "w-1.5 bg-white/50"
-                    }`}
-                  />
-                ))}
-              </div>
-              {/* Counter */}
-              <span className="absolute right-3 bottom-3 rounded-full bg-black/40 px-2 py-0.5 text-xs text-white">
-                {activeImg + 1} / {images.length}
-              </span>
-            </>
-          )}
-        </div>
-
-        {/* Thumbnail strip */}
-        {images.length > 1 && (
-          <div className="flex gap-2 overflow-x-auto px-6 py-3 border-b border-[#1F2A1F]/8">
-            {images.map((src, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => setActiveImg(i)}
-                className={`shrink-0 h-14 w-14 rounded-xl overflow-hidden border-2 transition-colors ${
-                  i === activeImg ? "border-[#004B08]" : "border-transparent"
-                }`}
-              >
-                <img src={src} alt="" className="h-full w-full object-cover" />
-              </button>
-            ))}
-          </div>
-        )}
-
-        {/* Content */}
-        <div className="p-6 space-y-4">
-          <div>
-            <div className="mb-1 text-xs font-semibold uppercase tracking-[0.22em] text-[#004B08]">
-              {item.type}
-            </div>
-            <h2 className="text-2xl leading-snug text-[#1F2A1F]">
-              {item.title}
-            </h2>
-          </div>
-
-          <div className="space-y-1">
-            <p className="text-xs font-semibold uppercase tracking-wide text-[#5F6756]/60">
-              Deskripsi (ID)
-            </p>
-            <p className="text-sm leading-relaxed text-[#5F6756]">
-              {item.description}
-            </p>
-          </div>
-
-          {item.en_description && (
-            <div className="space-y-1">
-              <p className="text-xs font-semibold uppercase tracking-wide text-[#5F6756]/60">
-                Description (EN)
-              </p>
-              <p className="text-sm leading-relaxed text-[#5F6756]">
-                {item.en_description}
-              </p>
-            </div>
-          )}
-
-          {item.keyFeatures?.length > 0 && (
-            <div className="space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-wide text-[#004B08]/60">
-                Fitur Kunci
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {item.keyFeatures.map((f, i) => (
-                  <span
-                    key={i}
-                    className="rounded-full bg-[#004B08]/8 px-3 py-1 text-xs text-[#004B08]"
-                  >
-                    {f}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {item.techStack?.length > 0 && (
-            <div className="space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-wide text-[#5F6756]/60">
-                Tech Stack
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {item.techStack.map((t, i) => (
-                  <span
-                    key={i}
-                    className="rounded-full border border-[#1F2A1F]/10 bg-white px-3 py-1 text-xs text-[#5F6756]"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Actions */}
-          <div className="flex gap-3 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 rounded-full border border-[#1F2A1F]/15 px-4 py-2.5 text-sm text-[#1F2A1F] hover:bg-[#f5f5f5] transition-colors"
-            >
-              Tutup
-            </button>
-            <button
-              type="button"
-              onClick={onEdit}
-              className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-[#004B08] px-4 py-2.5 text-sm text-[#F3EFDF] hover:bg-[#24452A] transition-colors"
-            >
-              <Pencil size={14} /> Edit Project
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─── Edit Modal ────────────────────────────────────────────────────────────────
-
-function EditModal({
-  item,
-  onClose,
-  onSaved,
-}: {
-  item: PortfolioItem;
-  onClose: () => void;
-  onSaved: (updated: PortfolioItem) => void;
-}) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Text fields — prefill dari data lama
-  const [title, setTitle] = useState(item.title);
-  const [type, setType] = useState<PortfolioType | "">(item.type);
-  const [description, setDescription] = useState(item.description);
-  const [en_description, setEn_description] = useState(
-    item.en_description ?? "",
-  );
-  const [keyFeatures, setKeyFeatures] = useState(
-    item.keyFeatures?.join(", ") ?? "",
-  );
-  const [techStack, setTechStack] = useState(item.techStack?.join(", ") ?? "");
-
-  // Gambar lama (URL dari server) — bisa dihapus
-  const existingImages = item.images?.length ? item.images : [item.coverImage];
-  const [keptImages, setKeptImages] = useState<string[]>(existingImages);
-
-  // Gambar baru (File) yang ditambahkan
-  const [newFiles, setNewFiles] = useState<File[]>([]);
-  const [newPreviews, setNewPreviews] = useState<string[]>([]);
-
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const totalImages = keptImages.length + newFiles.length;
-
-  const removeKept = (index: number) => {
-    setKeptImages((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const removeNew = (index: number) => {
-    URL.revokeObjectURL(newPreviews[index]);
-    setNewFiles((prev) => prev.filter((_, i) => i !== index));
-    setNewPreviews((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files ?? []);
-    if (!files.length) return;
-    setError("");
-
-    const remaining = MAX_IMAGES - totalImages;
-    if (remaining <= 0) {
-      setError(`Maksimal ${MAX_IMAGES} gambar.`);
-      return;
-    }
-
-    const valid: File[] = [];
-    const previews: string[] = [];
-
-    for (const file of files.slice(0, remaining)) {
-      if (!ACCEPTED_TYPES.includes(file.type)) {
-        setError("Format tidak didukung. Gunakan JPG, PNG, atau WebP.");
-        continue;
-      }
-      valid.push(file);
-      previews.push(URL.createObjectURL(file));
-    }
-
-    setNewFiles((prev) => [...prev, ...valid]);
-    setNewPreviews((prev) => [...prev, ...previews]);
-
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
-
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-
-    if (!title.trim() || !type || !description.trim()) {
-      setError("Title, kategori, dan deskripsi wajib diisi.");
-      return;
-    }
-    if (totalImages === 0) {
-      setError("Minimal 1 gambar harus ada.");
-      return;
-    }
-    if (title.trim().length > TITLE_MAX_LENGTH) {
-      setError(`Judul maksimal ${TITLE_MAX_LENGTH} karakter.`);
-      return;
-    }
-
-    const features = keyFeatures
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
-    const techs = techStack
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
-
-    setLoading(true);
-    try {
-      const updated = await updatePortfolioItem(item.id, {
-        title: title.trim(),
-        type: type as PortfolioType,
-        description: description.trim(),
-        en_description: en_description.trim(),
-        keyFeatures: features,
-        techStack: techs,
-        keptImageUrls: keptImages, // URL lama yang masih dipertahankan
-        newImageFiles: newFiles, // File baru yang ditambahkan
-      });
-      newPreviews.forEach((url) => URL.revokeObjectURL(url));
-      onSaved(updated);
-    } catch (err: unknown) {
-      setError(
-        err instanceof Error ? err.message : "Gagal menyimpan perubahan.",
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const titleTooLong = title.length > TITLE_MAX_LENGTH;
-  const descTooLong = description.length > DESCRIPTION_MAX_LENGTH;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 overflow-y-auto px-4 py-8">
-      <div className="relative w-full max-w-2xl rounded-[28px] border border-[#1F2A1F]/10 bg-white shadow-2xl">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#1F2A1F]/8 px-7 py-5">
-          <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-[#004B08]/60">
-              Edit Project
-            </p>
-            <h2 className="text-lg text-[#1F2A1F] leading-tight">
-              {item.title}
-            </h2>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-[#1F2A1F]/10 text-[#5F6756] hover:bg-[#f5f5f5]"
-          >
-            <X size={16} />
-          </button>
-        </div>
-
-        <form onSubmit={handleSave} className="space-y-5 p-7">
-          {/* Title */}
-          <AdminField label="Nama Project" required>
-            <input
-              value={title}
-              onChange={(e) => {
-                setTitle(e.target.value);
-                setError("");
-              }}
-              className={`${adminInput} ${titleTooLong ? "border-[#C99A3D]" : ""}`}
-              type="text"
-              maxLength={TITLE_MAX_LENGTH}
-            />
-            <div className="mt-1 flex justify-between text-xs">
-              <span className="text-[#5F6756]">
-                Maks. {TITLE_MAX_LENGTH} karakter
-              </span>
-              <span
-                className={titleTooLong ? "text-[#C99A3D]" : "text-[#5F6756]"}
-              >
-                {title.length}/{TITLE_MAX_LENGTH}
-              </span>
-            </div>
-          </AdminField>
-
-          {/* Type */}
-          <AdminField label="Kategori" required>
-            <select
-              value={type}
-              onChange={(e) => {
-                setType(e.target.value as PortfolioType);
-                setError("");
-              }}
-              className={adminInput}
-            >
-              <option value="">Pilih kategori...</option>
-              {PROJECT_TYPES.map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt}
-                </option>
-              ))}
-            </select>
-          </AdminField>
-
-          {/* Description */}
-          <AdminField label="Deskripsi (ID)" required>
-            <textarea
-              value={description}
-              onChange={(e) => {
-                setDescription(e.target.value);
-                setError("");
-              }}
-              rows={4}
-              maxLength={DESCRIPTION_MAX_LENGTH}
-              className={`${adminInput} ${descTooLong ? "border-[#C99A3D]" : ""}`}
-            />
-            <div className="mt-1 flex justify-between text-xs">
-              <span className="text-[#5F6756]">
-                Maks. {DESCRIPTION_MAX_LENGTH} karakter
-              </span>
-              <span
-                className={descTooLong ? "text-[#C99A3D]" : "text-[#5F6756]"}
-              >
-                {description.length}/{DESCRIPTION_MAX_LENGTH}
-              </span>
-            </div>
-          </AdminField>
-
-          {/* English Description */}
-          <AdminField label="Deskripsi (EN)" required>
-            <textarea
-              value={en_description}
-              onChange={(e) => {
-                setEn_description(e.target.value);
-                setError("");
-              }}
-              rows={4}
-              maxLength={DESCRIPTION_MAX_LENGTH}
-              className={adminInput}
-              placeholder="Describe this project in English..."
-            />
-          </AdminField>
-
-          {/* Key Features */}
-          <AdminField label="Fitur Kunci">
-            <input
-              value={keyFeatures}
-              onChange={(e) => setKeyFeatures(e.target.value)}
-              className={adminInput}
-              type="text"
-              placeholder="Admin Dashboard, Laporan PDF, Multi-User"
-            />
-            <p className="mt-1 text-xs text-[#5F6756]">Pisahkan dengan koma.</p>
-          </AdminField>
-
-          {/* Tech Stack */}
-          <AdminField label="Tech Stack">
-            <input
-              value={techStack}
-              onChange={(e) => setTechStack(e.target.value)}
-              className={adminInput}
-              type="text"
-              placeholder="React, Node.js, PostgreSQL, Tailwind"
-            />
-            <p className="mt-1 text-xs text-[#5F6756]">Pisahkan dengan koma.</p>
-          </AdminField>
-
-          {/* Gambar */}
-          <AdminField label="Gambar Project" required>
-            <p className="mb-3 text-xs text-[#5F6756]">
-              Gambar pertama jadi cover. Hapus gambar lama atau tambah yang
-              baru. Total maks. {MAX_IMAGES} gambar.
-            </p>
-
-            {/* Gambar lama */}
-            {keptImages.length > 0 && (
-              <div className="mb-3">
-                <p className="mb-2 text-xs font-medium text-[#5F6756]">
-                  Gambar saat ini
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {keptImages.map((src, i) => (
-                    <div key={src} className="relative group">
-                      <img
-                        src={src}
-                        alt={`Gambar ${i + 1}`}
-                        className="h-24 w-24 rounded-2xl object-cover border border-[#1F2A1F]/10 bg-[#f5f5f5]"
-                      />
-                      {i === 0 && (
-                        <span className="absolute bottom-1 left-1 rounded-full bg-[#004B08] px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white">
-                          Cover
-                        </span>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => removeKept(i)}
-                        className="absolute -right-1.5 -top-1.5 hidden h-5 w-5 items-center justify-center rounded-full bg-[#C99A3D] text-white shadow group-hover:flex"
-                        aria-label="Hapus gambar"
-                      >
-                        <X size={11} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Gambar baru */}
-            {newFiles.length > 0 && (
-              <div className="mb-3">
-                <p className="mb-2 text-xs font-medium text-[#5F6756]">
-                  Gambar baru ditambahkan
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {newPreviews.map((src, i) => (
-                    <ImageThumb
-                      key={src}
-                      src={src}
-                      index={i}
-                      isFirst={keptImages.length === 0 && i === 0}
-                      onRemove={() => removeNew(i)}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Tombol upload */}
-            {totalImages < MAX_IMAGES && (
-              <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border border-dashed border-[#1F2A1F]/15 bg-[#f5f5f5]/80 px-4 py-5 text-[#5F6756] transition-colors hover:border-[#C99A3D]/70 hover:bg-white">
-                <ImageIcon size={18} />
-                <span className="text-sm">
-                  {totalImages === 0
-                    ? "Klik untuk upload gambar"
-                    : `Tambah gambar (${totalImages}/${MAX_IMAGES})`}
-                </span>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/jpeg,image/jpg,image/png,image/webp"
-                  multiple
-                  onChange={onFileChange}
-                  className="hidden"
-                />
-              </label>
-            )}
-          </AdminField>
-
-          {error && (
-            <p className="rounded-2xl border border-[#C99A3D]/30 bg-[#C99A3D]/10 px-4 py-3 text-sm text-[#8A641E]">
-              {error}
-            </p>
-          )}
-
-          {/* Footer */}
-          <div className="flex gap-3 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 rounded-full border border-[#1F2A1F]/15 px-4 py-2.5 text-sm text-[#1F2A1F] hover:bg-[#f5f5f5] transition-colors"
-            >
-              Batal
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-[#004B08] px-4 py-2.5 text-sm text-[#F3EFDF] hover:bg-[#24452A] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
-            >
-              {loading ? (
-                "Menyimpan..."
-              ) : (
-                <>
-                  <Save size={14} /> Simpan Perubahan
-                </>
-              )}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
-
-// ─── Main Admin Dashboard ──────────────────────────────────────────────────────
-
-export function AdminPortfolio() {
   const { t } = useT();
-  const [authed, setAuthed] = useState<boolean | null>(null);
 
-  // Form state (tambah baru)
-  const [title, setTitle] = useState("");
-  const [type, setType] = useState<PortfolioType | "">("");
-  const [description, setDescription] = useState("");
-  const [en_description, setEn_description] = useState("");
-  const [keyFeatures, setKeyFeatures] = useState("");
-  const [techStack, setTechStack] = useState("");
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [current, setCurrent] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const [dragStartX, setDragStartX] = useState(0);
+  const [dragDelta, setDragDelta] = useState(0);
+  const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Items & UI state
-  const [items, setItems] = useState<PortfolioItem[]>([]);
-  const [fetchError, setFetchError] = useState("");
-  const [deleteId, setDeleteId] = useState<string | null>(null);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
-  const [deletedNotice, setDeletedNotice] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [showChangePw, setShowChangePw] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const total = images.length;
 
-  // Modal state
-  const [tinjauanItem, setTinjauanItem] = useState<PortfolioItem | null>(null);
-  const [editItem, setEditItem] = useState<PortfolioItem | null>(null);
-
-  useEffect(() => {
-    if (!isLoggedIn()) {
-      setAuthed(false);
-      return;
-    }
-    verifyToken().then((user) => setAuthed(!!user));
-  }, []);
-
-  useEffect(() => {
-    if (!authed) return;
-    listPortfolioItems()
-      .then(setItems)
-      .catch(() =>
-        setFetchError("Gagal memuat data. Pastikan backend berjalan."),
-      );
-  }, [authed]);
-
-  const handleLogout = () => {
-    removeToken();
-    setAuthed(false);
-  };
-
-  // ── Image handling (form tambah) ───────────────────────────────────────────
-
-  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files ?? []);
-    if (!files.length) return;
-    setError("");
-    setSuccess(false);
-
-    const remaining = MAX_IMAGES - imageFiles.length;
-    if (remaining <= 0) {
-      setError(`Maksimal ${MAX_IMAGES} gambar.`);
-      return;
-    }
-
-    const valid: File[] = [];
-    const previews: string[] = [];
-
-    for (const file of files.slice(0, remaining)) {
-      if (!ACCEPTED_TYPES.includes(file.type)) {
-        setError("Format tidak didukung. Gunakan JPG, PNG, atau WebP.");
-        continue;
-      }
-      valid.push(file);
-      previews.push(URL.createObjectURL(file));
-    }
-
-    setImageFiles((prev) => [...prev, ...valid]);
-    setImagePreviews((prev) => [...prev, ...previews]);
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
-
-  const removeImage = (index: number) => {
-    URL.revokeObjectURL(imagePreviews[index]);
-    setImageFiles((prev) => prev.filter((_, i) => i !== index));
-    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  // ── Submit (tambah baru) ───────────────────────────────────────────────────
-
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setSuccess(false);
-
-    if (!title.trim() || !type || !description.trim()) {
-      setError("Title, kategori, dan deskripsi wajib diisi.");
-      return;
-    }
-    if (imageFiles.length === 0) {
-      setError("Minimal 1 gambar harus diupload.");
-      return;
-    }
-    if (title.trim().length > TITLE_MAX_LENGTH) {
-      setError(`Judul maksimal ${TITLE_MAX_LENGTH} karakter.`);
-      return;
-    }
-    if (description.trim().length > DESCRIPTION_MAX_LENGTH) {
-      setError(`Deskripsi maksimal ${DESCRIPTION_MAX_LENGTH} karakter.`);
-      return;
-    }
-    if (en_description.trim().length > DESCRIPTION_MAX_LENGTH) {
-      setError(
-        `Deskripsi (Inggris) maksimal ${DESCRIPTION_MAX_LENGTH} karakter.`,
-      );
-      return;
-    }
-
-    const features = keyFeatures
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
-    const techs = techStack
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
-
-    setLoading(true);
-    try {
-      const created = await addPortfolioItem({
-        title: title.trim(),
-        type: type as PortfolioType,
-        description: description.trim(),
-        en_description: en_description.trim(),
-        keyFeatures: features,
-        techStack: techs,
-        imageFiles,
-      });
-      setItems((prev) => [created, ...prev]);
-      setTitle("");
-      setType("");
-      setDescription("");
-      setEn_description("");
-      setKeyFeatures("");
-      setTechStack("");
-      imagePreviews.forEach((url) => URL.revokeObjectURL(url));
-      setImageFiles([]);
-      setImagePreviews([]);
-      setSuccess(true);
-      setTimeout(() => setSuccess(false), 3500);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Gagal menyimpan.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const onDelete = async () => {
-    if (!deleteId) return;
-    try {
-      await deletePortfolioItem(deleteId);
-      setItems((prev) => prev.filter((it) => it.id !== deleteId));
-      setDeletedNotice(true);
-      setTimeout(() => setDeletedNotice(false), 3500);
-    } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Gagal menghapus.");
-    } finally {
-      setDeleteId(null);
-    }
-  };
-
-  // ── Filter ─────────────────────────────────────────────────────────────────
-
-  const filteredItems = items.filter(
-    (it) =>
-      it.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      it.type.toLowerCase().includes(searchQuery.toLowerCase()),
+  const goTo = useCallback(
+    (index: number) => {
+      if (total === 0) return;
+      setCurrent(((index % total) + total) % total);
+    },
+    [total],
   );
 
-  // ── Render States ─────────────────────────────────────────────────────────
+  const next = useCallback(() => goTo(current + 1), [current, goTo]);
+  const prev = useCallback(() => goTo(current - 1), [current, goTo]);
 
-  if (authed === null) {
+  const resetAuto = useCallback(() => {
+    if (autoRef.current) clearInterval(autoRef.current);
+    if (total <= 1) return;
+
+    autoRef.current = setInterval(() => {
+      setCurrent((prevIndex) => (prevIndex + 1) % total);
+    }, 4000);
+  }, [total]);
+
+  useEffect(() => {
+    resetAuto();
+
+    return () => {
+      if (autoRef.current) clearInterval(autoRef.current);
+    };
+  }, [resetAuto]);
+
+  useEffect(() => {
+    const handler = (event: KeyboardEvent) => {
+      if (event.key === "ArrowRight") {
+        next();
+        resetAuto();
+      }
+
+      if (event.key === "ArrowLeft") {
+        prev();
+        resetAuto();
+      }
+    };
+
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [next, prev, resetAuto]);
+
+  const onPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    setDragging(true);
+    setDragStartX(event.clientX);
+    setDragDelta(0);
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const onPointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (!dragging) return;
+    setDragDelta(event.clientX - dragStartX);
+  };
+
+  const onPointerUp = () => {
+    if (!dragging) return;
+
+    if (dragDelta < -50) {
+      next();
+      resetAuto();
+    } else if (dragDelta > 50) {
+      prev();
+      resetAuto();
+    }
+
+    setDragging(false);
+    setDragDelta(0);
+  };
+
+  if (total === 0) return null;
+
+  if (total === 1) {
     return (
-      <div className="min-h-screen bg-[#f5f5f5] flex items-center justify-center">
-        <p className="text-[#5F6756]">Memuat...</p>
+      <div
+        className="group overflow-hidden rounded-[24px] border border-[#1F2A1F]/10 bg-white shadow-[0_16px_45px_rgba(31,42,31,0.055)] sm:rounded-[30px] sm:shadow-[0_18px_55px_rgba(31,42,31,0.06)]"
+        onClick={() => onOpenLightbox(0)}
+      >
+        <img
+          src={images[0]}
+          alt={title}
+          className="aspect-[16/11] w-full cursor-zoom-in object-cover transition-transform duration-700 group-hover:scale-[1.025] sm:aspect-[16/10]"
+        />
+
+        <div className="flex items-center justify-center border-t border-[#1F2A1F]/10 px-4 py-3 text-xs text-[#5F6756]">
+          {t("portfolio_detail_zoom_hint")}
+        </div>
       </div>
     );
   }
 
-  if (!authed) return <LoginScreen onSuccess={() => setAuthed(true)} />;
-
-  const titleTooLong = title.length > TITLE_MAX_LENGTH;
-  const descriptionTooLong = description.length > DESCRIPTION_MAX_LENGTH;
-  const previewReady =
-    title.trim() || description.trim() || imagePreviews.length > 0;
-
   return (
-    <section className="relative min-h-screen overflow-hidden bg-[#f5f5f5] px-6 pb-20 pt-16 lg:px-10">
-      {/* Modals */}
-      {showChangePw && (
-        <ChangePasswordModal onClose={() => setShowChangePw(false)} />
-      )}
-
-      {tinjauanItem && (
-        <TinjauanModal
-          item={tinjauanItem}
-          onClose={() => setTinjauanItem(null)}
-          onEdit={() => {
-            setEditItem(tinjauanItem);
-            setTinjauanItem(null);
+    <div className="overflow-hidden rounded-[24px] border border-[#1F2A1F]/10 bg-white shadow-[0_16px_45px_rgba(31,42,31,0.055)] sm:rounded-[30px] sm:shadow-[0_18px_55px_rgba(31,42,31,0.06)]">
+      <div
+        className="relative aspect-[16/11] w-full cursor-grab select-none overflow-hidden active:cursor-grabbing sm:aspect-[16/10]"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+      >
+        <div
+          className="flex h-full"
+          style={{
+            transform: `translateX(calc(${-current * 100}% + ${dragDelta}px))`,
+            transition: dragging
+              ? "none"
+              : "transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+            willChange: "transform",
           }}
-        />
-      )}
-
-      {editItem && (
-        <EditModal
-          item={editItem}
-          onClose={() => setEditItem(null)}
-          onSaved={(updated) => {
-            setItems((prev) =>
-              prev.map((it) => (it.id === updated.id ? updated : it)),
-            );
-            setEditItem(null);
-          }}
-        />
-      )}
-
-      <div className="pointer-events-none absolute inset-0 opacity-[0.14] admin-texture" />
-      <div className="pointer-events-none absolute -top-44 right-[-180px] h-[560px] w-[560px] rounded-full bg-[#004B08]/[0.06] blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-44 left-[-180px] h-[560px] w-[560px] rounded-full bg-[#C99A3D]/[0.06] blur-3xl" />
-
-      <div className="relative mx-auto max-w-6xl">
-        {/* Header */}
-        <div className="mb-10 flex items-start justify-between gap-4">
-          <div>
-            <div className="mb-2 text-xs uppercase tracking-[0.24em] text-[#004B08]/70">
-              Admin Panel
-            </div>
-            <h1 className="text-3xl tracking-tight text-[#1F2A1F]">
-              Kelola Portfolio
-            </h1>
-            <p className="mt-2 max-w-2xl text-[#5F6756]">
-              Tambah, lihat, edit, dan hapus project portfolio yang tampil di
-              halaman publik.
-            </p>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={() => setShowChangePw(true)}
-              className="inline-flex items-center gap-2 rounded-full border border-[#1F2A1F]/15 px-4 py-2.5 text-sm text-[#1F2A1F] hover:bg-white transition-colors"
-            >
-              <Lock size={14} /> Ganti Password
-            </button>
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="inline-flex items-center gap-2 rounded-full border border-[#1F2A1F]/15 px-4 py-2.5 text-sm text-[#1F2A1F] hover:bg-white transition-colors"
-            >
-              <LogOut size={14} /> Logout
-            </button>
-          </div>
+        >
+          {images.map((src, index) => (
+            <img
+              key={`${src}-${index}`}
+              src={src}
+              alt={`${title} — ${t("portfolio_detail_image")} ${index + 1}`}
+              draggable={false}
+              className="h-full w-full shrink-0 cursor-zoom-in object-cover"
+              onClick={() => {
+                if (Math.abs(dragDelta) < 5) onOpenLightbox(index);
+              }}
+            />
+          ))}
         </div>
 
-        {fetchError && (
-          <div className="mb-6 rounded-2xl border border-[#C99A3D]/30 bg-[#C99A3D]/10 px-5 py-4 text-sm text-[#8A641E]">
-            ⚠️ {fetchError}
-          </div>
-        )}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-14 bg-gradient-to-r from-black/20 to-transparent sm:w-20" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-14 bg-gradient-to-l from-black/20 to-transparent sm:w-20" />
 
-        <div className="grid gap-8 lg:grid-cols-5">
-          {/* Form Tambah */}
-          <form
-            onSubmit={onSubmit}
-            className="space-y-5 rounded-[28px] border border-[#1F2A1F]/10 bg-white/70 p-6 shadow-[0_18px_60px_rgba(31,42,31,0.06)] backdrop-blur lg:col-span-3 lg:p-8"
-          >
-            <h2 className="text-base text-[#1F2A1F] font-medium">
-              Tambah Project Baru
-            </h2>
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            prev();
+            resetAuto();
+          }}
+          className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-[#1F2A1F] shadow-md backdrop-blur transition-all hover:scale-105 hover:bg-white sm:left-4 sm:h-10 sm:w-10"
+          aria-label={t("portfolio_detail_prev_image")}
+        >
+          <ChevronLeft size={18} />
+        </button>
 
-            <AdminField label="Nama Project" required>
-              <input
-                value={title}
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                  setError("");
-                  setSuccess(false);
-                }}
-                className={`${adminInput} ${titleTooLong ? "border-[#C99A3D]" : ""}`}
-                type="text"
-                placeholder="Contoh: Dashboard Manajemen Klinik"
-                maxLength={TITLE_MAX_LENGTH}
-              />
-              <div className="mt-1 flex justify-between gap-3 text-xs">
-                <p className="text-[#5F6756]">
-                  Maksimal {TITLE_MAX_LENGTH} karakter.
-                </p>
-                <p
-                  className={titleTooLong ? "text-[#C99A3D]" : "text-[#5F6756]"}
-                >
-                  {title.length}/{TITLE_MAX_LENGTH}
-                </p>
-              </div>
-            </AdminField>
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            next();
+            resetAuto();
+          }}
+          className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-[#1F2A1F] shadow-md backdrop-blur transition-all hover:scale-105 hover:bg-white sm:right-4 sm:h-10 sm:w-10"
+          aria-label={t("portfolio_detail_next_image")}
+        >
+          <ChevronRight size={18} />
+        </button>
 
-            <AdminField label="Kategori" required>
-              <select
-                value={type}
-                onChange={(e) => {
-                  setType(e.target.value as PortfolioType);
-                  setError("");
-                  setSuccess(false);
-                }}
-                className={adminInput}
-              >
-                <option value="">Pilih kategori...</option>
-                {PROJECT_TYPES.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
-            </AdminField>
-
-            <AdminField label="Deskripsi Singkat" required>
-              <textarea
-                value={description}
-                onChange={(e) => {
-                  setDescription(e.target.value);
-                  setError("");
-                  setSuccess(false);
-                }}
-                rows={4}
-                maxLength={DESCRIPTION_MAX_LENGTH}
-                className={`${adminInput} ${descriptionTooLong ? "border-[#C99A3D]" : ""}`}
-                placeholder="Cerita singkat tentang project ini..."
-              />
-              <div className="mt-1 flex justify-between gap-3 text-xs">
-                <p className="text-[#5F6756]">
-                  Maksimal {DESCRIPTION_MAX_LENGTH} karakter.
-                </p>
-                <p
-                  className={
-                    descriptionTooLong ? "text-[#C99A3D]" : "text-[#5F6756]"
-                  }
-                >
-                  {description.length}/{DESCRIPTION_MAX_LENGTH}
-                </p>
-              </div>
-            </AdminField>
-
-            <AdminField label="Deskripsi (Inggris)" required>
-              <textarea
-                value={en_description}
-                onChange={(e) => {
-                  setEn_description(e.target.value);
-                  setError("");
-                  setSuccess(false);
-                }}
-                rows={4}
-                maxLength={DESCRIPTION_MAX_LENGTH}
-                className={adminInput}
-                placeholder="Describe this project in English..."
-              />
-              <div className="mt-1 flex justify-between gap-3 text-xs">
-                <p className="text-[#5F6756]">
-                  Maksimal {DESCRIPTION_MAX_LENGTH} karakter.
-                </p>
-                <p
-                  className={
-                    descriptionTooLong ? "text-[#C99A3D]" : "text-[#5F6756]"
-                  }
-                >
-                  {description.length}/{DESCRIPTION_MAX_LENGTH}
-                </p>
-              </div>
-            </AdminField>
-
-            <AdminField label="Fitur Kunci">
-              <input
-                value={keyFeatures}
-                onChange={(e) => setKeyFeatures(e.target.value)}
-                className={adminInput}
-                type="text"
-                placeholder="Admin Dashboard, Laporan PDF, Multi-User"
-              />
-              <p className="mt-1 text-xs text-[#5F6756]">
-                Pisahkan dengan koma.
-              </p>
-            </AdminField>
-
-            <AdminField label="Tech Stack">
-              <input
-                value={techStack}
-                onChange={(e) => setTechStack(e.target.value)}
-                className={adminInput}
-                type="text"
-                placeholder="React, Node.js, PostgreSQL, Tailwind"
-              />
-              <p className="mt-1 text-xs text-[#5F6756]">
-                Pisahkan dengan koma.
-              </p>
-            </AdminField>
-
-            <AdminField label="Gambar Project" required>
-              {imagePreviews.length > 0 && (
-                <div className="mb-3 flex flex-wrap gap-2">
-                  {imagePreviews.map((src, i) => (
-                    <ImageThumb
-                      key={src}
-                      src={src}
-                      index={i}
-                      isFirst={i === 0}
-                      onRemove={() => removeImage(i)}
-                    />
-                  ))}
-                </div>
-              )}
-              {imageFiles.length < MAX_IMAGES && (
-                <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border border-dashed border-[#1F2A1F]/15 bg-[#f5f5f5]/80 px-4 py-5 text-[#5F6756] transition-colors hover:border-[#C99A3D]/70 hover:bg-white">
-                  <ImageIcon size={18} />
-                  <span className="text-sm">
-                    {imageFiles.length === 0
-                      ? "Klik untuk upload gambar"
-                      : `Tambah gambar (${imageFiles.length}/${MAX_IMAGES})`}
-                  </span>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/jpeg,image/jpg,image/png,image/webp"
-                    multiple
-                    onChange={onFileChange}
-                    className="hidden"
-                  />
-                </label>
-              )}
-              <p className="mt-2 text-xs leading-relaxed text-[#5F6756]">
-                Gambar pertama otomatis jadi cover. Rekomendasi: 1200×900px,
-                rasio 4:3, WebP/JPG, maks 5MB per file. Bisa upload hingga{" "}
-                {MAX_IMAGES} gambar.
-              </p>
-            </AdminField>
-
-            {error && (
-              <p className="rounded-2xl border border-[#C99A3D]/30 bg-[#C99A3D]/10 px-4 py-3 text-sm text-[#8A641E]">
-                {error}
-              </p>
-            )}
-            {success && (
-              <p className="rounded-2xl border border-[#004B08]/20 bg-[#004B08]/10 px-4 py-3 text-sm text-[#004B08]">
-                ✓ Project berhasil ditambahkan!
-              </p>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="group inline-flex items-center gap-2 rounded-full bg-[#004B08] px-6 py-3 text-[#F3EFDF] shadow-[0_16px_40px_rgba(0,75,8,0.16)] transition-colors hover:bg-[#24452A] disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              {loading ? "Menyimpan..." : "Tambah Project"}
-              {!loading && (
-                <ArrowUpRight
-                  size={18}
-                  className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                />
-              )}
-            </button>
-          </form>
-
-          {/* Live Preview */}
-          <aside className="space-y-6 lg:col-span-2">
-            <div className="rounded-[28px] border border-[#1F2A1F]/10 bg-white/70 p-6 shadow-[0_18px_60px_rgba(31,42,31,0.06)] backdrop-blur">
-              <h2 className="mb-4 text-sm uppercase tracking-[0.22em] text-[#004B08]/60">
-                Preview Card
-              </h2>
-              {previewReady ? (
-                <article className="overflow-hidden rounded-[26px] border border-[#1F2A1F]/10 bg-white/70">
-                  <div className="aspect-[4/3] bg-[#f5f5f5]">
-                    {imagePreviews[0] ? (
-                      <img
-                        src={imagePreviews[0]}
-                        alt=""
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="grid h-full w-full place-items-center text-xs text-[#5F6756]/60">
-                        Belum ada gambar
-                      </div>
-                    )}
-                  </div>
-
-                  {imagePreviews.length > 1 && (
-                    <div className="flex justify-center gap-1 border-t border-[#1F2A1F]/6 py-2">
-                      {imagePreviews.map((_, i) => (
-                        <span
-                          key={i}
-                          className={`h-1.5 w-1.5 rounded-full transition-colors ${i === 0 ? "bg-[#004B08]" : "bg-[#1F2A1F]/20"}`}
-                        />
-                      ))}
-                    </div>
-                  )}
-
-                  <div className="p-6">
-                    {type && (
-                      <div className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#004B08]">
-                        {type}
-                      </div>
-                    )}
-                    <h3 className="mb-3 line-clamp-2 text-xl leading-snug text-[#1F2A1F]">
-                      {title || "Nama project..."}
-                    </h3>
-                    <p className="line-clamp-3 text-sm leading-relaxed text-[#5F6756]">
-                      {description || "Deskripsi project..."}
-                    </p>
-                    <p className="line-clamp-3 text-sm leading-relaxed text-[#5F6756]">
-                      {en_description ||
-                        "Deskripsi project (Bahasa Inggris)..."}
-                    </p>
-
-                    {keyFeatures && (
-                      <div className="mt-4">
-                        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#004B08]/60">
-                          Fitur Kunci
-                        </p>
-                        <div className="flex flex-wrap gap-1.5">
-                          {keyFeatures
-                            .split(",")
-                            .map((f) => f.trim())
-                            .filter(Boolean)
-                            .map((f, i) => (
-                              <span
-                                key={i}
-                                className="rounded-full bg-[#004B08]/8 px-3 py-1 text-xs text-[#004B08]"
-                              >
-                                {f}
-                              </span>
-                            ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {techStack && (
-                      <div className="mt-3">
-                        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#5F6756]/60">
-                          Tech Stack
-                        </p>
-                        <div className="flex flex-wrap gap-1.5">
-                          {techStack
-                            .split(",")
-                            .map((t) => t.trim())
-                            .filter(Boolean)
-                            .map((t, i) => (
-                              <span
-                                key={i}
-                                className="rounded-full border border-[#1F2A1F]/10 bg-white px-3 py-1 text-xs text-[#5F6756]"
-                              >
-                                {t}
-                              </span>
-                            ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </article>
-              ) : (
-                <p className="text-sm leading-relaxed text-[#5F6756]">
-                  Isi form di sebelah kiri untuk melihat preview card.
-                </p>
-              )}
-            </div>
-          </aside>
-        </div>
-
-        {/* Items List */}
-        <div className="mt-12">
-          <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-xl text-[#1F2A1F]">
-              Project Tersimpan ({filteredItems.length}
-              {searchQuery && items.length !== filteredItems.length
-                ? ` dari ${items.length}`
-                : ""}
-              )
-            </h2>
-            <div className="flex items-center gap-3">
-              {deletedNotice && (
-                <span className="text-sm text-[#004B08]">
-                  ✓ Project berhasil dihapus.
-                </span>
-              )}
-              {/* Search */}
-              <div className="relative">
-                <Search
-                  size={14}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-[#5F6756]"
-                />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Cari project..."
-                  className="rounded-full border border-[#1F2A1F]/10 bg-white py-2 pl-8 pr-4 text-sm text-[#1F2A1F] placeholder:text-[#5F6756]/60 focus:border-[#C99A3D] focus:outline-none"
-                />
-              </div>
-            </div>
-          </div>
-
-          {filteredItems.length === 0 ? (
-            <div className="rounded-[28px] border border-dashed border-[#1F2A1F]/15 bg-white/60 p-10 text-center text-[#5F6756]">
-              {searchQuery
-                ? `Tidak ada project yang cocok dengan "${searchQuery}".`
-                : "Belum ada project. Tambahkan project pertamamu di form di atas."}
-            </div>
-          ) : (
-            <ul className="grid gap-4 sm:grid-cols-2">
-              {filteredItems.map((it) => (
-                <li
-                  key={it.id}
-                  className="flex gap-4 rounded-[24px] border border-[#1F2A1F]/10 bg-white/70 p-4 shadow-[0_12px_40px_rgba(31,42,31,0.045)] backdrop-blur"
-                >
-                  <div className="relative flex-shrink-0">
-                    <img
-                      src={it.coverImage}
-                      alt={it.title}
-                      className="h-24 w-24 rounded-2xl border border-[#1F2A1F]/10 object-cover bg-[#f5f5f5]"
-                    />
-                    {it.images?.length > 1 && (
-                      <span className="absolute bottom-1 right-1 rounded-full bg-black/50 px-1.5 py-0.5 text-[9px] text-white">
-                        +{it.images.length - 1}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="flex min-w-0 flex-1 flex-col">
-                    <div className="mb-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#004B08]">
-                      {it.type}
-                    </div>
-                    <h3 className="mb-1 truncate leading-snug text-[#1F2A1F]">
-                      {it.title}
-                    </h3>
-                    <p className="line-clamp-2 text-sm leading-relaxed text-[#5F6756]">
-                      {it.description}
-                    </p>
-
-                    {(it.keyFeatures.length > 0 || it.techStack.length > 0) && (
-                      <div className="mt-2 flex flex-wrap gap-1">
-                        {it.keyFeatures.slice(0, 2).map((f, i) => (
-                          <span
-                            key={i}
-                            className="rounded-full bg-[#004B08]/8 px-2 py-0.5 text-[10px] text-[#004B08]"
-                          >
-                            {f}
-                          </span>
-                        ))}
-                        {it.techStack.slice(0, 2).map((t, i) => (
-                          <span
-                            key={i}
-                            className="rounded-full border border-[#1F2A1F]/10 px-2 py-0.5 text-[10px] text-[#5F6756]"
-                          >
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Action buttons */}
-                    <div className="mt-auto flex items-center gap-2 pt-3">
-                      <button
-                        type="button"
-                        onClick={() => setTinjauanItem(it)}
-                        className="inline-flex items-center gap-1.5 rounded-full border border-[#1F2A1F]/10 px-3 py-1.5 text-sm text-[#1F2A1F] transition-colors hover:border-[#004B08] hover:text-[#004B08]"
-                      >
-                        <Eye size={14} /> Tinjauan
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setEditItem(it)}
-                        className="inline-flex items-center gap-1.5 rounded-full border border-[#1F2A1F]/10 px-3 py-1.5 text-sm text-[#1F2A1F] transition-colors hover:border-[#004B08] hover:text-[#004B08]"
-                      >
-                        <Pencil size={14} /> Edit
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setDeleteId(it.id)}
-                        className="inline-flex items-center gap-1.5 rounded-full border border-[#1F2A1F]/10 px-3 py-1.5 text-sm text-[#1F2A1F] transition-colors hover:border-[#C99A3D] hover:text-[#C99A3D]"
-                      >
-                        <Trash2 size={14} /> Hapus
-                      </button>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
+        <div className="absolute bottom-3 right-3 rounded-full bg-black/55 px-3 py-1 text-xs text-white backdrop-blur-sm sm:bottom-4 sm:right-4">
+          {current + 1} / {total}
         </div>
       </div>
 
-      {/* Delete confirm modal */}
-      {deleteId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6">
-          <div className="w-full max-w-sm rounded-[28px] border border-[#1F2A1F]/10 bg-white p-8 shadow-2xl">
-            <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#C99A3D]/10">
-              <Trash2 size={22} className="text-[#C99A3D]" />
-            </div>
-            <h2 className="mt-4 text-lg text-[#1F2A1F]">Hapus Project?</h2>
-            <p className="mt-2 text-sm text-[#5F6756]">
-              Project yang dihapus tidak bisa dikembalikan. Semua gambar yang
-              terkait juga akan dihapus.
-            </p>
-            <div className="mt-6 flex gap-3">
-              <button
-                type="button"
-                onClick={() => setDeleteId(null)}
-                className="flex-1 rounded-full border border-[#1F2A1F]/15 px-4 py-2.5 text-sm text-[#1F2A1F] hover:bg-[#f5f5f5] transition-colors"
-              >
-                Batal
-              </button>
-              <button
-                type="button"
-                onClick={onDelete}
-                className="flex-1 rounded-full bg-[#C99A3D] px-4 py-2.5 text-sm text-white hover:bg-[#a87e2f] transition-colors"
-              >
-                Ya, Hapus
-              </button>
-            </div>
-          </div>
+      <div className="border-t border-[#1F2A1F]/10 px-4 py-4">
+        <div className="mb-3 flex items-center justify-center gap-1.5">
+          {images.map((_, index) => (
+            <button
+              key={index}
+              type="button"
+              onClick={() => {
+                goTo(index);
+                resetAuto();
+              }}
+              aria-label={`${t("portfolio_detail_image")} ${index + 1}`}
+              style={{
+                width: index === current ? "22px" : "7px",
+                transition: "width 0.3s ease, background-color 0.3s ease",
+              }}
+              className={`h-1.5 rounded-full ${
+                index === current
+                  ? "bg-[#004B08]"
+                  : "bg-[#1F2A1F]/20 hover:bg-[#1F2A1F]/40"
+              }`}
+            />
+          ))}
         </div>
-      )}
 
-      <style>{`
-        @keyframes adminTextureMove {
-          0% { background-position: 0 0; }
-          100% { background-position: 72px 72px; }
-        }
-        .admin-texture {
-          background-image:
-            linear-gradient(rgba(31, 42, 31, 0.055) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(31, 42, 31, 0.055) 1px, transparent 1px);
-          background-size: 72px 72px;
-          animation: adminTextureMove 24s linear infinite;
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .admin-texture { animation: none; }
-        }
-      `}</style>
-    </section>
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+          {images.map((src, index) => (
+            <button
+              key={`${src}-thumb-${index}`}
+              type="button"
+              onClick={() => {
+                goTo(index);
+                resetAuto();
+              }}
+              className={`shrink-0 overflow-hidden rounded-xl border-2 transition-all ${
+                index === current
+                  ? "scale-105 border-[#004B08] opacity-100"
+                  : "border-transparent opacity-55 hover:opacity-85"
+              }`}
+              aria-label={`${t("portfolio_detail_view_image")} ${index + 1}`}
+            >
+              <img
+                src={src}
+                alt=""
+                draggable={false}
+                className="h-12 w-16 object-cover sm:h-14 sm:w-20"
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
-const adminInput =
-  "w-full rounded-2xl border border-[#1F2A1F]/10 bg-white px-4 py-3 text-[#1F2A1F] placeholder:text-[#5F6756]/60 transition-colors focus:border-[#C99A3D] focus:outline-none";
+/* ──────────────────────────────────────────────────────────────
+   Lightbox
+────────────────────────────────────────────────────────────── */
 
-function AdminField({
-  label,
-  required,
+function Lightbox({
+  images,
+  startIndex,
+  title,
+  onClose,
+}: {
+  images: string[];
+  startIndex: number;
+  title: string;
+  onClose: () => void;
+}) {
+  const { t } = useT();
+
+  const [current, setCurrent] = useState(startIndex);
+  const total = images.length;
+
+  const next = () => setCurrent((currentIndex) => (currentIndex + 1) % total);
+  const prev = () =>
+    setCurrent((currentIndex) => (currentIndex - 1 + total) % total);
+
+  useEffect(() => {
+    const handler = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+      if (event.key === "ArrowRight") next();
+      if (event.key === "ArrowLeft") prev();
+    };
+
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/92 p-4 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <button
+        type="button"
+        className="absolute right-4 top-4 rounded-full bg-white/10 p-2.5 text-white transition-colors hover:bg-white/20 sm:right-5 sm:top-5"
+        onClick={onClose}
+        aria-label={t("portfolio_detail_close")}
+      >
+        <X size={20} />
+      </button>
+
+      {total > 1 && (
+        <div className="absolute left-1/2 top-5 -translate-x-1/2 rounded-full bg-white/10 px-4 py-1.5 text-sm text-white backdrop-blur-sm">
+          {current + 1} / {total}
+        </div>
+      )}
+
+      {total > 1 && (
+        <button
+          type="button"
+          className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/25 sm:left-4 sm:h-11 sm:w-11"
+          onClick={(event) => {
+            event.stopPropagation();
+            prev();
+          }}
+          aria-label={t("portfolio_detail_previous")}
+        >
+          <ChevronLeft size={22} />
+        </button>
+      )}
+
+      <img
+        src={images[current]}
+        alt={`${title} — ${current + 1}`}
+        className="max-h-[84vh] max-w-[86vw] rounded-2xl object-contain shadow-2xl sm:max-h-[88vh] sm:max-w-[88vw]"
+        onClick={(event) => event.stopPropagation()}
+      />
+
+      {total > 1 && (
+        <button
+          type="button"
+          className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/25 sm:right-4 sm:h-11 sm:w-11"
+          onClick={(event) => {
+            event.stopPropagation();
+            next();
+          }}
+          aria-label={t("portfolio_detail_next")}
+        >
+          <ChevronRight size={22} />
+        </button>
+      )}
+
+      {total > 1 && (
+        <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-2">
+          {images.map((_, index) => (
+            <button
+              key={index}
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                setCurrent(index);
+              }}
+              style={{
+                width: index === current ? "20px" : "6px",
+                transition: "width 0.3s ease",
+              }}
+              className={`h-1.5 rounded-full ${
+                index === current ? "bg-white" : "bg-white/30 hover:bg-white/60"
+              }`}
+              aria-label={`${t("portfolio_detail_image")} ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Tech Badge
+────────────────────────────────────────────────────────────── */
+
+function TechBadge({ name, index }: { name: string; index: number }) {
+  const logo = getTechLogo(name);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setVisible(true), index * 70);
+    return () => clearTimeout(timer);
+  }, [index]);
+
+  return (
+    <div
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(12px)",
+        transition: `opacity 0.4s ease ${index * 0.04}s, transform 0.4s ease ${
+          index * 0.04
+        }s`,
+      }}
+      className="group flex min-w-0 items-center gap-2.5 rounded-2xl border border-[#1F2A1F]/10 bg-white px-3.5 py-2.5 shadow-[0_8px_24px_rgba(31,42,31,0.045)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#C99A3D]/55 hover:shadow-[0_14px_34px_rgba(31,42,31,0.08)] sm:px-4 sm:py-3"
+    >
+      {logo ? (
+        <img
+          src={logo}
+          alt={name}
+          className="h-5 w-5 shrink-0 object-contain transition-transform duration-300 group-hover:scale-110 sm:h-6 sm:w-6"
+          onError={(event) => {
+            event.currentTarget.style.display = "none";
+          }}
+        />
+      ) : (
+        <span className="grid h-5 w-5 shrink-0 place-items-center rounded-lg bg-[#004B08]/10 text-[9px] font-bold text-[#004B08] sm:h-6 sm:w-6 sm:text-[10px]">
+          {name.slice(0, 2).toUpperCase()}
+        </span>
+      )}
+
+      <span className="truncate text-sm font-medium text-[#1F2A1F]">
+        {name}
+      </span>
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Small UI
+────────────────────────────────────────────────────────────── */
+
+function MetaPill({
+  icon: Icon,
   children,
 }: {
-  label: string;
-  required?: boolean;
+  icon: ComponentType<{ size?: number; className?: string }>;
   children: React.ReactNode;
 }) {
   return (
-    <label className="block">
-      <span className="mb-2 block text-sm text-[#1F2A1F]">
-        {label} {required && <span className="text-[#C99A3D]">*</span>}
-      </span>
-      {children}
-    </label>
+    <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.08] px-3.5 py-2 text-xs text-white/75 backdrop-blur-md sm:px-4 sm:text-sm">
+      <Icon size={13} className="shrink-0 text-[#E0C16A]" />
+      <span className="leading-none">{children}</span>
+    </div>
+  );
+}
+
+// Tambah helper di atas komponen PortfolioDetail
+function useLocalizedDescription(item: PortfolioItem | null, lang: Lang) {
+  if (!item) return "";
+  return lang === "en" && item.en_description
+    ? item.en_description
+    : item.description;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Main Page
+────────────────────────────────────────────────────────────── */
+
+export function PortfolioDetail() {
+  const { t, lang } = useT();
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+
+  const [item, setItem] = useState<PortfolioItem | null>(null);
+  const [allItems, setAllItems] = useState<PortfolioItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [pageVisible, setPageVisible] = useState(false);
+  const [heroVisible, setHeroVisible] = useState(false);
+
+  const description = useLocalizedDescription(item, lang);
+
+  useEffect(() => {
+    const pageTimer = setTimeout(() => setPageVisible(true), 50);
+    const heroTimer = setTimeout(() => setHeroVisible(true), 100);
+
+    return () => {
+      clearTimeout(pageTimer);
+      clearTimeout(heroTimer);
+    };
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+
+    listPortfolioItems()
+      .then((items) => {
+        const found = items.find((portfolioItem) => portfolioItem.id === id);
+
+        console.log("found item:", found); // ← tambah ini
+        console.log("lang:", lang);
+
+        if (!found) {
+          navigate("/portfolio", { replace: true });
+          return;
+        }
+
+        setItem(found);
+        setAllItems(
+          items.filter((portfolioItem) => portfolioItem.id !== id).slice(0, 3),
+        );
+      })
+      .catch(() => navigate("/portfolio", { replace: true }))
+      .finally(() => setLoading(false));
+  }, [id, navigate]);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#f5f5f5]">
+        <div className="space-y-3 text-center">
+          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-[#004B08]/20 border-t-[#004B08]" />
+          <p className="text-sm text-[#5F6756]">
+            {t("portfolio_detail_loading")}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!item) return null;
+
+  const images =
+    item.images && item.images.length > 0 ? item.images : [item.coverImage];
+
+  const contactService =
+    item.type === "Website"
+      ? "website"
+      : item.type === "Mobile Apps"
+        ? "mobile-app"
+        : "ai-ml";
+
+  return (
+    <div
+      className="min-h-screen bg-[#f5f5f5]"
+      style={{
+        opacity: pageVisible ? 1 : 0,
+        transform: pageVisible ? "translateY(0)" : "translateY(12px)",
+        transition: "opacity 0.5s ease, transform 0.5s ease",
+      }}
+    >
+      {lightboxIndex !== null && (
+        <Lightbox
+          images={images}
+          startIndex={lightboxIndex}
+          title={item.title}
+          onClose={() => setLightboxIndex(null)}
+        />
+      )}
+
+      <section className="relative overflow-hidden bg-[#102417] pt-28 pb-20 text-white sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-32">
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,#102417_0%,#173323_46%,#102417_100%)]" />
+        <div className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:linear-gradient(rgba(255,255,255,0.8)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.8)_1px,transparent_1px)] [background-size:56px_56px]" />
+        <div className="pointer-events-none absolute -left-32 top-20 h-[360px] w-[360px] rounded-full bg-[#C99A3D]/20 blur-3xl" />
+        <div className="pointer-events-none absolute right-[-140px] top-0 h-[460px] w-[460px] rounded-full bg-[#004B08]/35 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-[-140px] left-1/2 h-[360px] w-[360px] -translate-x-1/2 rounded-full bg-white/[0.045] blur-3xl" />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+          <div
+            className="max-w-5xl"
+            style={{
+              opacity: heroVisible ? 1 : 0,
+              transform: heroVisible ? "translateY(0)" : "translateY(20px)",
+              transition: "opacity 0.6s ease 0.1s, transform 0.6s ease 0.1s",
+            }}
+          >
+            <Link
+              to="/portfolio"
+              className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.08] px-4 py-2 text-sm text-white/70 backdrop-blur transition-colors hover:bg-white/[0.12] hover:text-white"
+            >
+              <ChevronLeft size={16} />
+              {t("portfolio_detail_back")}
+            </Link>
+
+            <h1 className="mt-6 max-w-4xl text-[clamp(2.35rem,8vw,4.8rem)] font-semibold leading-[1.02] tracking-tight text-white">
+              {item.title}
+            </h1>
+
+            <p className="mt-6 max-w-3xl text-sm leading-7 text-white/68 ...">
+              {description}
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <MetaPill icon={Tag}>{item.type}</MetaPill>
+
+              <MetaPill icon={Calendar}>
+                {new Date(item.createdAt).toLocaleDateString(
+                  lang === "id" ? "id-ID" : "en-US",
+                  {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  },
+                )}
+              </MetaPill>
+
+              {item.keyFeatures.length > 0 && (
+                <MetaPill icon={Zap}>
+                  {item.keyFeatures.length}{" "}
+                  {t("portfolio_detail_features_count")}
+                </MetaPill>
+              )}
+
+              {item.techStack.length > 0 && (
+                <MetaPill icon={Layers}>
+                  {item.techStack.length} {t("portfolio_detail_tech_count")}
+                </MetaPill>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <main className="relative z-10 bg-[#f5f5f5]">
+        <div className="mx-auto max-w-7xl px-4 pt-14 pb-12 sm:px-6 sm:pt-20 lg:px-10 lg:pt-24 lg:pb-20">
+          <div
+            className="grid gap-8 lg:grid-cols-[minmax(0,1.7fr)_minmax(320px,0.8fr)] lg:items-start"
+            style={{
+              opacity: pageVisible ? 1 : 0,
+              transform: pageVisible ? "translateY(0)" : "translateY(20px)",
+              transition: "opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s",
+            }}
+          >
+            <div id="project-gallery" className="space-y-8 scroll-mt-28">
+              <Carousel
+                images={images}
+                title={item.title}
+                onOpenLightbox={(index) => setLightboxIndex(index)}
+              />
+
+              {item.techStack.length > 0 && (
+                <section className="rounded-[24px] border border-[#1F2A1F]/10 bg-white p-5 shadow-[0_14px_45px_rgba(31,42,31,0.045)] sm:rounded-[30px] sm:p-7">
+                  <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#004B08]/70">
+                        {t("portfolio_detail_tech_stack")}
+                      </p>
+
+                      <h2 className="mt-2 text-xl font-semibold text-[#1F2A1F] sm:text-2xl">
+                        {t("portfolio_detail_tech_title")}
+                      </h2>
+                    </div>
+
+                    <span className="rounded-full bg-[#1F2A1F]/[0.06] px-4 py-2 text-xs text-[#5F6756]">
+                      {item.techStack.length} {t("portfolio_detail_tech_count")}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-wrap gap-3">
+                    {item.techStack.map((tech, index) => (
+                      <TechBadge
+                        key={`${tech}-${index}`}
+                        name={tech}
+                        index={index}
+                      />
+                    ))}
+                  </div>
+                </section>
+              )}
+            </div>
+
+            <aside className="space-y-6 lg:sticky lg:top-28">
+              {item.keyFeatures.length > 0 && (
+                <section className="rounded-[24px] border border-[#1F2A1F]/10 bg-white p-5 shadow-[0_14px_45px_rgba(31,42,31,0.045)] sm:rounded-[30px] sm:p-7">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#004B08]/70">
+                    {t("portfolio_detail_key_features")}
+                  </p>
+
+                  <h2 className="mt-2 text-xl font-semibold text-[#1F2A1F] sm:text-2xl">
+                    {t("portfolio_detail_features_title")}
+                  </h2>
+
+                  <ul className="mt-6 space-y-3">
+                    {item.keyFeatures.map((feature, index) => (
+                      <li
+                        key={`${feature}-${index}`}
+                        className="grid grid-cols-[10px_1fr] gap-3 rounded-2xl border border-[#1F2A1F]/[0.08] bg-[#f8f8f6] px-4 py-3 text-sm leading-6 text-[#5F6756]"
+                      >
+                        <span className="mt-2 h-2 w-2 rounded-full bg-[#004B08]" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+
+              <Link
+                to={`/contact?service=${contactService}`}
+                className="group flex items-center justify-between gap-5 rounded-[24px] border border-[#004B08]/15 bg-[#004B08]/[0.06] px-5 py-5 text-[#004B08] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#004B08]/25 hover:bg-[#004B08] hover:text-[#F3EFDF] sm:rounded-[30px] sm:px-7 sm:py-6"
+              >
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-[0.18em] opacity-65">
+                    {t("portfolio_detail_cta_eyebrow")}
+                  </p>
+
+                  <p className="mt-2 text-base font-semibold sm:text-lg">
+                    {t("portfolio_detail_cta_title")}
+                  </p>
+                </div>
+
+                <ArrowUpRight
+                  size={22}
+                  className="shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
+              </Link>
+            </aside>
+          </div>
+
+          {allItems.length > 0 && (
+            <section className="mt-16 border-t border-[#1F2A1F]/10 pt-12 sm:mt-20 sm:pt-14">
+              <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#004B08]/70">
+                    {t("portfolio_detail_more_eyebrow")}
+                  </p>
+
+                  <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#1F2A1F] sm:text-3xl">
+                    {t("portfolio_detail_other_projects")}
+                  </h2>
+                </div>
+
+                <Link
+                  to="/portfolio"
+                  className="inline-flex w-fit items-center gap-2 text-sm font-semibold text-[#004B08] hover:underline"
+                >
+                  {t("portfolio_detail_view_all")}
+                  <ArrowUpRight size={15} />
+                </Link>
+              </div>
+
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+                {allItems.map((project) => (
+                  <Link
+                    key={project.id}
+                    to={`/portfolio/${project.id}`}
+                    className="group block"
+                  >
+                    <article className="overflow-hidden rounded-[24px] border border-[#1F2A1F]/10 bg-white shadow-[0_12px_38px_rgba(31,42,31,0.04)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(31,42,31,0.075)]">
+                      <div className="relative aspect-[16/10] overflow-hidden bg-[#1F2A1F]">
+                        <img
+                          src={project.coverImage}
+                          alt={project.title}
+                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                        />
+
+                        {project.images && project.images.length > 1 && (
+                          <span className="absolute bottom-3 right-3 rounded-full bg-black/55 px-2.5 py-1 text-[10px] text-white backdrop-blur-sm">
+                            +{project.images.length - 1}{" "}
+                            {t("portfolio_detail_photos")}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="p-5">
+                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#004B08]">
+                          {project.type}
+                        </p>
+
+                        <h3 className="mt-2 truncate text-base font-semibold text-[#1F2A1F]">
+                          {project.title}
+                        </h3>
+
+                        <p className="mt-2 line-clamp-2 text-sm leading-6 text-[#5F6756]">
+                          {lang === "en" && project.en_description
+                            ? project.en_description
+                            : project.description}
+                        </p>
+                      </div>
+                    </article>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+      </main>
+
+      <style>{`
+        .scrollbar-none::-webkit-scrollbar {
+          display: none;
+        }
+
+        .scrollbar-none {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          * {
+            transition-duration: 0.01ms !important;
+          }
+        }
+      `}</style>
+    </div>
   );
 }
