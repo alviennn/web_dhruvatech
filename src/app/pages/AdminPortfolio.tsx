@@ -73,7 +73,7 @@ function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
               Admin Login
             </h1>
             <p className="mt-1 text-sm text-[#5F6756]">
-              Dhruva Tech Portfolio Admin
+              Dhurva Tech Portfolio Admin
             </p>
           </div>
 

@@ -23,17 +23,17 @@ const en = {
   cta_read: "Read article",
   cta_tell_idea: "Tell Us Your Idea",
   cta_back_home: "Back to Home",
-  cta_more_about_dt: "More about Dhruva Tech",
+  cta_more_about_dt: "More about Dhurva Tech",
   cta_send_inquiry: "Send Project Inquiry",
 
   // home hero
   hero_title_1: "Got a big tech idea?",
   hero_title_accent: "We got you",
   hero_sub:
-    "Dhruva Tech helps businesses build useful, reliable, and growth ready digital products.",
+    "Dhurva Tech helps businesses build useful, reliable, and growth ready digital products.",
 
   // home intro
-  home_intro: "Dhruva Tech is a software house building",
+  home_intro: "Dhurva Tech is a software house building",
   home_intro_accent: "websites, mobile apps, and AI/ML solutions",
   home_intro_tail:
     "that help businesses look professional, work efficiently, and grow through technology.",
@@ -41,7 +41,7 @@ const en = {
   // services preview
   services_preview_title: "Digital Services for Business Needs",
   services_preview_sub:
-    "Dhruva Tech builds websites, mobile apps, and AI/ML solutions adjusted to each project goal, scale, and business need.",
+    "Dhurva Tech builds websites, mobile apps, and AI/ML solutions adjusted to each project goal, scale, and business need.",
 
   svc_website_desc:
     "Professional websites for company profiles, landing pages, business catalogs, portfolios, and web-based systems.",
@@ -53,7 +53,7 @@ const en = {
     "AI/ML solutions for computer vision, automation, data classification, prediction, and intelligent features.",
 
   // why choose
-  home_why_title: "Why Choose Dhruva Tech?",
+  home_why_title: "Why Choose Dhurva Tech?",
   home_why_sub:
     "Digital products should help your business work better, not just look better.",
   home_why_desc:
@@ -150,7 +150,7 @@ home_faq_cta_button: "Ask Us Directly",
   // mindset
   mindset_title: "Stable. Purposeful. Evolving.",
   mindset_sub:
-    "Dhruva represents stability, consistency, and trust. These values shape how we build digital products.",
+    "Dhurva represents stability, consistency, and trust. These values shape how we build digital products.",
   val_stable: "Stable",
   val_purposeful: "Purposeful",
   val_evolving: "Evolving",
@@ -173,7 +173,7 @@ home_faq_cta_button: "Ask Us Directly",
   services_hero_t1: "Digital Services Built for",
   services_hero_t2: "Real Business Needs",
   services_hero_sub:
-    "Dhruva Tech helps businesses plan, design, and build digital products that are clear, useful, and ready to support growth.",
+    "Dhurva Tech helps businesses plan, design, and build digital products that are clear, useful, and ready to support growth.",
 
   services_detail_title: "Services Designed Around Your Business Goals",
   services_detail_sub:
@@ -243,7 +243,7 @@ home_faq_cta_button: "Ask Us Directly",
 
   services_faq_title: "FAQ",
   services_faq_sub: "Frequently asked questions before starting a project.",
-  services_faq_1_q: "Can Dhruva Tech help if I only have a rough idea?",
+  services_faq_1_q: "Can Dhurva Tech help if I only have a rough idea?",
   services_faq_1_a:
     "Yes. We can start from your idea, business problem, or target outcome, then help clarify the service direction, features, user flow, and project scope.",
   services_faq_2_q: "Which service should I choose first?",
@@ -253,14 +253,14 @@ home_faq_cta_button: "Ask Us Directly",
     "Can one project combine website, mobile app, and AI features?",
   services_faq_3_a:
     "Yes. Some projects may combine multiple services, but the scope should be planned in stages so the project remains focused and realistic.",
-  services_faq_4_q: "How does Dhruva Tech usually start a project?",
+  services_faq_4_q: "How does Dhurva Tech usually start a project?",
   services_faq_4_a:
     "We start by understanding your goal, users, main problems, and expected result before defining the scope and development direction.",
   services_faq_5_q:
     "Can the service be adjusted to my business or institution needs?",
   services_faq_5_a:
     "Yes. Each project can be adjusted based on your industry, workflow, service model, and target users.",
-  services_faq_6_q: "Does Dhruva Tech only handle development?",
+  services_faq_6_q: "Does Dhurva Tech only handle development?",
   services_faq_6_a:
     "No. We also help with UI/UX planning, product direction, content structure, feature prioritization, and project scope.",
   services_faq_cta_text: "Need more detailed information?",
@@ -278,7 +278,7 @@ home_faq_cta_button: "Ask Us Directly",
   web_hero_t2: "Build Trust",
   web_hero_t3: "and Drive Action",
   web_hero_sub:
-    "Dhruva Tech designs and develops websites that help businesses present their value clearly, improve credibility, and reach more potential customers.",
+    "Dhurva Tech designs and develops websites that help businesses present their value clearly, improve credibility, and reach more potential customers.",
   web_problem_title:
     "Many businesses lose credibility because of outdated or unclear websites.",
   web_problem_1:
@@ -295,7 +295,7 @@ home_faq_cta_button: "Ask Us Directly",
   mob_hero_t1: "Mobile Applications That Make Services",
   mob_hero_t2: "Easier to Access",
   mob_hero_sub:
-    "Dhruva Tech helps businesses plan, design, and develop mobile application solutions that improve user access, interaction, and digital service experience.",
+    "Dhurva Tech helps businesses plan, design, and develop mobile application solutions that improve user access, interaction, and digital service experience.",
   mob_problem_title:
     "Mobile expectations have changed your service should meet users where they are.",
   mob_problem_1:
@@ -313,7 +313,7 @@ home_faq_cta_button: "Ask Us Directly",
   ai_hero_t2: "Smarter",
   ai_hero_t3: "Digital Products",
   ai_hero_sub:
-    "Dhruva Tech helps businesses explore AI and machine learning solutions for automation, data processing, prediction, computer vision, and intelligent digital features.",
+    "Dhurva Tech helps businesses explore AI and machine learning solutions for automation, data processing, prediction, computer vision, and intelligent digital features.",
   ai_problem_title:
     "AI is powerful, but only when applied to the right problem.",
   ai_problem_1:
@@ -353,11 +353,11 @@ home_faq_cta_button: "Ask Us Directly",
   about_hero_t2: "digital solutions",
   about_hero_t3: "with real value",
   about_hero_sub:
-    "Dhruva Tech helps businesses build websites, applications, and technology solutions that are ready to use.",
+    "Dhurva Tech helps businesses build websites, applications, and technology solutions that are ready to use.",
   about_title:
     "A technology partner for businesses that want to grow digitally",
   about_p1:
-    "Dhruva Tech is a software house that helps businesses design and build digital products such as websites, mobile applications, and AI/ML-based solutions.",
+    "Dhurva Tech is a software house that helps businesses design and build digital products such as websites, mobile applications, and AI/ML-based solutions.",
   about_p2:
     "We first understand the business needs, then shape a solution that is relevant, realistic, and ready to grow.",
   about_help_title: "How we help clients",
@@ -403,7 +403,7 @@ home_faq_cta_button: "Ask Us Directly",
   form_email: "Email Address",
   form_whatsapp: "WhatsApp Number",
   form_project_type: "Project Type",
-  form_referral: "How Did You Hear About Dhruva Tech?",
+  form_referral: "How Did You Hear About Dhurva Tech?",
   form_description: "Project Description",
   form_select_type: "Select project type",
   form_select_referral: "Select an option",
@@ -428,7 +428,7 @@ home_faq_cta_button: "Ask Us Directly",
   footer_menu: "Menu",
   footer_services: "Services",
   footer_contact: "Contact",
-  footer_rights: "© 2026 Dhruva Tech. All rights reserved.",
+  footer_rights: "© 2026 Dhurva Tech. All rights reserved.",
   footer_tag: "Stable · Purposeful · Evolving",
 
   // 404
@@ -439,7 +439,7 @@ home_faq_cta_button: "Ask Us Directly",
   admin_label: "Admin",
   admin_title: "Portfolio Admin",
   admin_subtitle:
-    "Add and manage portfolio items displayed on the Dhruva Tech website.",
+    "Add and manage portfolio items displayed on the Dhurva Tech website.",
   admin_field_title: "Project Title",
   admin_field_type: "Project Type",
   admin_field_desc: "Project Description",
@@ -540,7 +540,7 @@ home_faq_cta_button: "Ask Us Directly",
   pricing_note:
     "Prices may change depending on feature complexity and project requirements.",
   pricing_wa_message:
-    "Hello DhruvaTech! I am interested in the {packageName} package and would like to consult about my project.",
+    "Hello DhurvaTech! I am interested in the {packageName} package and would like to consult about my project.",
 
   // website service detail
   web_type_company_profile: "Company Profile Website",
@@ -763,17 +763,17 @@ const id: Record<keyof typeof en, string> = {
   cta_read: "Baca artikel",
   cta_tell_idea: "Ceritakan Ide Anda",
   cta_back_home: "Kembali ke Beranda",
-  cta_more_about_dt: "Selengkapnya tentang Dhruva Tech",
+  cta_more_about_dt: "Selengkapnya tentang Dhurva Tech",
   cta_send_inquiry: "Kirim Pertanyaan Proyek",
 
   // home hero
   hero_title_1: "Punya ide teknologi besar?",
   hero_title_accent: "Kami siap membantu",
   hero_sub:
-    "Dhruva Tech membantu bisnis membangun produk digital yang berguna, andal, dan siap berkembang.",
+    "Dhurva Tech membantu bisnis membangun produk digital yang berguna, andal, dan siap berkembang.",
 
   // home intro
-  home_intro: "Dhruva Tech adalah software house yang membangun",
+  home_intro: "Dhurva Tech adalah software house yang membangun",
   home_intro_accent: "website, aplikasi mobile, dan solusi AI/ML",
   home_intro_tail:
     "yang membantu bisnis tampil profesional, bekerja efisien, dan tumbuh lewat teknologi.",
@@ -781,7 +781,7 @@ const id: Record<keyof typeof en, string> = {
   // services preview
 services_preview_title: "Layanan Digital untuk Kebutuhan Bisnis",
 services_preview_sub:
-  "Dhruva Tech membantu membangun produk digital mulai dari website company profile, aplikasi mobile, hingga solusi berbasis AI/ML. Setiap layanan disesuaikan dengan tujuan, skala, dan kebutuhan project.",
+  "Dhurva Tech membantu membangun produk digital mulai dari website company profile, aplikasi mobile, hingga solusi berbasis AI/ML. Setiap layanan disesuaikan dengan tujuan, skala, dan kebutuhan project.",
 svc_website_desc:
   "Website profesional untuk company profile, landing page, katalog bisnis, portofolio, hingga sistem berbasis web yang membantu bisnis tampil kredibel dan mudah diakses.",
 svc_mobile_desc:
@@ -790,11 +790,11 @@ svc_ai_desc:
   "Solusi AI/ML untuk computer vision, otomasi, klasifikasi data, prediksi, dan fitur cerdas yang mendukung alur kerja bisnis secara nyata.",
 
 // why choose
-home_why_title: "Kenapa Memilih Dhruva Tech?",
+home_why_title: "Kenapa Memilih Dhurva Tech?",
 home_why_sub:
   "Produk digital yang baik perlu memiliki arah, struktur, dan fungsi yang jelas.",
 home_why_desc:
-  "Dhruva Tech mengutamakan pemahaman kebutuhan bisnis, struktur informasi, kenyamanan pengguna, dan kualitas implementasi agar hasil akhirnya tidak hanya menarik, tetapi juga siap digunakan.",
+  "Dhurva Tech mengutamakan pemahaman kebutuhan bisnis, struktur informasi, kenyamanan pengguna, dan kualitas implementasi agar hasil akhirnya tidak hanya menarik, tetapi juga siap digunakan.",
 home_why_1_title: "Business First",
 home_why_1_desc:
   "Kami memahami tujuan bisnis terlebih dahulu sebelum menentukan bentuk website, aplikasi, atau fitur yang perlu dibangun.",
@@ -882,7 +882,7 @@ home_faq_cta_button: "Tanya Langsung",
   // mindset
   mindset_title: "Stabil. Bertujuan. Berkembang.",
   mindset_sub:
-    "Dhruva mewakili stabilitas, konsistensi, dan kepercayaan. Nilai-nilai ini membentuk cara kami membangun produk digital.",
+    "Dhurva mewakili stabilitas, konsistensi, dan kepercayaan. Nilai-nilai ini membentuk cara kami membangun produk digital.",
   val_stable: "Stabil",
   val_purposeful: "Bertujuan",
   val_evolving: "Berkembang",
@@ -905,7 +905,7 @@ home_faq_cta_button: "Tanya Langsung",
   services_hero_t1: "Layanan Digital untuk",
   services_hero_t2: "Kebutuhan Bisnis Nyata",
   services_hero_sub:
-    "Dhruva Tech membantu bisnis merancang, mendesain, dan membangun produk digital yang jelas, berguna, dan siap mendukung pertumbuhan.",
+    "Dhurva Tech membantu bisnis merancang, mendesain, dan membangun produk digital yang jelas, berguna, dan siap mendukung pertumbuhan.",
 
   services_detail_title: "Layanan yang Dirancang Sesuai Tujuan Bisnis",
   services_detail_sub:
@@ -977,7 +977,7 @@ home_faq_cta_button: "Tanya Langsung",
   services_faq_sub:
     "Pertanyaan yang sering diajukan sebelum memulai project.",
   services_faq_1_q:
-    "Apakah Dhruva Tech bisa membantu jika ide saya masih kasar?",
+    "Apakah Dhurva Tech bisa membantu jika ide saya masih kasar?",
   services_faq_1_a:
     "Bisa. Kami bisa mulai dari ide, masalah bisnis, atau target yang ingin dicapai, lalu membantu memperjelas arah layanan, fitur, alur pengguna, dan scope project.",
   services_faq_2_q: "Layanan mana yang sebaiknya saya pilih lebih dulu?",
@@ -994,7 +994,7 @@ home_faq_cta_button: "Tanya Langsung",
     "Apakah layanan bisa disesuaikan dengan kebutuhan bisnis atau instansi saya?",
   services_faq_5_a:
     "Bisa. Setiap project dapat disesuaikan dengan industri, alur kerja, model layanan, dan target pengguna Anda.",
-  services_faq_6_q: "Apakah Dhruva Tech hanya mengerjakan development saja?",
+  services_faq_6_q: "Apakah Dhurva Tech hanya mengerjakan development saja?",
   services_faq_6_a:
     "Tidak. Kami juga membantu perencanaan UI/UX, arah produk, struktur konten, prioritas fitur, dan scope project.",
   services_faq_cta_text: "Butuh informasi yang lebih detail?",
@@ -1012,7 +1012,7 @@ home_faq_cta_button: "Tanya Langsung",
   web_hero_t2: "Membangun Kepercayaan",
   web_hero_t3: "dan Mendorong Aksi",
   web_hero_sub:
-    "Dhruva Tech merancang dan mengembangkan website yang membantu bisnis menyampaikan nilai dengan jelas, meningkatkan kredibilitas, dan menjangkau lebih banyak pelanggan.",
+    "Dhurva Tech merancang dan mengembangkan website yang membantu bisnis menyampaikan nilai dengan jelas, meningkatkan kredibilitas, dan menjangkau lebih banyak pelanggan.",
   web_problem_title:
     "Banyak bisnis kehilangan kredibilitas karena website yang usang atau tidak jelas.",
   web_problem_1:
@@ -1029,7 +1029,7 @@ home_faq_cta_button: "Tanya Langsung",
   mob_hero_t1: "Aplikasi Mobile yang Memudahkan",
   mob_hero_t2: "Akses Layanan",
   mob_hero_sub:
-    "Dhruva Tech membantu bisnis merencanakan, mendesain, dan mengembangkan solusi aplikasi mobile yang meningkatkan akses, interaksi, dan pengalaman layanan digital.",
+    "Dhurva Tech membantu bisnis merencanakan, mendesain, dan mengembangkan solusi aplikasi mobile yang meningkatkan akses, interaksi, dan pengalaman layanan digital.",
   mob_problem_title:
     "Ekspektasi mobile telah berubah, layanan Anda harus menjangkau pengguna di mana mereka berada.",
   mob_problem_1:
@@ -1047,7 +1047,7 @@ home_faq_cta_button: "Tanya Langsung",
   ai_hero_t2: "Produk Digital",
   ai_hero_t3: "yang Lebih Cerdas",
   ai_hero_sub:
-    "Dhruva Tech membantu bisnis mengeksplorasi solusi AI dan machine learning untuk otomasi, pengolahan data, prediksi, computer vision, dan fitur digital cerdas.",
+    "Dhurva Tech membantu bisnis mengeksplorasi solusi AI dan machine learning untuk otomasi, pengolahan data, prediksi, computer vision, dan fitur digital cerdas.",
   ai_problem_title:
     "AI itu kuat, tapi hanya jika diterapkan pada masalah yang tepat.",
   ai_problem_1:
@@ -1087,13 +1087,13 @@ home_faq_cta_button: "Tanya Langsung",
   about_hero_t2: "solusi digital",
   about_hero_t3: "yang bernilai",
   about_hero_sub:
-    "Dhruva Tech membantu bisnis membangun website, aplikasi, dan solusi teknologi yang siap digunakan.",
+    "Dhurva Tech membantu bisnis membangun website, aplikasi, dan solusi teknologi yang siap digunakan.",
 
   about_title:
     "Partner teknologi untuk bisnis yang ingin bertumbuh secara digital",
 
   about_p1:
-    "Dhruva Tech adalah software house yang membantu bisnis merancang dan membangun produk digital seperti website, aplikasi mobile, dan solusi berbasis AI/ML.",
+    "Dhurva Tech adalah software house yang membantu bisnis merancang dan membangun produk digital seperti website, aplikasi mobile, dan solusi berbasis AI/ML.",
 
   about_p2:
     "Kami memahami kebutuhan bisnis terlebih dahulu, lalu menyusun solusi yang relevan, realistis, dan mudah dikembangkan.",
@@ -1142,7 +1142,7 @@ home_faq_cta_button: "Tanya Langsung",
   form_email: "Alamat Email",
   form_whatsapp: "Nomor WhatsApp",
   form_project_type: "Jenis Proyek",
-  form_referral: "Dari Mana Anda Tahu Dhruva Tech?",
+  form_referral: "Dari Mana Anda Tahu Dhurva Tech?",
   form_description: "Deskripsi Proyek",
   form_select_type: "Pilih jenis proyek",
   form_select_referral: "Pilih salah satu",
@@ -1172,7 +1172,7 @@ home_faq_cta_button: "Tanya Langsung",
   footer_services: "Layanan",
   footer_contact: "Kontak",
   footer_rights:
-    "© 2026 Dhruva Tech. Seluruh hak cipta dilindungi.",
+    "© 2026 Dhurva Tech. Seluruh hak cipta dilindungi.",
   footer_tag: "Stabil · Bertujuan · Berkembang",
 
   // 404
@@ -1183,7 +1183,7 @@ home_faq_cta_button: "Tanya Langsung",
   admin_label: "Admin",
   admin_title: "Portfolio Admin",
   admin_subtitle:
-    "Tambah dan kelola item portofolio yang ditampilkan di website Dhruva Tech.",
+    "Tambah dan kelola item portofolio yang ditampilkan di website Dhurva Tech.",
   admin_field_title: "Judul Project",
   admin_field_type: "Jenis Project",
   admin_field_desc: "Deskripsi Project",
@@ -1289,7 +1289,7 @@ home_faq_cta_button: "Tanya Langsung",
   pricing_note:
     "Harga dapat berubah sesuai kompleksitas fitur dan kebutuhan project.",
   pricing_wa_message:
-    "Hallo DhruvaTech! Saya tertarik dengan paket {packageName}, saya ingin konsultasi mengenai project saya.",
+    "Hallo DhurvaTech! Saya tertarik dengan paket {packageName}, saya ingin konsultasi mengenai project saya.",
 
   // website service detail
   web_type_company_profile: "Website Company Profile",

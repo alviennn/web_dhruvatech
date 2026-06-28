@@ -1,9 +1,4 @@
-import {
-  ArrowUpRight,
-  Code2,
-  Smartphone,
-  BrainCircuit,
-} from "lucide-react";
+import { ArrowUpRight, Code2, Smartphone, BrainCircuit } from "lucide-react";
 import { Link } from "react-router";
 import { useT } from "../providers";
 import heroImage from "../../imports/hero.png";
@@ -107,7 +102,7 @@ export function Hero() {
 
             <img
               src={heroImage}
-              alt="Dhruva Tech digital products"
+              alt="Dhurva Tech digital products"
               className="relative z-10 h-auto w-full object-contain rounded-[24px] drop-shadow-[0_22px_50px_rgba(31,42,31,0.14)] sm:rounded-3xl lg:drop-shadow-[0_32px_75px_rgba(31,42,31,0.16)]"
             />
           </div>
@@ -381,10 +376,34 @@ function HeroSystemTexture() {
         <circle cx="250" cy="610" r="4.5" fill="#D98C67" fillOpacity="0.32" />
         <circle cx="410" cy="510" r="4.5" fill="#D98C67" fillOpacity="0.28" />
 
-        <circle cx="420" cy="265" r="10" stroke="#C99A3D" strokeOpacity="0.16" />
-        <circle cx="1180" cy="610" r="10" stroke="#004B08" strokeOpacity="0.13" />
-        <circle cx="760" cy="265" r="10" stroke="#6EA7A1" strokeOpacity="0.14" />
-        <circle cx="250" cy="610" r="10" stroke="#D98C67" strokeOpacity="0.12" />
+        <circle
+          cx="420"
+          cy="265"
+          r="10"
+          stroke="#C99A3D"
+          strokeOpacity="0.16"
+        />
+        <circle
+          cx="1180"
+          cy="610"
+          r="10"
+          stroke="#004B08"
+          strokeOpacity="0.13"
+        />
+        <circle
+          cx="760"
+          cy="265"
+          r="10"
+          stroke="#6EA7A1"
+          strokeOpacity="0.14"
+        />
+        <circle
+          cx="250"
+          cy="610"
+          r="10"
+          stroke="#D98C67"
+          strokeOpacity="0.12"
+        />
       </svg>
 
       {/* Clean overlay */}

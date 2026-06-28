@@ -1,10 +1,7 @@
 import { Link } from "react-router";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import {
-  listPortfolioItems,
-  type PortfolioItem,
-} from "../data/api/api";
+import { listPortfolioItems, type PortfolioItem } from "../data/api/api";
 import {
   ArrowUpRight,
   Compass,
@@ -88,9 +85,7 @@ export function FeaturedWorkPreview() {
         if (!isMounted) return;
 
         setError(
-          err instanceof Error
-            ? err.message
-            : t("portfolio_error_load")
+          err instanceof Error ? err.message : t("portfolio_error_load"),
         );
       } finally {
         if (isMounted) {
@@ -588,9 +583,7 @@ export function WhyChoosePreview() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
         <Reveal>
           <div className="mx-auto max-w-3xl text-center">
-            <SectionHeader
-              title={t("home_why_title")}
-            />
+            <SectionHeader title={t("home_why_title")} />
 
             <p className="mt-5 text-sm leading-relaxed text-[#5F6756] sm:text-base">
               {t("home_why_desc")}
@@ -832,7 +825,7 @@ export function DigitalProductCTA({
               <div className="relative hidden min-h-[360px] lg:col-span-6 lg:block">
                 <img
                   src={ctaImage}
-                  alt="Dhruva Tech consultation"
+                  alt="Dhurva Tech consultation"
                   className="absolute bottom-[-58px] left-[39%] h-[420px] w-auto max-w-none -translate-x-1/2 object-contain object-bottom"
                 />
               </div>
@@ -983,23 +976,29 @@ export function Footer() {
           <FooterTitle>{t("footer_contact")}</FooterTitle>
           <ul className="space-y-3 text-sm sm:text-base">
             <li>
-              <a href="#" className="transition-colors hover:text-[#E0C16A]">
+              <a
+                href="https://wa.me/6289514693178?text=Hello%20Dhurva%20Tech!"
+                className="transition-colors hover:text-[#E0C16A]"
+              >
                 WhatsApp
               </a>
             </li>
             <li>
-              <a href="#" className="transition-colors hover:text-[#E0C16A]">
+              <a
+                href="mailto:dhurvatech@gmail.com"
+                className="transition-colors hover:text-[#E0C16A]"
+              >
                 Email
               </a>
             </li>
             <li>
-              <a href="#" className="transition-colors hover:text-[#E0C16A]">
+              <a
+                href="https://www.instagram.com/dhurvatech_/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-colors hover:text-[#E0C16A]"
+              >
                 Instagram
-              </a>
-            </li>
-            <li>
-              <a href="#" className="transition-colors hover:text-[#E0C16A]">
-                LinkedIn
               </a>
             </li>
           </ul>
