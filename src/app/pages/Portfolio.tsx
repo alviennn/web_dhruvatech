@@ -23,10 +23,25 @@ export function Portfolio() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    let isMounted = true;
+
     listPortfolioItems()
-      .then(setItems)
-      .catch(() => setError(t("portfolio_error_load")))
-      .finally(() => setLoading(false));
+      .then((data) => {
+        if (!isMounted) return;
+        setItems(data);
+      })
+      .catch(() => {
+        if (!isMounted) return;
+        setError(t("portfolio_error_load"));
+      })
+      .finally(() => {
+        if (!isMounted) return;
+        setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, [t]);
 
   const adminToFilter = (type: PortfolioItem["type"]) =>
@@ -73,17 +88,18 @@ export function Portfolio() {
         subtitle={t("portfolio_hero_sub")}
       />
 
-      <section className="relative overflow-hidden bg-[#f5f5f5] pt-10 pb-24 lg:pt-12 lg:pb-28 transition-colors">
+      <section className="relative overflow-hidden bg-[#f5f5f5] pb-24 pt-10 transition-colors lg:pb-28 lg:pt-12">
         <div className="pointer-events-none absolute inset-0 opacity-[0.14] portfolio-texture" />
         <div className="pointer-events-none absolute -top-40 right-[-160px] h-[540px] w-[540px] rounded-full bg-[#004B08]/[0.06] blur-3xl" />
         <div className="pointer-events-none absolute -bottom-48 left-[-160px] h-[540px] w-[540px] rounded-full bg-[#C99A3D]/[0.06] blur-3xl" />
 
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
           {/* Filter Buttons */}
           <div className="mb-10 flex flex-wrap gap-2">
             {filters.map((f) => (
               <button
                 key={f.key}
+                type="button"
                 onClick={() => setFilter(f.key)}
                 className={`rounded-full border px-4 py-2 text-sm transition-all duration-300 ${
                   filter === f.key
@@ -97,14 +113,15 @@ export function Portfolio() {
           </div>
 
           {loading && (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {[1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className="rounded-[26px] border border-[#1F2A1F]/10 bg-white/70 overflow-hidden animate-pulse"
+                  className="flex h-full flex-col overflow-hidden rounded-[26px] border border-[#1F2A1F]/10 bg-white/70 animate-pulse"
                 >
                   <div className="aspect-[4/3] bg-[#1F2A1F]/10" />
-                  <div className="p-6 space-y-3">
+
+                  <div className="flex flex-1 flex-col space-y-3 p-6">
                     <div className="h-3 w-20 rounded bg-[#1F2A1F]/10" />
                     <div className="h-5 w-3/4 rounded bg-[#1F2A1F]/10" />
                     <div className="h-4 w-full rounded bg-[#1F2A1F]/8" />
@@ -122,25 +139,30 @@ export function Portfolio() {
           )}
 
           {!loading && !error && visibleItems.length > 0 && (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {visibleItems.map((p) => {
                 const title = getPortfolioTitle(p);
                 const type = getPortfolioType(p);
                 const description = getPortfolioDescription(p);
 
                 return (
-                  <Link to={`/portfolio/${p.id}`} key={p.id} className="block">
-                    <article className="group overflow-hidden rounded-[26px] border border-[#1F2A1F]/10 bg-white/70 shadow-[0_16px_50px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_22px_70px_rgba(31,42,31,0.09)]">
-                      <div className="aspect-[4/3] relative overflow-hidden bg-[#1F2A1F]">
+                  <Link
+                    to={`/portfolio/${p.id}`}
+                    key={p.id}
+                    className="block h-full"
+                  >
+                    <article className="group flex h-full flex-col overflow-hidden rounded-[26px] border border-[#1F2A1F]/10 bg-white/70 shadow-[0_16px_50px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_22px_70px_rgba(31,42,31,0.09)]">
+                      <div className="relative aspect-[4/3] overflow-hidden bg-[#1F2A1F]">
                         <img
                           src={p.coverImage}
                           alt={title}
                           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
                         />
+
                         <div className="absolute inset-0 bg-gradient-to-t from-[#1F2A1F]/35 via-transparent to-transparent opacity-70" />
                       </div>
 
-                      <div className="p-6">
+                      <div className="flex flex-1 flex-col p-6">
                         <div className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#004B08]">
                           {type}
                         </div>
@@ -149,13 +171,13 @@ export function Portfolio() {
                           {title}
                         </h3>
 
-                        <p className="text-sm leading-relaxed text-[#5F6756] line-clamp-2">
-                          {p.description}
+                        <p className="line-clamp-2 text-sm leading-relaxed text-[#5F6756]">
+                          {description}
                         </p>
 
                         {p.keyFeatures && p.keyFeatures.length > 0 && (
                           <div className="mt-4">
-                            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#004B08]/60 line-clamp-1">
+                            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#004B08]/60">
                               {t("portfolio_key_features")}
                             </p>
 
@@ -173,7 +195,7 @@ export function Portfolio() {
                         )}
 
                         {p.techStack && p.techStack.length > 0 && (
-                          <div className="mt-3">
+                          <div className="mt-auto pt-3">
                             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#5F6756]/60">
                               {t("portfolio_tech_stack")}
                             </p>
@@ -207,9 +229,15 @@ export function Portfolio() {
 
         <style>{`
           @keyframes portfolioTextureMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 72px 72px; }
+            0% {
+              background-position: 0 0;
+            }
+
+            100% {
+              background-position: 72px 72px;
+            }
           }
+
           .portfolio-texture {
             background-image:
               linear-gradient(rgba(31, 42, 31, 0.055) 1px, transparent 1px),
@@ -217,8 +245,11 @@ export function Portfolio() {
             background-size: 72px 72px;
             animation: portfolioTextureMove 24s linear infinite;
           }
+
           @media (prefers-reduced-motion: reduce) {
-            .portfolio-texture { animation: none; }
+            .portfolio-texture {
+              animation: none;
+            }
           }
         `}</style>
       </section>
