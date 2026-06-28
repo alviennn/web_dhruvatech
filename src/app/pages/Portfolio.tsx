@@ -150,7 +150,7 @@ export function Portfolio() {
                         </h3>
 
                         <p className="text-sm leading-relaxed text-[#5F6756]">
-                          {description}
+                          {p.description}
                         </p>
 
                         {p.keyFeatures && p.keyFeatures.length > 0 && (
