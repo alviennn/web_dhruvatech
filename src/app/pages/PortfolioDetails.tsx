@@ -467,6 +467,9 @@ export function PortfolioDetail() {
   const description = useLocalizedDescription(item, lang);
 
   useEffect(() => {
+    // Scroll ke atas dengan smooth saat halaman dimuat
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
     const pageTimer = setTimeout(() => setPageVisible(true), 50);
     const heroTimer = setTimeout(() => setHeroVisible(true), 100);
 
