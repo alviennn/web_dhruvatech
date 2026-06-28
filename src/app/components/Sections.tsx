@@ -168,8 +168,8 @@ export function FeaturedWorkPreview() {
             </div>
           </Reveal>
         ) : projects.length > 0 ? (
-          <div className="home-scrollbar -mx-4 overflow-x-auto px-4 pb-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:overflow-visible lg:px-0 lg:pb-0">
-            <div className="flex gap-5 lg:grid lg:grid-cols-3 lg:gap-6">
+          <div className="-mx-4 overflow-x-auto px-4 pb-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:overflow-visible lg:px-0 lg:pb-0 home-scrollbar">
+            <div className="flex snap-x snap-mandatory gap-5 lg:grid lg:snap-none lg:grid-cols-3 lg:gap-6">
               {projects.map((p, i) => {
                 const title = getPortfolioTitle(p);
                 const type = getPortfolioType(p);
@@ -179,7 +179,7 @@ export function FeaturedWorkPreview() {
                   <Reveal
                     key={p.id}
                     delay={i * 0.08}
-                    className="w-[82vw] shrink-0 sm:w-[420px] lg:w-auto lg:shrink"
+                    className="w-full min-w-full shrink-0 snap-center sm:w-[420px] sm:min-w-[420px] lg:w-auto lg:min-w-0 lg:shrink"
                   >
                     <article className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-[#1F2A1F]/10 bg-white/70 shadow-[0_16px_50px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_24px_80px_rgba(31,42,31,0.10)] sm:rounded-[28px] lg:rounded-[30px]">
                       <div className="relative aspect-[16/11] overflow-hidden bg-[#1F2A1F] sm:aspect-[4/3]">
