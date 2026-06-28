@@ -1045,26 +1045,12 @@ function HomeMotionStyle() {
       }
 
       .home-scrollbar {
-        scrollbar-width: thin;
-        scrollbar-color: rgba(0, 75, 8, 0.24) transparent;
-        scroll-snap-type: x proximity;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
       }
 
       .home-scrollbar::-webkit-scrollbar {
-        height: 6px;
-      }
-
-      .home-scrollbar::-webkit-scrollbar-track {
-        background: transparent;
-      }
-
-      .home-scrollbar::-webkit-scrollbar-thumb {
-        background: rgba(0, 75, 8, 0.22);
-        border-radius: 999px;
-      }
-
-      .home-scrollbar > div > div {
-        scroll-snap-align: start;
+        display: none;
       }
 
       @media (max-width: 640px) {
