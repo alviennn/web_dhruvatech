@@ -147,27 +147,24 @@ export async function updatePortfolioItem(
     en_description: string;
     keyFeatures: string[];
     techStack: string[];
-    keptImageUrls: string[];   // URL gambar lama yang dipertahankan
-    newImageFiles: File[];     // File gambar baru
+    keptImageUrls: string[];
+    newImageFiles: File[];
   }
 ): Promise<PortfolioItem> {
   const formData = new FormData();
+  formData.append("_method", "PUT"); // ← method override
   formData.append("title", input.title);
   formData.append("type", input.type);
   formData.append("description", input.description);
   formData.append("en_description", input.en_description);
   formData.append("keyFeatures", JSON.stringify(input.keyFeatures));
   formData.append("techStack", JSON.stringify(input.techStack));
-
-  // Kirim daftar URL gambar lama yang masih dipakai
   formData.append("keptImageUrls", JSON.stringify(input.keptImageUrls));
-
-  // Kirim file-file gambar baru
   input.newImageFiles.forEach((file) => formData.append("newImages[]", file));
 
   const res = await fetch(`${PORTFOLIO_URL}?id=${id}`, {
-    method: "PUT",
-    headers: authHeaders(), // jangan set Content-Type, biar browser set boundary otomatis
+    method: "POST", // ← ganti PUT jadi POST
+    headers: authHeaders(),
     body: formData,
   });
 
