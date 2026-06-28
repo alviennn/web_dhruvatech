@@ -149,7 +149,7 @@ export function Portfolio() {
                           {title}
                         </h3>
 
-                        <p className="text-sm leading-relaxed text-[#5F6756]">
+                        <p className="text-sm leading-relaxed text-[#5F6756] line-clamp-2">
                           {p.description}
                         </p>
 
