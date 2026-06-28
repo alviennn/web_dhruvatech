@@ -795,19 +795,19 @@ home_why_sub:
   "Produk digital yang baik perlu memiliki arah, struktur, dan fungsi yang jelas.",
 home_why_desc:
   "Dhurva Tech mengutamakan pemahaman kebutuhan bisnis, struktur informasi, kenyamanan pengguna, dan kualitas implementasi agar hasil akhirnya tidak hanya menarik, tetapi juga siap digunakan.",
-home_why_1_title: "Business First",
+home_why_1_title: "Pemahaman Kebutuhan Bisnis",
 home_why_1_desc:
   "Kami memahami tujuan bisnis terlebih dahulu sebelum menentukan bentuk website, aplikasi, atau fitur yang perlu dibangun.",
-home_why_2_title: "Custom Solution",
+home_why_2_title: "Solusi yang Disesuaikan",
 home_why_2_desc:
   "Setiap produk digital disusun sesuai kebutuhan project, target pengguna, dan karakter brand.",
-home_why_3_title: "Responsive UX",
+home_why_3_title: "Pengalaman Pengguna yang Responsive",
 home_why_3_desc:
   "Tampilan disiapkan agar tetap jelas dan nyaman digunakan di desktop, tablet, maupun mobile.",
-home_why_4_title: "Clear Direction",
+home_why_4_title: "Arah yang Jelas",
 home_why_4_desc:
   "Scope, prioritas fitur, dan arah pengerjaan dibuat jelas sejak awal agar proses kerja lebih terkontrol.",
-home_why_5_title: "Handover Support",
+home_why_5_title: "Panduan Penggunaan",
 home_why_5_desc:
   "Client mendapat arahan penggunaan dasar agar hasil project bisa digunakan dengan lebih percaya diri.",
 
