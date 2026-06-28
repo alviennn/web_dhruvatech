@@ -155,7 +155,7 @@ export function Portfolio() {
 
                         {p.keyFeatures && p.keyFeatures.length > 0 && (
                           <div className="mt-4">
-                            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#004B08]/60">
+                            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#004B08]/60 line-clamp-1">
                               {t("portfolio_key_features")}
                             </p>
 
