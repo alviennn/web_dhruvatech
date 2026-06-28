@@ -170,7 +170,7 @@ export function FeaturedWorkPreview() {
         ) : projects.length > 0 ? (
           <div className="-mx-4 overflow-hidden sm:-mx-6 lg:mx-0 lg:overflow-visible">
             <div className="home-scrollbar overflow-x-auto px-4 pb-4 sm:px-6 lg:overflow-visible lg:px-0 lg:pb-0">
-              <div className="flex snap-x snap-mandatory gap-0 lg:grid lg:snap-none lg:grid-cols-3 lg:gap-6">
+              <div className="flex snap-x snap-mandatory scroll-smooth gap-5 overflow-x-auto pb-5 home-scrollbar md:grid md:grid-cols-2 md:gap-6 md:overflow-visible md:pb-0 lg:grid-cols-3">
                 {projects.map((p, i) => {
                   const title = getPortfolioTitle(p);
                   const type = getPortfolioType(p);
@@ -180,35 +180,33 @@ export function FeaturedWorkPreview() {
                     <Reveal
                       key={p.id}
                       delay={i * 0.08}
-                      className="w-full min-w-full shrink-0 snap-start lg:min-w-0 lg:shrink lg:snap-align-none"
+                      className="min-w-full snap-start md:min-w-0"
                     >
-                      <div className="px-0 lg:px-0">
-                        <article className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-[#1F2A1F]/10 bg-white/70 shadow-[0_16px_50px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_24px_80px_rgba(31,42,31,0.10)] sm:rounded-[28px] lg:rounded-[30px]">
-                          <div className="relative aspect-[16/11] overflow-hidden bg-[#1F2A1F] sm:aspect-[4/3]">
-                            <img
-                              src={p.coverImage}
-                              alt={title}
-                              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
-                            />
+                      <article className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-[#1F2A1F]/10 bg-white/70 shadow-[0_16px_50px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_24px_80px_rgba(31,42,31,0.10)] sm:rounded-[28px] lg:rounded-[30px]">
+                        <div className="relative aspect-[16/11] overflow-hidden bg-[#1F2A1F] sm:aspect-[4/3]">
+                          <img
+                            src={p.coverImage}
+                            alt={title}
+                            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
+                          />
 
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#1F2A1F]/35 via-transparent to-transparent opacity-70" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#1F2A1F]/35 via-transparent to-transparent opacity-70" />
+                        </div>
+
+                        <div className="flex flex-1 flex-col p-5 sm:p-6">
+                          <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#004B08] sm:text-xs">
+                            {type}
                           </div>
 
-                          <div className="flex flex-1 flex-col p-5 sm:p-6">
-                            <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#004B08] sm:text-xs">
-                              {type}
-                            </div>
+                          <h3 className="mb-3 line-clamp-2 text-lg leading-snug text-[#1F2A1F] sm:text-xl">
+                            {title}
+                          </h3>
 
-                            <h3 className="mb-3 line-clamp-2 text-lg leading-snug text-[#1F2A1F] sm:text-xl">
-                              {title}
-                            </h3>
-
-                            <p className="line-clamp-3 text-sm leading-relaxed text-[#5F6756]">
-                              {description}
-                            </p>
-                          </div>
-                        </article>
-                      </div>
+                          <p className="line-clamp-3 text-sm leading-relaxed text-[#5F6756]">
+                            {description}
+                          </p>
+                        </div>
+                      </article>
                     </Reveal>
                   );
                 })}
