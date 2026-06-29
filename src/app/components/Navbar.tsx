@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { useLocation } from "react-router";
 import { useT } from "../providers";
-import logo from "../../imports/logonavbar.png";
+import logo from "../../imports/logonav.png";
 
 export function Navbar() {
   const { t, lang, setLang } = useT();
