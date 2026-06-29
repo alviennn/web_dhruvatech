@@ -467,10 +467,14 @@ export function PortfolioDetail() {
   const description = useLocalizedDescription(item, lang);
 
   useEffect(() => {
-    setPageVisible(false); // ← reset dulu
+    setPageVisible(false);
     setHeroVisible(false);
 
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant" as ScrollBehavior,
+    });
 
     const pageTimer = setTimeout(() => setPageVisible(true), 50);
     const heroTimer = setTimeout(() => setHeroVisible(true), 100);
@@ -488,9 +492,6 @@ export function PortfolioDetail() {
       .then((items) => {
         const found = items.find((portfolioItem) => portfolioItem.id === id);
 
-        console.log("found item:", found); // ← tambah ini
-        console.log("lang:", lang);
-
         if (!found) {
           navigate("/portfolio", { replace: true });
           return;
@@ -503,7 +504,7 @@ export function PortfolioDetail() {
       })
       .catch(() => navigate("/portfolio", { replace: true }))
       .finally(() => setLoading(false));
-  }, [id, navigate]);
+  }, [id, navigate, lang]);
 
   if (loading) {
     return (
