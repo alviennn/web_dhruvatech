@@ -467,7 +467,9 @@ export function PortfolioDetail() {
   const description = useLocalizedDescription(item, lang);
 
   useEffect(() => {
-    // Scroll ke atas dengan smooth saat halaman dimuat
+    setPageVisible(false); // ← reset dulu
+    setHeroVisible(false);
+
     window.scrollTo({ top: 0, behavior: "smooth" });
 
     const pageTimer = setTimeout(() => setPageVisible(true), 50);
@@ -477,7 +479,7 @@ export function PortfolioDetail() {
       clearTimeout(pageTimer);
       clearTimeout(heroTimer);
     };
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     setLoading(true);
