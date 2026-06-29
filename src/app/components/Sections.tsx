@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { SectionHeader } from "./shared";
 import { useT } from "../providers";
-import logo from "../../imports/logonavbar.png";
+import logo from "../../imports/logofooter.png";
 import ctaImage from "../../imports/cta.png";
 import ctaLogoMark from "../../imports/dhruva-mark.png";
 import why from "../../imports/why.png";
