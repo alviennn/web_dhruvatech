@@ -1,7 +1,6 @@
 import { ArrowUpRight, Code2, Smartphone, BrainCircuit } from "lucide-react";
 import { Link } from "react-router";
 import { useT } from "../providers";
-import heroImage from "../../imports/hero.png";
 
 export function Hero() {
   const { t } = useT();
@@ -101,8 +100,13 @@ export function Hero() {
             </div>
 
             <img
-              src={heroImage}
-              alt="Dhurva Tech digital products"
+              src="/images/hero.png"
+              alt="Dhruva Tech digital products"
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              width={700}
+              height={700}
               className="relative z-10 h-auto w-full object-contain rounded-[24px] drop-shadow-[0_22px_50px_rgba(31,42,31,0.14)] sm:rounded-3xl lg:drop-shadow-[0_32px_75px_rgba(31,42,31,0.16)]"
             />
           </div>
