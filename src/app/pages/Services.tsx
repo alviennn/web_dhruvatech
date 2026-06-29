@@ -16,6 +16,7 @@ import type { Key } from "../i18n";
 import websiteServiceImage from "../../imports/services/website-development.png";
 import mobileServiceImage from "../../imports/services/mobile-app-development.png";
 import aiServiceImage from "../../imports/services/ai-ml-solutions.png";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 type HighlightItem = {
   titleKey: Key;
@@ -46,6 +47,18 @@ type FAQItem = {
 };
 
 export function Services() {
+  <HelmetProvider>
+    <Helmet>
+      <title>
+        Dhurva Tech | Software House Yogyakarta - Web, Mobile & AI Development
+      </title>
+      <meta
+        name="description"
+        content="Dhurva Tech membantu membangun produk digital anda mulai dari website company profile, aplikasi mobile, hingga solusi berbasis AI/ML. Mari Realisasikan Ide Besar Anda Bersama Kami!"
+      />
+    </Helmet>
+  </HelmetProvider>;
+
   const { t } = useT();
 
   const services: ServiceItem[] = [

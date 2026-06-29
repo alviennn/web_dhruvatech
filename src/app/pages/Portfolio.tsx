@@ -6,8 +6,21 @@ import { PageHero } from "../components/shared";
 import { useT } from "../providers";
 import { listPortfolioItems, type PortfolioItem } from "../data/api/api";
 import { Link } from "react-router";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 export function Portfolio() {
+  <HelmetProvider>
+    <Helmet>
+      <title>
+        Dhurva Tech | Software House Yogyakarta - Web, Mobile & AI Development
+      </title>
+      <meta
+        name="description"
+        content="Dhurva Tech membantu membangun produk digital anda mulai dari website company profile, aplikasi mobile, hingga solusi berbasis AI/ML. Mari Realisasikan Ide Besar Anda Bersama Kami!"
+      />
+    </Helmet>
+  </HelmetProvider>;
+
   const { t, lang } = useT();
 
   const filters = [
