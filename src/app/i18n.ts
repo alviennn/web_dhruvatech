@@ -30,7 +30,7 @@ const en = {
   hero_title_1: "Got a big tech idea?",
   hero_title_accent: "We got you",
   hero_sub:
-    "Dhurva Tech helps businesses build useful, reliable, and growth ready digital products.",
+    "DhurvaTech is a software house providing digital solution development services to help businesses and organizations transform through technology. We specialize in developing websites, information systems, mobile applications, and UI/UX designs, as well as Artificial Intelligence (AI)-based solutions. Prioritizing quality, innovation, and client satisfaction, DhurvaTech is committed to delivering digital solutions that are reliable, efficient, and tailored to business needs.",
 
   // home intro
   home_intro: "Dhurva Tech is a software house building",
@@ -770,7 +770,8 @@ const id: Record<keyof typeof en, string> = {
   hero_title_1: "Punya ide teknologi besar?",
   hero_title_accent: "Kami siap membantu",
   hero_sub:
-    "Dhurva Tech membantu bisnis membangun produk digital yang berguna, andal, dan siap berkembang.",
+    "DhurvaTech adalah software house yang menyediakan layanan pengembangan solusi digital untuk membantu bisnis dan organisasi bertransformasi melalui teknologi. Kami melayani pembuatan website, sistem informasi, aplikasi mobile, UI/UX Design, serta solusi berbasis Artificial Intelligence (AI) Dengan mengutamakan kualitas, inovasi, dan kepuasan klien, DhurvaTech berkomitmen menghadirkan solusi digital yang andal, efisien, dan sesuai dengan kebutuhan bisnis.",
+
 
   // home intro
   home_intro: "Dhurva Tech adalah software house yang membangun",
