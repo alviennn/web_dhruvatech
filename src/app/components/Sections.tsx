@@ -172,24 +172,19 @@ export function FeaturedWorkPreview() {
                   const description = getPortfolioDescription(p);
 
                   return (
-                                      <Link
-                    to={`/portfolio/${p.id}`}
-                    key={p.id}
-                    className="block h-full"
-                  >
-                    
                     <Reveal
                       key={p.id}
                       delay={i * 0.08}
                       className="min-w-full snap-start md:min-w-0"
                     >
-                      <article className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-[#1F2A1F]/10 bg-white/70 shadow-[0_16px_50px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_24px_80px_rgba(31,42,31,0.10)] sm:rounded-[28px] lg:rounded-[30px]">
-                        <div className="relative aspect-[16/11] overflow-hidden bg-[#1F2A1F] sm:aspect-[4/3]">
-                          <img
-                            src={p.coverImage}
-                            alt={title}
-                            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
-                          />
+<Link to={`/portfolio/${p.id}`} className="block h-full">
+        <article className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-[#1F2A1F]/10 bg-white/70 shadow-[0_16px_50px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_24px_80px_rgba(31,42,31,0.10)] sm:rounded-[28px] lg:rounded-[30px]">
+          <div className="relative aspect-[16/11] overflow-hidden bg-[#1F2A1F] sm:aspect-[4/3]">
+            <img
+              src={p.coverImage}
+              alt={title}
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
+            />
 
                           <div className="absolute inset-0 bg-gradient-to-t from-[#1F2A1F]/35 via-transparent to-transparent opacity-70" />
                         </div>
@@ -208,8 +203,8 @@ export function FeaturedWorkPreview() {
                           </p>
                         </div>
                       </article>
-                    </Reveal>
                     </Link>
+                    </Reveal>
                   );
                 })}
               </div>
