@@ -429,7 +429,7 @@ home_faq_cta_button: "Ask Us Directly",
   footer_services: "Services",
   footer_contact: "Contact",
   footer_rights: "© 2026 Dhurva Tech. All rights reserved.",
-  footer_tag: "Stable · Purposeful · Evolving",
+  footer_tag: "Building Impactful Digital Solutions.",
 
   // 404
   nf_title: "Page not found",
@@ -881,7 +881,7 @@ home_faq_cta_button: "Tanya Langsung",
     "Meluncurkan produk dan menyiapkannya untuk berkembang.",
 
   // mindset
-  mindset_title: "Stabil. Bertujuan. Berkembang.",
+  mindset_title: "Stabil, Bertujuan, dan Berkembang",
   mindset_sub:
     "Dhurva mewakili stabilitas, konsistensi, dan kepercayaan. Nilai-nilai ini membentuk cara kami membangun produk digital.",
   val_stable: "Stabil",
@@ -1174,7 +1174,7 @@ home_faq_cta_button: "Tanya Langsung",
   footer_contact: "Kontak",
   footer_rights:
     "© 2026 Dhurva Tech. Seluruh hak cipta dilindungi.",
-  footer_tag: "Stabil · Bertujuan · Berkembang",
+  footer_tag: "Membangun Solusi Digital yang Berdampak.",
 
   // 404
   nf_title: "Halaman tidak ditemukan",
