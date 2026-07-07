@@ -30,7 +30,7 @@ const en = {
   hero_title_1: "Got a big tech idea?",
   hero_title_accent: "We got you",
   hero_sub:
-    "DhurvaTech is a software house providing digital solution development services to help businesses and organizations transform through technology. We specialize in developing websites, information systems, mobile applications, and UI/UX designs, as well as Artificial Intelligence (AI)-based solutions. Prioritizing quality, innovation, and client satisfaction, DhurvaTech is committed to delivering digital solutions that are reliable, efficient, and tailored to business needs.",
+    "Dhurva Tech is a software house that helps businesses design and build digital products such as websites, mobile applications, and AI/ML-based solutions.",
 
   // home intro
   home_intro: "Dhurva Tech is a software house building",
@@ -357,7 +357,7 @@ home_faq_cta_button: "Ask Us Directly",
   about_title:
     "A technology partner for businesses that want to grow digitally",
   about_p1:
-    "Dhurva Tech is a software house that helps businesses design and build digital products such as websites, mobile applications, and AI/ML-based solutions.",
+    "Dhurva Tech is a software house providing digital solution development services to help businesses and organizations transform through technology. We specialize in developing websites, information systems, mobile applications, and UI/UX designs, as well as Artificial Intelligence (AI)-based solutions. Prioritizing quality, innovation, and client satisfaction, Dhurva Tech is committed to delivering digital solutions that are reliable, efficient, and tailored to business needs.",
   about_p2:
     "We first understand the business needs, then shape a solution that is relevant, realistic, and ready to grow.",
   about_help_title: "How we help clients",
@@ -770,7 +770,7 @@ const id: Record<keyof typeof en, string> = {
   hero_title_1: "Punya ide teknologi besar?",
   hero_title_accent: "Kami siap membantu",
   hero_sub:
-    "DhurvaTech adalah software house yang menyediakan layanan pengembangan solusi digital untuk membantu bisnis dan organisasi bertransformasi melalui teknologi. Kami melayani pembuatan website, sistem informasi, aplikasi mobile, UI/UX Design, serta solusi berbasis Artificial Intelligence (AI) Dengan mengutamakan kualitas, inovasi, dan kepuasan klien, DhurvaTech berkomitmen menghadirkan solusi digital yang andal, efisien, dan sesuai dengan kebutuhan bisnis.",
+  "Dhurva Tech adalah software house yang membantu bisnis merancang dan membangun produk digital seperti website, aplikasi mobile, dan solusi berbasis AI/ML",
 
 
   // home intro
@@ -1094,7 +1094,7 @@ home_faq_cta_button: "Tanya Langsung",
     "Partner teknologi untuk bisnis yang ingin bertumbuh secara digital",
 
   about_p1:
-    "Dhurva Tech adalah software house yang membantu bisnis merancang dan membangun produk digital seperti website, aplikasi mobile, dan solusi berbasis AI/ML.",
+    "Dhurva Tech adalah software house yang menyediakan layanan pengembangan solusi digital untuk membantu bisnis dan organisasi bertransformasi melalui teknologi. Kami melayani pembuatan website, sistem informasi, aplikasi mobile, UI/UX Design, serta solusi berbasis Artificial Intelligence (AI) Dengan mengutamakan kualitas, inovasi, dan kepuasan klien, Dhurva Tech berkomitmen menghadirkan solusi digital yang andal, efisien, dan sesuai dengan kebutuhan bisnis.",
 
   about_p2:
     "Kami memahami kebutuhan bisnis terlebih dahulu, lalu menyusun solusi yang relevan, realistis, dan mudah dikembangkan.",
