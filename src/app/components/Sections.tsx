@@ -172,6 +172,12 @@ export function FeaturedWorkPreview() {
                   const description = getPortfolioDescription(p);
 
                   return (
+                                      <Link
+                    to={`/portfolio/${p.id}`}
+                    key={p.id}
+                    className="block h-full"
+                  >
+                    
                     <Reveal
                       key={p.id}
                       delay={i * 0.08}
@@ -203,6 +209,7 @@ export function FeaturedWorkPreview() {
                         </div>
                       </article>
                     </Reveal>
+                    </Link>
                   );
                 })}
               </div>
