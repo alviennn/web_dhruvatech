@@ -34,6 +34,8 @@ export function Portfolio() {
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [pageIndex, setPageIndex] = useState(0);
+  const pageSize = 3;
 
   useEffect(() => {
     let isMounted = true;
@@ -57,6 +59,10 @@ export function Portfolio() {
     };
   }, [t]);
 
+  useEffect(() => {
+    setPageIndex(0);
+  }, [filter, items.length]);
+
   const adminToFilter = (type: PortfolioItem["type"]) =>
     type === "Mobile Apps" ? "Mobile App" : type;
 
@@ -64,6 +70,20 @@ export function Portfolio() {
     if (filter === "all") return true;
     return adminToFilter(item.type) === filter;
   });
+
+  const totalPages = Math.max(1, Math.ceil(visibleItems.length / pageSize));
+  const currentItems = visibleItems.slice(
+    pageIndex * pageSize,
+    pageIndex * pageSize + pageSize,
+  );
+
+  const onPrevPage = () => {
+    setPageIndex((current) => Math.max(0, current - 1));
+  };
+
+  const onNextPage = () => {
+    setPageIndex((current) => Math.min(totalPages - 1, current + 1));
+  };
 
   const getPortfolioTitle = (item: PortfolioItem) => {
     if (lang === "en") {
@@ -152,85 +172,114 @@ export function Portfolio() {
           )}
 
           {!loading && !error && visibleItems.length > 0 && (
-            <div className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {visibleItems.map((p) => {
-                const title = getPortfolioTitle(p);
-                const type = getPortfolioType(p);
-                const description = getPortfolioDescription(p);
+            <>
+              <div className="mb-6 flex items-center justify-between gap-4">
+                <button
+                  type="button"
+                  onClick={onPrevPage}
+                  disabled={pageIndex === 0}
+                  className="inline-flex items-center justify-center rounded-full border border-[#1F2A1F]/10 bg-white px-4 py-2 text-sm font-semibold text-[#1F2A1F] transition hover:border-[#004B08]/50 hover:text-[#004B08] disabled:cursor-not-allowed disabled:border-[#1F2A1F]/10 disabled:text-[#B0B8B0]"
+                >
+                  ← {t("portfolio_prev")}
+                </button>
 
-                return (
-                  <Link
-                    to={`/portfolio/${p.id}`}
-                    key={p.id}
-                    className="block h-full"
-                  >
-                    <article className="group flex h-full flex-col overflow-hidden rounded-[26px] border border-[#1F2A1F]/10 bg-white/70 shadow-[0_16px_50px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_22px_70px_rgba(31,42,31,0.09)]">
-                      <div className="relative aspect-[4/3] overflow-hidden bg-[#1F2A1F]">
-                        <img
-                          src={p.coverImage}
-                          alt={title}
-                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
-                        />
+                <div className="text-sm text-[#5F6756]">
+                  {t("portfolio_page_info", {
+                    current: pageIndex + 1,
+                    total: totalPages,
+                  })}
+                </div>
 
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#1F2A1F]/35 via-transparent to-transparent opacity-70" />
-                      </div>
+                <button
+                  type="button"
+                  onClick={onNextPage}
+                  disabled={pageIndex >= totalPages - 1}
+                  className="inline-flex items-center justify-center rounded-full border border-[#1F2A1F]/10 bg-white px-4 py-2 text-sm font-semibold text-[#1F2A1F] transition hover:border-[#004B08]/50 hover:text-[#004B08] disabled:cursor-not-allowed disabled:border-[#1F2A1F]/10 disabled:text-[#B0B8B0]"
+                >
+                  {t("portfolio_next")} →
+                </button>
+              </div>
 
-                      <div className="flex flex-1 flex-col p-6">
-                        <div className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#004B08]">
-                          {type}
+              <div className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {currentItems.map((p) => {
+                  const title = getPortfolioTitle(p);
+                  const type = getPortfolioType(p);
+                  const description = getPortfolioDescription(p);
+
+                  return (
+                    <Link
+                      to={`/portfolio/${p.id}`}
+                      key={p.id}
+                      className="block h-full"
+                    >
+                      <article className="group flex h-full flex-col overflow-hidden rounded-[26px] border border-[#1F2A1F]/10 bg-white/70 shadow-[0_16px_50px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_22px_70px_rgba(31,42,31,0.09)]">
+                        <div className="relative aspect-[4/3] overflow-hidden bg-[#1F2A1F]">
+                          <img
+                            src={p.coverImage}
+                            alt={title}
+                            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
+                          />
+
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#1F2A1F]/35 via-transparent to-transparent opacity-70" />
                         </div>
 
-                        <h3 className="mb-3 text-xl leading-snug text-[#1F2A1F]">
-                          {title}
-                        </h3>
-
-                        <p className="line-clamp-2 text-sm leading-relaxed text-[#5F6756]">
-                          {description}
-                        </p>
-
-                        {p.keyFeatures && p.keyFeatures.length > 0 && (
-                          <div className="mt-4">
-                            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#004B08]/60">
-                              {t("portfolio_key_features")}
-                            </p>
-
-                            <div className="flex flex-wrap gap-1.5">
-                              {p.keyFeatures.map((feature, i) => (
-                                <span
-                                  key={i}
-                                  className="rounded-full bg-[#004B08]/8 px-3 py-1 text-xs text-[#004B08]"
-                                >
-                                  {feature}
-                                </span>
-                              ))}
-                            </div>
+                        <div className="flex flex-1 flex-col p-6">
+                          <div className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#004B08]">
+                            {type}
                           </div>
-                        )}
 
-                        {p.techStack && p.techStack.length > 0 && (
-                          <div className="mt-auto pt-3">
-                            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#5F6756]/60">
-                              {t("portfolio_tech_stack")}
-                            </p>
+                          <h3 className="mb-3 text-xl leading-snug text-[#1F2A1F]">
+                            {title}
+                          </h3>
 
-                            <div className="flex flex-wrap gap-1.5">
-                              {p.techStack.map((tech, i) => (
-                                <span
-                                  key={i}
-                                  className="rounded-full border border-[#1F2A1F]/10 bg-white px-3 py-1 text-xs text-[#5F6756]"
-                                >
-                                  {tech}
-                                </span>
-                              ))}
+                          <p className="line-clamp-2 text-sm leading-relaxed text-[#5F6756]">
+                            {description}
+                          </p>
+
+                          {p.keyFeatures && p.keyFeatures.length > 0 && (
+                            <div className="mt-4">
+                              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#004B08]/60">
+                                {t("portfolio_key_features")}
+                              </p>
+
+                              <div className="flex flex-wrap gap-1.5">
+                                {p.keyFeatures.map((feature, i) => (
+                                  <span
+                                    key={i}
+                                    className="rounded-full bg-[#004B08]/8 px-3 py-1 text-xs text-[#004B08]"
+                                  >
+                                    {feature}
+                                  </span>
+                                ))}
+                              </div>
                             </div>
-                          </div>
-                        )}
-                      </div>
-                    </article>
-                  </Link>
-                );
-              })}
-            </div>
+                          )}
+
+                          {p.techStack && p.techStack.length > 0 && (
+                            <div className="mt-auto pt-3">
+                              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#5F6756]/60">
+                                {t("portfolio_tech_stack")}
+                              </p>
+
+                              <div className="flex flex-wrap gap-1.5">
+                                {p.techStack.map((tech, i) => (
+                                  <span
+                                    key={i}
+                                    className="rounded-full border border-[#1F2A1F]/10 bg-white px-3 py-1 text-xs text-[#5F6756]"
+                                  >
+                                    {tech}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </article>
+                    </Link>
+                  );
+                })}
+              </div>
+            </>
           )}
 
           {!loading && !error && visibleItems.length === 0 && (
