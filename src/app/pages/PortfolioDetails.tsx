@@ -91,6 +91,9 @@ function Carousel({
   }, [next, prev, resetAuto]);
 
   const onPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.closest("button")) return;
+
     setDragging(true);
     setDragStartX(event.clientX);
     setDragDelta(0);
@@ -190,6 +193,7 @@ function Carousel({
         <button
           type="button"
           onClick={(event) => {
+            event.preventDefault();
             event.stopPropagation();
             next();
             resetAuto();
