@@ -163,7 +163,7 @@ export async function updatePortfolioItem(
   input.newImageFiles.forEach((file) => formData.append("newImages[]", file));
 
   const res = await fetch(`${PORTFOLIO_URL}?id=${id}`, {
-    method: "POST", // ← ganti PUT jadi POST
+    method: "POST", 
     headers: authHeaders(),
     body: formData,
   });
