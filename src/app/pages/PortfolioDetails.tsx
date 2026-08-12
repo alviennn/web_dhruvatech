@@ -91,6 +91,9 @@ function Carousel({
   }, [next, prev, resetAuto]);
 
   const onPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.closest("button")) return;
+
     setDragging(true);
     setDragStartX(event.clientX);
     setDragDelta(0);
@@ -190,6 +193,7 @@ function Carousel({
         <button
           type="button"
           onClick={(event) => {
+            event.preventDefault();
             event.stopPropagation();
             next();
             resetAuto();
@@ -690,10 +694,6 @@ export function PortfolioDetail() {
                 className="group flex items-center justify-between gap-5 rounded-[24px] border border-[#004B08]/15 bg-[#004B08]/[0.06] px-5 py-5 text-[#004B08] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#004B08]/25 hover:bg-[#004B08] hover:text-[#F3EFDF] sm:rounded-[30px] sm:px-7 sm:py-6"
               >
                 <div>
-                  <p className="text-xs font-medium uppercase tracking-[0.18em] opacity-65">
-                    {t("portfolio_detail_cta_eyebrow")}
-                  </p>
-
                   <p className="mt-2 text-base font-semibold sm:text-lg">
                     {t("portfolio_detail_cta_title")}
                   </p>
