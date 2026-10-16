@@ -3,6 +3,7 @@ import { Navbar } from "./Navbar";
 import { DigitalProductCTA, Footer } from "./Sections";
 import { useT } from "../providers";
 import type { Key } from "../i18n";
+import { ScrollToTop } from "./ScrollToTop";
 
 type CTAContent = {
   title: string;
@@ -10,10 +11,7 @@ type CTAContent = {
   buttonLabel: string;
 };
 
-function getCTAContent(
-  pathname: string,
-  t: (key: Key) => string
-): CTAContent {
+function getCTAContent(pathname: string, t: (key: Key) => string): CTAContent {
   if (pathname === "/") {
     return {
       title: t("home_cta_title"),
@@ -94,6 +92,7 @@ export function Layout() {
 
   return (
     <div className="min-h-screen bg-[#f5f5f5] text-[#1F2A1F]">
+      <ScrollToTop />
       <Navbar />
 
       <main>
