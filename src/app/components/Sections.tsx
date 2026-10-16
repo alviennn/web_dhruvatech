@@ -272,7 +272,7 @@ export function ServicesPreview() {
                 to={to}
                 className="group relative flex h-full min-h-[240px] flex-col overflow-hidden rounded-[24px] border border-[#1F2A1F]/10 bg-white/75 p-6 shadow-[0_16px_50px_rgba(31,42,31,0.045)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:bg-white hover:shadow-[0_24px_75px_rgba(31,42,31,0.09)] sm:min-h-[270px] sm:rounded-[28px] sm:p-7 lg:min-h-[300px] lg:rounded-[30px] lg:p-8"
               >
-                {/* Judul dan ikon sejajar */}
+                {/*  */}
                 <div className="relative z-10 flex items-start justify-between gap-4">
                   <h3 className="min-w-0 flex-1 text-xl font-medium tracking-tight text-[#1F2A1F] sm:text-2xl">
                     {t(titleKey as any)}
