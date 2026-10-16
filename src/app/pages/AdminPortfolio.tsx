@@ -825,6 +825,7 @@ export function AdminPortfolio() {
   const [en_description, setEn_description] = useState("");
   const [keyFeatures, setKeyFeatures] = useState("");
   const [techStack, setTechStack] = useState("");
+  const [liveUrl, setLiveUrl] = useState("");
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -1255,6 +1256,25 @@ export function AdminPortfolio() {
                 Gambar pertama otomatis jadi cover. Rekomendasi: 1200×900px,
                 rasio 4:3, WebP/JPG, maks 5MB per file. Bisa upload hingga{" "}
                 {MAX_IMAGES} gambar.
+              </p>
+            </AdminField>
+
+            <AdminField label="Website URL">
+              <input
+                value={liveUrl}
+                onChange={(e) => {
+                  setLiveUrl(e.target.value);
+                  setError("");
+                  setSuccess(false);
+                }}
+                className={adminInput}
+                type="url"
+                placeholder="https://dhurvatech.com"
+                maxLength={2048}
+              />
+              <p className="mt-1 text-xs text-[#5F6756]">
+                Opsional. Masukkan URL website project jika ada. Gunakan format
+                lengkap (https://...).
               </p>
             </AdminField>
 

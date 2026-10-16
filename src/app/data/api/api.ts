@@ -38,6 +38,7 @@ export type PortfolioItem = {
   keyFeatures: string[];
   techStack: string[];
   coverImage: string;
+  liveUrl: string;
   images: string[];
   createdAt: string;
 };
