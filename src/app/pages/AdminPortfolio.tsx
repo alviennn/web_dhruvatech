@@ -463,6 +463,8 @@ function EditModal({
   );
   const [techStack, setTechStack] = useState(item.techStack?.join(", ") ?? "");
 
+  const [liveUrl, setLiveUrl] = useState("");
+
   // Gambar lama (URL dari server) — bisa dihapus
   const existingImages = item.images?.length ? item.images : [item.coverImage];
   const [keptImages, setKeptImages] = useState<string[]>(existingImages);
@@ -552,6 +554,7 @@ function EditModal({
         techStack: techs,
         keptImageUrls: keptImages, // URL lama yang masih dipertahankan
         newImageFiles: newFiles, // File baru yang ditambahkan
+        liveUrl: liveUrl.trim(),
       });
       newPreviews.forEach((url) => URL.revokeObjectURL(url));
       onSaved(updated);
@@ -777,6 +780,22 @@ function EditModal({
             )}
           </AdminField>
 
+          {/* Live Demo URL */}
+          <AdminField label="Live Demo URL">
+            <input
+              value={liveUrl}
+              onChange={(e) => setLiveUrl(e.target.value)}
+              className={adminInput}
+              type="url"
+              placeholder="https://project-demo.vercel.app"
+              maxLength={2048}
+            />
+            <p className="mt-1 text-xs text-[#5F6756]">
+              Opsional. Masukkan URL demo project atau kosongkan jika tidak
+              tersedia.
+            </p>
+          </AdminField>
+
           {error && (
             <p className="rounded-2xl border border-[#C99A3D]/30 bg-[#C99A3D]/10 px-4 py-3 text-sm text-[#8A641E]">
               {error}
@@ -953,6 +972,7 @@ export function AdminPortfolio() {
         keyFeatures: features,
         techStack: techs,
         imageFiles,
+        liveUrl: liveUrl.trim(),
       });
       setItems((prev) => [created, ...prev]);
       setTitle("");
@@ -964,6 +984,7 @@ export function AdminPortfolio() {
       imagePreviews.forEach((url) => URL.revokeObjectURL(url));
       setImageFiles([]);
       setImagePreviews([]);
+      setLiveUrl("");
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3500);
     } catch (err: unknown) {

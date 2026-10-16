@@ -111,6 +111,7 @@ export async function addPortfolioItem(input: {
   keyFeatures: string[];
   techStack: string[];
   imageFiles: File[];
+  liveUrl: string;
 }): Promise<PortfolioItem> {
   const formData = new FormData();
   formData.append("title", input.title);
@@ -119,6 +120,7 @@ export async function addPortfolioItem(input: {
   formData.append("en_description", input.en_description);
   formData.append("keyFeatures", JSON.stringify(input.keyFeatures));
   formData.append("techStack", JSON.stringify(input.techStack));
+  formData.append("liveUrl", input.liveUrl.trim());
   input.imageFiles.forEach((file) => formData.append("images[]", file));
 
   const res = await fetch(PORTFOLIO_URL, {
@@ -150,6 +152,7 @@ export async function updatePortfolioItem(
     techStack: string[];
     keptImageUrls: string[];
     newImageFiles: File[];
+    liveUrl: string;
   }
 ): Promise<PortfolioItem> {
   const formData = new FormData();
@@ -161,6 +164,7 @@ export async function updatePortfolioItem(
   formData.append("keyFeatures", JSON.stringify(input.keyFeatures));
   formData.append("techStack", JSON.stringify(input.techStack));
   formData.append("keptImageUrls", JSON.stringify(input.keptImageUrls));
+  formData.append("liveUrl", input.liveUrl);
   input.newImageFiles.forEach((file) => formData.append("newImages[]", file));
 
   const res = await fetch(`${PORTFOLIO_URL}?id=${id}`, {
