@@ -6,6 +6,7 @@ import { PageHero } from "../components/shared";
 import { useT } from "../providers";
 import { listPortfolioItems, type PortfolioItem } from "../data/api/api";
 import { Link } from "react-router";
+import { AnimatePresence, motion } from "motion/react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
 export function Portfolio() {
@@ -23,6 +24,7 @@ export function Portfolio() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [pageIndex, setPageIndex] = useState(0);
+  const [pageDirection, setPageDirection] = useState(1);
   const pageSize = 3;
 
   useEffect(() => {
@@ -66,11 +68,17 @@ export function Portfolio() {
   );
 
   const onPrevPage = () => {
-    setPageIndex((current) => Math.max(0, current - 1));
+    if (pageIndex <= 0) return;
+
+    setPageDirection(-1);
+    setPageIndex((current) => current - 1);
   };
 
   const onNextPage = () => {
-    setPageIndex((current) => Math.min(totalPages - 1, current + 1));
+    if (pageIndex >= totalPages - 1) return;
+
+    setPageDirection(1);
+    setPageIndex((current) => current + 1);
   };
 
   const getPortfolioTitle = (item: PortfolioItem) => {
@@ -195,86 +203,117 @@ export function Portfolio() {
                     {t("portfolio_detail_next")} →
                   </button>
                 </div>
+                <AnimatePresence
+                  mode="wait"
+                  initial={false}
+                  custom={pageDirection}
+                >
+                  <motion.div
+                    key={pageIndex}
+                    custom={pageDirection}
+                    initial={{
+                      opacity: 0,
+                      x: pageDirection > 0 ? 60 : -60,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      x: 0,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      x: pageDirection > 0 ? -60 : 60,
+                    }}
+                    transition={{
+                      x: {
+                        type: "spring",
+                        stiffness: 280,
+                        damping: 30,
+                      },
+                      opacity: {
+                        duration: 0.2,
+                      },
+                    }}
+                    className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3"
+                  >
+                    {currentItems.map((p) => {
+                      const title = getPortfolioTitle(p);
+                      const type = getPortfolioType(p);
+                      const description = getPortfolioDescription(p);
 
-                <div className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                  {currentItems.map((p) => {
-                    const title = getPortfolioTitle(p);
-                    const type = getPortfolioType(p);
-                    const description = getPortfolioDescription(p);
+                      return (
+                        <Link
+                          to={`/portfolio/${p.id}`}
+                          key={p.id}
+                          className="block h-full"
+                        >
+                          <article className="group flex h-full flex-col overflow-hidden rounded-[26px] border border-[#1F2A1F]/10 bg-white/70 shadow-[0_16px_50px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_22px_70px_rgba(31,42,31,0.09)]">
+                            <div className="relative aspect-[4/3] overflow-hidden bg-[#1F2A1F]">
+                              <img
+                                src={p.coverImage}
+                                alt={title}
+                                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
+                              />
 
-                    return (
-                      <Link
-                        to={`/portfolio/${p.id}`}
-                        key={p.id}
-                        className="block h-full"
-                      >
-                        <article className="group flex h-full flex-col overflow-hidden rounded-[26px] border border-[#1F2A1F]/10 bg-white/70 shadow-[0_16px_50px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_22px_70px_rgba(31,42,31,0.09)]">
-                          <div className="relative aspect-[4/3] overflow-hidden bg-[#1F2A1F]">
-                            <img
-                              src={p.coverImage}
-                              alt={title}
-                              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
-                            />
-
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#1F2A1F]/35 via-transparent to-transparent opacity-70" />
-                          </div>
-
-                          <div className="flex flex-1 flex-col p-6">
-                            <div className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#004B08]">
-                              {type}
+                              <div className="absolute inset-0 bg-gradient-to-t from-[#1F2A1F]/35 via-transparent to-transparent opacity-70" />
                             </div>
 
-                            <h3 className="mb-3 text-xl leading-snug text-[#1F2A1F]">
-                              {title}
-                            </h3>
-
-                            <p className="line-clamp-2 text-sm leading-relaxed text-[#5F6756]">
-                              {description}
-                            </p>
-
-                            {p.keyFeatures && p.keyFeatures.length > 0 && (
-                              <div className="mt-4">
-                                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#004B08]/60">
-                                  {t("portfolio_key_features")}
-                                </p>
-
-                                <div className="flex flex-wrap gap-1.5">
-                                  {p.keyFeatures.map((feature, i) => (
-                                    <span
-                                      key={i}
-                                      className="rounded-full bg-[#004B08]/8 px-3 py-1 text-xs text-[#004B08]"
-                                    >
-                                      {feature}
-                                    </span>
-                                  ))}
-                                </div>
+                            <div className="flex flex-1 flex-col p-6">
+                              <div className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#004B08]">
+                                {type}
                               </div>
-                            )}
 
-                            {p.techStack && p.techStack.length > 0 && (
-                              <div className="mt-auto pt-3">
-                                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#5F6756]/60">
-                                  {t("portfolio_tech_stack")}
-                                </p>
+                              <h3 className="mb-3 text-xl leading-snug text-[#1F2A1F]">
+                                {title}
+                              </h3>
 
-                                <div className="flex flex-wrap gap-1.5">
-                                  {p.techStack.map((tech, i) => (
-                                    <span
-                                      key={i}
-                                      className="rounded-full border border-[#1F2A1F]/10 bg-white px-3 py-1 text-xs text-[#5F6756]"
-                                    >
-                                      {tech}
-                                    </span>
-                                  ))}
+                              <p className="line-clamp-2 text-sm leading-relaxed text-[#5F6756]">
+                                {description}
+                              </p>
+
+                              {p.keyFeatures && p.keyFeatures.length > 0 && (
+                                <div className="mt-4">
+                                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#004B08]/60">
+                                    {t("portfolio_key_features")}
+                                  </p>
+
+                                  <div className="flex flex-wrap gap-1.5">
+                                    {p.keyFeatures.map((feature, i) => (
+                                      <span
+                                        key={i}
+                                        className="rounded-full bg-[#004B08]/8 px-3 py-1 text-xs text-[#004B08]"
+                                      >
+                                        {feature}
+                                      </span>
+                                    ))}
+                                  </div>
                                 </div>
-                              </div>
-                            )}
-                          </div>
-                        </article>
-                      </Link>
-                    );
-                  })}
-                </div>
+                              )}
+
+                              {p.techStack && p.techStack.length > 0 && (
+                                <div className="mt-auto pt-3">
+                                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#5F6756]/60">
+                                    {t("portfolio_tech_stack")}
+                                  </p>
+
+                                  <div className="flex flex-wrap gap-1.5">
+                                    {p.techStack.map((tech, i) => (
+                                      <span
+                                        key={i}
+                                        className="rounded-full border border-[#1F2A1F]/10 bg-white px-3 py-1 text-xs text-[#5F6756]"
+                                      >
+                                        {tech}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </article>
+                        </Link>
+                      );
+                    })}
+                  </motion.div>
+                </AnimatePresence>
               </>
             )}
 
