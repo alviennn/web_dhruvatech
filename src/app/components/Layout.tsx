@@ -96,7 +96,9 @@ export function Layout() {
       <Navbar />
 
       <main>
-        <Outlet />
+        <div key={location.pathname} className="page-transition">
+          <Outlet />
+        </div>
       </main>
 
       {!hideCTA && (
