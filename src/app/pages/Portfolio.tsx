@@ -23,8 +23,10 @@ export function Portfolio() {
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [pageIndex, setPageIndex] = useState(0);
+
+  const [startIndex, setStartIndex] = useState(0);
   const [pageDirection, setPageDirection] = useState(1);
+
   const pageSize = 3;
 
   useEffect(() => {
@@ -50,7 +52,7 @@ export function Portfolio() {
   }, [t]);
 
   useEffect(() => {
-    setPageIndex(0);
+    setStartIndex(0);
   }, [filter, items.length]);
 
   const adminToFilter = (type: PortfolioItem["type"]) =>
@@ -61,24 +63,22 @@ export function Portfolio() {
     return adminToFilter(item.type) === filter;
   });
 
-  const totalPages = Math.max(1, Math.ceil(visibleItems.length / pageSize));
-  const currentItems = visibleItems.slice(
-    pageIndex * pageSize,
-    pageIndex * pageSize + pageSize,
-  );
+  const maxStartIndex = Math.max(0, visibleItems.length - pageSize);
+
+  const currentItems = visibleItems.slice(startIndex, startIndex + pageSize);
 
   const onPrevPage = () => {
-    if (pageIndex <= 0) return;
+    if (startIndex <= 0) return;
 
     setPageDirection(-1);
-    setPageIndex((current) => current - 1);
+    setStartIndex((current) => current - 1);
   };
 
   const onNextPage = () => {
-    if (pageIndex >= totalPages - 1) return;
+    if (startIndex >= maxStartIndex) return;
 
     setPageDirection(1);
-    setPageIndex((current) => current + 1);
+    setStartIndex((current) => current + 1);
   };
 
   const getPortfolioTitle = (item: PortfolioItem) => {
@@ -184,20 +184,21 @@ export function Portfolio() {
                   <button
                     type="button"
                     onClick={onPrevPage}
-                    disabled={pageIndex === 0}
+                    disabled={startIndex === 0}
                     className="inline-flex items-center justify-center rounded-full border border-[#1F2A1F]/10 bg-white px-4 py-2 text-sm font-semibold text-[#1F2A1F] transition hover:border-[#004B08]/50 hover:text-[#004B08] disabled:cursor-not-allowed disabled:border-[#1F2A1F]/10 disabled:text-[#B0B8B0]"
                   >
                     ← {t("portfolio_detail_previous")}
                   </button>
 
                   <div className="text-sm text-[#5F6756]">
-                    {pageIndex + 1} / {totalPages}
+                    {Math.floor(startIndex / pageSize) + 1} /{" "}
+                    {Math.ceil(visibleItems.length / pageSize)}
                   </div>
 
                   <button
                     type="button"
                     onClick={onNextPage}
-                    disabled={pageIndex >= totalPages - 1}
+                    disabled={startIndex >= maxStartIndex}
                     className="inline-flex items-center justify-center rounded-full border border-[#1F2A1F]/10 bg-white px-4 py-2 text-sm font-semibold text-[#1F2A1F] transition hover:border-[#004B08]/50 hover:text-[#004B08] disabled:cursor-not-allowed disabled:border-[#1F2A1F]/10 disabled:text-[#B0B8B0]"
                   >
                     {t("portfolio_detail_next")} →
@@ -209,7 +210,7 @@ export function Portfolio() {
                   custom={pageDirection}
                 >
                   <motion.div
-                    key={pageIndex}
+                    key={startIndex}
                     custom={pageDirection}
                     initial={{
                       opacity: 0,
