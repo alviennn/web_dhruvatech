@@ -38,7 +38,7 @@ export type PortfolioItem = {
   keyFeatures: string[];
   techStack: string[];
   coverImage: string;
-  liveUrl: string;
+  liveUrl: string | null;
   images: string[];
   createdAt: string;
 };
@@ -164,7 +164,7 @@ export async function updatePortfolioItem(
   formData.append("keyFeatures", JSON.stringify(input.keyFeatures));
   formData.append("techStack", JSON.stringify(input.techStack));
   formData.append("keptImageUrls", JSON.stringify(input.keptImageUrls));
-  formData.append("liveUrl", input.liveUrl);
+  formData.append("liveUrl", input.liveUrl.trim());
   input.newImageFiles.forEach((file) => formData.append("newImages[]", file));
 
   const res = await fetch(`${PORTFOLIO_URL}?id=${id}`, {

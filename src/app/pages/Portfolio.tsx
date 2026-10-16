@@ -259,8 +259,30 @@ export function Portfolio() {
                             </div>
 
                             <div className="flex flex-1 flex-col p-6">
-                              <div className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#004B08]">
-                                {type}
+                              <div className="mb-3 flex items-center justify-between gap-3">
+                                <span className="text-xs font-semibold uppercase tracking-[0.22em] text-[#004B08]">
+                                  {type}
+                                </span>
+
+                                {p.liveUrl && (
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      window.open(
+                                        p.liveUrl!,
+                                        "_blank",
+                                        "noopener,noreferrer",
+                                      );
+                                    }}
+                                    className="inline-flex shrink-0 items-center gap-1 rounded-full border border-[#004B08]/20 px-3 py-1.5 text-xs font-medium text-[#004B08] transition-colors hover:bg-[#004B08] hover:text-white"
+                                    aria-label={`Kunjungi website ${title}`}
+                                  >
+                                    Kunjungi Website{" "}
+                                    <span aria-hidden="true">↗</span>
+                                  </button>
+                                )}
                               </div>
 
                               <h3 className="mb-3 text-xl leading-snug text-[#1F2A1F]">
