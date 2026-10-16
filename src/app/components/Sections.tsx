@@ -263,7 +263,6 @@ export function ServicesPreview() {
             subtitle={t("services_preview_sub")}
           />
         </Reveal>
-
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3 lg:gap-6">
           {items.map(({ icon: Icon, titleKey, descKey, to }, i) => (
             <Reveal key={titleKey} delay={i * 0.08}>
