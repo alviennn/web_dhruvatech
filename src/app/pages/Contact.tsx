@@ -76,11 +76,11 @@ ${form.description}
     <>
       <Helmet>
         <title>
-          Dhruva Tech | Software House Yogyakarta - Web, Mobile & AI Development
+          Dhurva Tech | Software House Yogyakarta - Web, Mobile & AI Development
         </title>
         <meta
           name="description"
-          content="Dhruva Tech membantu membangun produk digital anda mulai dari website company profile, aplikasi mobile, hingga solusi berbasis AI/ML. Mari Realisasikan Ide Besar Anda Bersama Kami!"
+          content="Dhurva Tech membantu membangun produk digital anda mulai dari website company profile, aplikasi mobile, hingga solusi berbasis AI/ML. Mari Realisasikan Ide Besar Anda Bersama Kami!"
         />
       </Helmet>
 
@@ -255,8 +255,8 @@ ${form.description}
                 <ContactRow
                   icon={Instagram}
                   label="Instagram"
-                  value="@dhruvatech_"
-                  link="https://www.instagram.com/dhruvatech_"
+                  value="@dhurvatech"
+                  link="https://www.instagram.com/dhurvatech"
                 />
               </ul>
             </div>
