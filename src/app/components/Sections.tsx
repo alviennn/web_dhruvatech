@@ -177,33 +177,33 @@ export function FeaturedWorkPreview() {
                       delay={i * 0.08}
                       className="min-w-full snap-start md:min-w-0"
                     >
-<Link to={`/portfolio/${p.id}`} className="block h-full">
-        <article className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-[#1F2A1F]/10 bg-white/70 shadow-[0_16px_50px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_24px_80px_rgba(31,42,31,0.10)] sm:rounded-[28px] lg:rounded-[30px]">
-          <div className="relative aspect-[16/11] overflow-hidden bg-[#1F2A1F] sm:aspect-[4/3]">
-            <img
-              src={p.coverImage}
-              alt={title}
-              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
-            />
+                      <Link to={`/portfolio/${p.id}`} className="block h-full">
+                        <article className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-[#1F2A1F]/10 bg-white/70 shadow-[0_16px_50px_rgba(31,42,31,0.055)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:shadow-[0_24px_80px_rgba(31,42,31,0.10)] sm:rounded-[28px] lg:rounded-[30px]">
+                          <div className="relative aspect-[16/11] overflow-hidden bg-[#1F2A1F] sm:aspect-[4/3]">
+                            <img
+                              src={p.coverImage}
+                              alt={title}
+                              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
+                            />
 
-                          <div className="absolute inset-0 bg-gradient-to-t from-[#1F2A1F]/35 via-transparent to-transparent opacity-70" />
-                        </div>
-
-                        <div className="flex flex-1 flex-col p-5 sm:p-6">
-                          <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#004B08] sm:text-xs">
-                            {type}
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#1F2A1F]/35 via-transparent to-transparent opacity-70" />
                           </div>
 
-                          <h3 className="mb-3 line-clamp-2 text-lg leading-snug text-[#1F2A1F] sm:text-xl">
-                            {title}
-                          </h3>
+                          <div className="flex flex-1 flex-col p-5 sm:p-6">
+                            <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#004B08] sm:text-xs">
+                              {type}
+                            </div>
 
-                          <p className="line-clamp-3 text-sm leading-relaxed text-[#5F6756]">
-                            {description}
-                          </p>
-                        </div>
-                      </article>
-                    </Link>
+                            <h3 className="mb-3 line-clamp-2 text-lg leading-snug text-[#1F2A1F] sm:text-xl">
+                              {title}
+                            </h3>
+
+                            <p className="line-clamp-3 text-sm leading-relaxed text-[#5F6756]">
+                              {description}
+                            </p>
+                          </div>
+                        </article>
+                      </Link>
                     </Reveal>
                   );
                 })}
@@ -223,7 +223,6 @@ export function FeaturedWorkPreview() {
     </section>
   );
 }
-
 
 /* ---------------- SERVICES PREVIEW ---------------- */
 
@@ -268,38 +267,42 @@ export function ServicesPreview() {
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3 lg:gap-6">
           {items.map(({ icon: Icon, titleKey, descKey, to }, i) => (
             <Reveal key={titleKey} delay={i * 0.08}>
+              ```tsx
               <Link
                 to={to}
-                className="group relative block h-full min-h-[240px] overflow-hidden rounded-[24px] border border-[#1F2A1F]/10 bg-white/75 p-6 shadow-[0_16px_50px_rgba(31,42,31,0.045)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:bg-white hover:shadow-[0_24px_75px_rgba(31,42,31,0.09)] sm:min-h-[270px] sm:rounded-[28px] sm:p-7 lg:min-h-[300px] lg:rounded-[30px] lg:p-8"
+                className="group relative flex h-full min-h-[240px] flex-col overflow-hidden rounded-[24px] border border-[#1F2A1F]/10 bg-white/75 p-6 shadow-[0_16px_50px_rgba(31,42,31,0.045)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-[#004B08]/25 hover:bg-white hover:shadow-[0_24px_75px_rgba(31,42,31,0.09)] sm:min-h-[270px] sm:rounded-[28px] sm:p-7 lg:min-h-[300px] lg:rounded-[30px] lg:p-8"
               >
-                <Icon
-                  aria-hidden="true"
-                  size={64}
-                  strokeWidth={1.5}
-                  className="pointer-events-none absolute right-5 top-5 text-[#004B08]/[0.32] transition-all duration-500 group-hover:scale-[1.05] group-hover:text-[#C99A3D]/[0.15] sm:right-7 sm:top-7"
-                />
+                {/* Judul dan ikon sejajar */}
+                <div className="relative z-10 flex items-start justify-between gap-4">
+                  <h3 className="min-w-0 flex-1 text-xl font-medium tracking-tight text-[#1F2A1F] sm:text-2xl">
+                    {t(titleKey as any)}
+                  </h3>
 
-                <div className="relative z-10 flex h-full flex-col justify-end">
-                  <div className="max-w-[86%] sm:max-w-[82%]">
-                    <h3 className="mb-3 text-xl font-medium tracking-tight text-[#1F2A1F] sm:text-2xl">
-                      {t(titleKey as any)}
-                    </h3>
+                  <Icon
+                    aria-hidden="true"
+                    size={64}
+                    strokeWidth={1.5}
+                    className="pointer-events-none h-12 w-12 shrink-0 text-[#004B08]/[0.32] transition-all duration-500 group-hover:scale-[1.05] group-hover:text-[#C99A3D]/[0.15] sm:h-14 sm:w-14 lg:h-16 lg:w-16"
+                  />
+                </div>
 
-                    <p className="text-sm leading-relaxed text-[#5F6756]">
-                      {t(descKey as any)}
-                    </p>
+                {/* Deskripsi dan CTA */}
+                <div className="relative z-10 mt-4 flex flex-1 flex-col items-start">
+                  <p className="text-sm leading-relaxed text-[#5F6756] sm:text-base">
+                    {t(descKey as any)}
+                  </p>
 
-                    <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-[#004B08] sm:mt-7">
-                      {t("cta_learn_more")}
-                      <ArrowUpRight
-                        size={15}
-                        strokeWidth={2}
-                        className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                      />
-                    </div>
+                  <div className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-medium text-[#004B08] sm:pt-7">
+                    {t("cta_learn_more")}
+                    <ArrowUpRight
+                      size={15}
+                      strokeWidth={2}
+                      className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    />
                   </div>
                 </div>
               </Link>
+              ```
             </Reveal>
           ))}
         </div>
