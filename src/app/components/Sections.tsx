@@ -300,7 +300,6 @@ export function ServicesPreview() {
                   </div>
                 </div>
               </Link>
-              ```
             </Reveal>
           ))}
         </div>
